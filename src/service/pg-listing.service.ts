@@ -105,7 +105,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PgListingResponse, PgModel } from '../entity/PgModel';
-import { environment } from '../Environments/environment';
+import { environment } from '../environment/environment';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Inquiry } from '../entity/Inquiry';
-import { environment } from '../Environments/environment.prod';
+import { environment } from '../environment/environment';
 
 // const post_url = "http://localhost:8080/inquiry/sendMessage";
 const apiUrl = environment.apiUrl;

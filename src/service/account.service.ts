@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Account } from '../entity/Account';
 import { JwtToken } from '../entity/JwtToken';
-import { environment } from '../Environments/environment';
+import { environment } from '../environment/environment';
+
 
 // const post_url = "http://localhost:8080/api/v1/auth/signup"
 const apiUrl = environment.apiUrl;
