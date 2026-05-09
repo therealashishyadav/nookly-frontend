@@ -1,0 +1,33 @@
+<div class="login-container">
+  <form action="" (ngSubmit)="login()" class="auth-form">
+    <h2 class="auth-title">Welcome Back!</h2>
+
+
+    <mat-form-field appearance="outline" class="full-width-field">
+      <mat-label>Email or Phone Number</mat-label>
+      <input matInput type="text" name="email" [(ngModel)]="user.email" required>
+      <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline" class="full-width-field">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" name="password" [(ngModel)]="user.password" required>
+      <mat-icon matSuffix>lock</mat-icon>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" class="auth-button">
+        Sign In
+      </button>
+
+      <button mat-button color="accent" routerLink="/account" class="auth-button">
+        Create New Account
+      </button>
+    </div>
+
+    <div class="auth-footer">
+      <a href="/forgot-password" class="forgot-password">Forgot password?</a>
+    </div>
+  </form>
+</div>

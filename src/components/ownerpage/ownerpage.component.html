@@ -1,0 +1,104 @@
+<div class="dashboard">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Owner Dashboard</h1>
+    </div>
+    <div class="header-right">
+      <button class="btn-add" routerLink="/addpglist">+ Add New PG</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <p class="stat-label">Total PGs</p>
+      <p class="stat-value">{{ totalPGs }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Total Rent</p>
+      <p class="stat-value">₹{{ totalRent | number }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Average Rent</p>
+      <p class="stat-value">₹{{ averageRent | number:'1.0-0' }}</p>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">Loading your PGs...</div>
+
+  <!-- No PGs -->
+  <div *ngIf="!isLoading && pgs.length === 0" class="empty">
+    <p>You have no PGs listed yet.</p>
+    <button class="btn-add" routerLink="/addpglist">+ Add Your First PG</button>
+  </div>
+
+  <!-- PG List -->
+  <div class="pg-list" *ngIf="!isLoading && pgs.length > 0">
+    <div class="pg-card" *ngFor="let pg of pgs">
+      <div class="pg-card-header">
+        <h2>{{ pg.pgName }}</h2>
+        <div class="pg-actions">
+          <button class="btn-edit" (click)="editPG(pg)">Edit</button>
+          <button class="btn-delete" (click)="deletePG(pg.id)">Delete</button>
+        </div>
+      </div>
+      <div class="pg-card-body">
+        <p><span class="label">City:</span> {{ pg.city }}</p>
+        <p><span class="label">Locality:</span> {{ pg.locality }}</p>
+
+        <!-- handles both lowestPrice (8084) and monthlyRent (8082) -->
+        <p><span class="label">Rent:</span>
+          ₹{{ (pg.lowestPrice || pg.monthlyRent || 0) | number }}
+        </p>
+
+        <p><span class="label">Occupancy:</span> {{ pg.occupancyLabel || pg.occupancyType }}</p>
+        <p><span class="label">Deposit:</span> ₹{{ pg.depositAmount | number }}</p>
+        <p><span class="label">Available From:</span> {{ pg.availableFromDate }}</p>
+
+        <div class="amenities">
+          <span class="badge" *ngIf="pg.wifiAvailable">WiFi</span>
+          <span class="badge" *ngIf="pg.foodProvided">Food</span>
+          <span class="badge" *ngIf="pg.airConditioned">AC</span>
+          <span class="badge" *ngIf="pg.furnished">Furnished</span>
+          <span class="badge" *ngIf="pg.cctvSurveillance">CCTV</span>
+          <span class="badge" *ngIf="pg.laundryService">Laundry</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" *ngIf="editingPG">
+    <div class="modal">
+      <h2>Edit PG</h2>
+      <div class="form-group">
+        <label>PG Name</label>
+        <input [(ngModel)]="editingPG!.pgName" type="text" />
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <input [(ngModel)]="editingPG!.city" type="text" />
+      </div>
+      <div class="form-group">
+        <label>Locality</label>
+        <input [(ngModel)]="editingPG!.locality" type="text" />
+      </div>
+      <div class="form-group">
+        <label>Occupancy Type</label>
+        <input [(ngModel)]="editingPG!.occupancyType" type="text" />
+      </div>
+      <div class="form-group">
+        <label>Deposit Amount</label>
+        <input [(ngModel)]="editingPG!.depositAmount" type="number" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-save" (click)="saveEdit()">Save</button>
+        <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>

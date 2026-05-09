@@ -1,0 +1,504 @@
+/* ============================================================
+   NOOKLY — Luxury Real Estate Platform
+   About Page Stylesheet
+   MNC-Level Production CSS | Version 1.0.0
+   Author: Nookly Design System
+   ============================================================ */
+
+/* ── Google Fonts Import ─────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap');
+
+/* ── Design Tokens via :host ─────────────────────────────── */
+:host {
+  /* Brand Palette */
+  --nookly-azure:       #4A90E2;
+  --nookly-mist:        #D9E6F1;
+  --nookly-slate:       #A7B3C6;
+  --nookly-midnight:    #2C3E50;
+  --nookly-white:       #FFFFFF;
+
+  /* Derived Tones */
+  --nookly-azure-deep:  #2d6abf;
+  --nookly-azure-glow:  rgba(74, 144, 226, 0.18);
+  --nookly-azure-line:  rgba(74, 144, 226, 0.30);
+  --nookly-midnight-90: rgba(44, 62, 80, 0.90);
+  --nookly-midnight-05: rgba(44, 62, 80, 0.05);
+  --nookly-slate-soft:  rgba(167, 179, 198, 0.25);
+  --nookly-gold:        #C9A96E;
+  --nookly-gold-soft:   rgba(201, 169, 110, 0.15);
+
+  /* Typography */
+  --font-display:  'Cormorant Garamond', 'Georgia', serif;
+  --font-body:     'Jost', 'Segoe UI', sans-serif;
+
+  /* Spacing Scale */
+  --space-xs:  0.5rem;
+  --space-sm:  1rem;
+  --space-md:  1.75rem;
+  --space-lg:  3rem;
+  --space-xl:  5rem;
+  --space-2xl: 8rem;
+
+  /* Motion */
+  --ease-luxury:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-bounce:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:      200ms;
+  --dur-mid:       420ms;
+  --dur-slow:      700ms;
+
+  /* Radius */
+  --radius-sm:  6px;
+  --radius-md:  14px;
+  --radius-lg:  24px;
+  --radius-pill:9999px;
+
+  /* Shadows */
+  --shadow-card:   0 4px 24px rgba(44,62,80,0.10), 0 1px 4px rgba(44,62,80,0.06);
+  --shadow-hover:  0 16px 48px rgba(44,62,80,0.16), 0 4px 12px rgba(74,144,226,0.12);
+  --shadow-azure:  0 8px 32px rgba(74,144,226,0.22);
+}
+
+/* ── Global Reset & Base ─────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Page Background ─────────────────────────────────────── */
+.bootstrap-wrapper {
+  background-color: var(--nookly-white);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -10%, var(--nookly-mist) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 90% 80%, var(--nookly-azure-glow) 0%, transparent 65%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='0.8' fill='%23A7B3C6' fill-opacity='0.18'/%3E%3C/svg%3E");
+  background-size: cover, cover, 60px 60px;
+  min-height: 100vh;
+  padding-block: var(--space-xl);
+  font-family: var(--font-body);
+  color: var(--nookly-midnight);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Container ───────────────────────────────────────────── */
+.bootstrap-wrapper .container {
+  max-width: 880px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 3rem);
+  animation: pageReveal 0.9s var(--ease-luxury) both;
+}
+
+@keyframes pageReveal {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── H1 — Hero Heading ───────────────────────────────────── */
+.bootstrap-wrapper .container > h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  color: var(--nookly-midnight);
+  margin-block-end: var(--space-md);
+  padding-block-end: var(--space-md);
+  position: relative;
+  animation: fadeSlideUp 0.8s var(--ease-luxury) 0.1s both;
+}
+
+.bootstrap-wrapper .container > h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 72px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--nookly-gold), var(--nookly-azure));
+  border-radius: var(--radius-pill);
+  transition: width var(--dur-slow) var(--ease-luxury);
+}
+
+.bootstrap-wrapper .container > h1:hover::after {
+  width: 140px;
+}
+
+
+.bootstrap-wrapper .container h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 3.2vw, 2.15rem);
+  font-weight: 500;
+  /* font-style: italic; */
+  letter-spacing: 0.01em;
+  color: var(--nookly-midnight);
+  margin-block: var(--space-lg) var(--space-sm);
+  padding-inline-start: 1.1rem;
+  border-inline-start: 3px solid var(--nookly-azure);
+  position: relative;
+  transition: color var(--dur-mid) var(--ease-luxury),
+              border-color var(--dur-mid) var(--ease-luxury);
+}
+
+.bootstrap-wrapper .container h2::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -3px;
+  top: 0;
+  width: 3px;
+  height: 0%;
+  background: var(--nookly-gold);
+  border-radius: var(--radius-pill);
+  transition: height var(--dur-slow) var(--ease-luxury);
+}
+
+.bootstrap-wrapper .container h2:hover {
+  color: var(--nookly-azure-deep);
+}
+
+.bootstrap-wrapper .container h2:hover::before {
+  height: 100%;
+}
+
+/* ── Paragraphs ──────────────────────────────────────────── */
+.bootstrap-wrapper .container p {
+  font-family: var(--font-body);
+  font-size: clamp(0.975rem, 1.6vw, 1.075rem);
+  font-weight: 300;
+  line-height: 1.85;
+  color: #313131;
+  margin-block-end: var(--space-md);
+  max-width: 72ch;
+}
+
+/* First paragraph — lead intro */
+.bootstrap-wrapper .container > p:first-of-type {
+  font-size: clamp(1.05rem, 1.8vw, 1.175rem);
+  font-weight: 400;
+  color: var(--nookly-midnight);
+  line-height: 1.9;
+}
+
+/* ── Strong / Bold ───────────────────────────────────────── */
+.bootstrap-wrapper .container strong {
+  font-weight: 600;
+  color: var(--nookly-midnight);
+  font-family: var(--font-display);
+  font-size: 1.05em;
+  letter-spacing: 0.01em;
+}
+
+/* Brand name "Nookly" emphasis */
+.bootstrap-wrapper .container p > strong:first-child {
+  background: linear-gradient(135deg, var(--nookly-azure-deep) 0%, var(--nookly-azure) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Unordered Lists ─────────────────────────────────────── */
+.bootstrap-wrapper .container ul {
+  list-style: none;
+  padding: 0;
+  margin-block: var(--space-sm) var(--space-md);
+  display: grid;
+  gap: 0.55rem;
+}
+
+/* Two-column grid for larger lists */
+.bootstrap-wrapper .container ul:has(li:nth-child(4)) {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.bootstrap-wrapper .container li {
+  font-family: var(--font-body);
+  font-size: clamp(0.935rem, 1.5vw, 1.025rem);
+  font-weight: 300;
+  line-height: 1.65;
+  color: #3d4f61;
+  background: var(--nookly-white);
+  border: 1px solid var(--nookly-mist);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.1rem 0.85rem 1.3rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform     var(--dur-mid) var(--ease-luxury),
+    box-shadow    var(--dur-mid) var(--ease-luxury),
+    border-color  var(--dur-mid) var(--ease-luxury),
+    background    var(--dur-mid) var(--ease-luxury);
+  cursor: default;
+}
+
+/* Shimmer line on left */
+.bootstrap-wrapper .container li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 20%;
+  height: 60%;
+  width: 3px;
+  background: linear-gradient(180deg, var(--nookly-azure), var(--nookly-gold));
+  border-radius: var(--radius-pill);
+  opacity: 0.7;
+  transition: opacity var(--dur-mid) var(--ease-luxury),
+              height   var(--dur-mid) var(--ease-luxury),
+              top      var(--dur-mid) var(--ease-luxury);
+}
+
+/* Hover sweep */
+.bootstrap-wrapper .container li::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, var(--nookly-azure-glow) 100%);
+  opacity: 0;
+  transition: opacity var(--dur-mid) var(--ease-luxury);
+  border-radius: inherit;
+}
+
+.bootstrap-wrapper .container li:hover {
+  transform: translateY(-3px) translateX(2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--nookly-azure-line);
+  background: var(--nookly-white);
+}
+
+.bootstrap-wrapper .container li:hover::before {
+  top: 0;
+  height: 100%;
+  opacity: 1;
+}
+
+.bootstrap-wrapper .container li:hover::after {
+  opacity: 1;
+}
+
+/* Bold inside list items */
+.bootstrap-wrapper .container li > strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.05em;
+  color: var(--nookly-midnight);
+  margin-block-end: 0.15rem;
+}
+
+/* ── Closing Tagline ─────────────────────────────────────── */
+.bootstrap-wrapper .container > p:last-of-type {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+  /* font-style: italic; */
+  font-weight: 500;
+  color: var(--nookly-midnight);
+  text-align: center;
+  margin-block-start: var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(135deg, var(--nookly-midnight-05), var(--nookly-azure-glow));
+  border: 1px solid var(--nookly-azure-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-azure);
+  position: relative;
+  overflow: hidden;
+}
+
+.bootstrap-wrapper .container > p:last-of-type::before {
+  content: '"';
+  position: absolute;
+  top: -0.5rem;
+  left: 1.2rem;
+  font-family: var(--font-display);
+  font-size: 6rem;
+  line-height: 1;
+  color: var(--nookly-azure);
+  opacity: 0.1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.bootstrap-wrapper .container > p:last-of-type strong {
+  background: linear-gradient(135deg, var(--nookly-midnight) 0%, var(--nookly-azure-deep) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Section Divider (after every h2) ───────────────────── */
+.bootstrap-wrapper .container h2 + p,
+.bootstrap-wrapper .container h2 + ul {
+  animation: fadeSlideUp 0.6s var(--ease-luxury) 0.05s both;
+}
+
+/* ── Scroll-Reveal Animation ─────────────────────────────── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stagger paragraphs */
+.bootstrap-wrapper .container p:nth-of-type(1)  { animation: fadeSlideUp 0.65s var(--ease-luxury) 0.15s both; }
+.bootstrap-wrapper .container p:nth-of-type(2)  { animation: fadeSlideUp 0.65s var(--ease-luxury) 0.22s both; }
+.bootstrap-wrapper .container p:nth-of-type(3)  { animation: fadeSlideUp 0.65s var(--ease-luxury) 0.29s both; }
+.bootstrap-wrapper .container p:nth-of-type(4)  { animation: fadeSlideUp 0.65s var(--ease-luxury) 0.36s both; }
+
+/* Stagger list items */
+.bootstrap-wrapper .container li:nth-child(1)  { animation: fadeSlideUp 0.5s var(--ease-luxury) 0.10s both; }
+.bootstrap-wrapper .container li:nth-child(2)  { animation: fadeSlideUp 0.5s var(--ease-luxury) 0.18s both; }
+.bootstrap-wrapper .container li:nth-child(3)  { animation: fadeSlideUp 0.5s var(--ease-luxury) 0.26s both; }
+.bootstrap-wrapper .container li:nth-child(4)  { animation: fadeSlideUp 0.5s var(--ease-luxury) 0.34s both; }
+.bootstrap-wrapper .container li:nth-child(5)  { animation: fadeSlideUp 0.5s var(--ease-luxury) 0.42s both; }
+.bootstrap-wrapper .container li:nth-child(6)  { animation: fadeSlideUp 0.5s var(--ease-luxury) 0.50s both; }
+
+/* ── Decorative Floating Orbs ────────────────────────────── */
+.bootstrap-wrapper::before,
+.bootstrap-wrapper::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: orbitFloat 14s ease-in-out infinite alternate;
+}
+
+.bootstrap-wrapper::before {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  right: -100px;
+  background: radial-gradient(circle, var(--nookly-mist) 0%, transparent 70%);
+  opacity: 0.55;
+  animation-duration: 18s;
+}
+
+.bootstrap-wrapper::after {
+  width: 280px;
+  height: 280px;
+  bottom: 60px;
+  left: -80px;
+  background: radial-gradient(circle, var(--nookly-azure-glow) 0%, transparent 70%);
+  opacity: 0.4;
+  animation-duration: 22s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes orbitFloat {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(30px, 20px) scale(1.06); }
+  100% { transform: translate(-15px, 35px) scale(0.97); }
+}
+
+/* ── Selection Highlight ─────────────────────────────────── */
+.bootstrap-wrapper ::selection {
+  background: var(--nookly-mist);
+  color: var(--nookly-midnight);
+}
+
+/* ── Focus Ring (Accessibility) ──────────────────────────── */
+.bootstrap-wrapper *:focus-visible {
+  outline: 2px solid var(--nookly-azure);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Scrollbar Styling ───────────────────────────────────── */
+.bootstrap-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: var(--nookly-slate) transparent;
+}
+
+.bootstrap-wrapper::-webkit-scrollbar        { width: 6px; }
+.bootstrap-wrapper::-webkit-scrollbar-track  { background: transparent; }
+.bootstrap-wrapper::-webkit-scrollbar-thumb  {
+  background: linear-gradient(180deg, var(--nookly-azure), var(--nookly-gold));
+  border-radius: var(--radius-pill);
+}
+
+/* ── Responsive Breakpoints ──────────────────────────────── */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .bootstrap-wrapper {
+    padding-block: var(--space-lg);
+    background-image:
+      radial-gradient(ellipse 100% 50% at 50% -5%, var(--nookly-mist) 0%, transparent 70%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='0.8' fill='%23A7B3C6' fill-opacity='0.12'/%3E%3C/svg%3E");
+  }
+
+  .bootstrap-wrapper .container {
+    padding-inline: 1.25rem;
+  }
+
+  /* Revert to single column on tablet */
+  .bootstrap-wrapper .container ul:has(li:nth-child(4)) {
+    grid-template-columns: 1fr;
+  }
+
+  .bootstrap-wrapper .container > h1 {
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
+    margin-block-end: var(--space-sm);
+  }
+
+  .bootstrap-wrapper .container h2 {
+    font-size: clamp(1.4rem, 4vw, 1.85rem);
+    margin-block-start: var(--space-md);
+  }
+
+  .bootstrap-wrapper .container > p:last-of-type {
+    padding: var(--space-sm) var(--space-md);
+    font-size: clamp(1.05rem, 3vw, 1.3rem);
+    margin-block-start: var(--space-lg);
+  }
+
+  .bootstrap-wrapper::before,
+  .bootstrap-wrapper::after {
+    display: none;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .bootstrap-wrapper .container > h1 {
+    font-size: clamp(1.6rem, 7vw, 2.1rem);
+    line-height: 1.25;
+  }
+
+  .bootstrap-wrapper .container h2 {
+    font-size: clamp(1.25rem, 5vw, 1.6rem);
+  }
+
+  .bootstrap-wrapper .container p {
+    font-size: 0.98rem;
+    line-height: 1.8;
+  }
+
+  .bootstrap-wrapper .container li {
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem 0.75rem 1.1rem;
+  }
+
+  .bootstrap-wrapper .container > p:last-of-type {
+    font-size: 1.05rem;
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+}
+
+
+@media print {
+  .bootstrap-wrapper {
+    background: white;
+    padding: 0;
+  }
+
+  .bootstrap-wrapper .container li {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .bootstrap-wrapper::before,
+  .bootstrap-wrapper::after {
+    display: none;
+  }
+}

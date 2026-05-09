@@ -1,0 +1,338 @@
+<app-navbar></app-navbar>
+
+<div class="services-page">
+
+  <!-- ═══════════════════════════════════════════════════
+       PAGE HERO
+  ═══════════════════════════════════════════════════ -->
+  <section class="services-hero" aria-labelledby="services-hero-title">
+    <div class="services-hero__backdrop" aria-hidden="true">
+      <div class="services-hero__orb services-hero__orb--1"></div>
+      <div class="services-hero__orb services-hero__orb--2"></div>
+      <div class="services-hero__grain"></div>
+    </div>
+
+    <div class="services-hero__content">
+      <!-- <span class="services-hero__eyebrow">
+        <i class="fas fa-layer-group" aria-hidden="true"></i>
+        Platform Services 
+      </span> -->
+      <h1 class="services-hero__title" id="services-hero-title">
+        Everything You Need,
+        <span class="services-hero__title-accent">Under One Roof</span>
+      </h1>
+      <p class="services-hero__subtitle">
+        From discovery to move-in  Nookly provides a complete,
+        transparent rental ecosystem for tenants and property owners alike.
+      </p>
+    </div>
+  </section>
+
+  <section class="services-grid-section" aria-labelledby="services-grid-title">
+    <div class="services-wrapper">
+      <div class="section-header">
+        <h2 class="section-title" id="services-grid-title">Core Services</h2>
+        <p class="section-subtitle">Available to all Nookly users today</p>
+      </div>
+
+      <div class="services-grid">
+
+        <!-- Property Discovery -->
+        <div class="service-card service-card--live">
+          <div class="service-card__header">
+            <div class="service-card__icon-wrap">
+              <i class="fas fa-search" aria-hidden="true"></i>
+            </div>
+            <span class="service-card__badge service-card__badge--live">
+              <span class="status-dot" aria-hidden="true"></span> Live
+            </span>
+          </div>
+          <h3 class="service-card__title">Property Discovery</h3>
+          <p class="service-card__desc">
+            Search verified PGs across Pune with powerful filters 
+            location, budget, gender preference, meals, and amenities.
+          </p>
+          <ul class="service-card__list" aria-label="Property Discovery features">
+            <li>Search PGs, flats, duplexes &amp; more</li>
+            <li>Filter by budget, amenities &amp; property type</li>
+            <li>Map-integrated location browsing</li>
+          </ul>
+          <a routerLink="/listings" class="service-card__cta">
+            Browse PGs <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <!-- Property Listing -->
+        <div class="service-card service-card--live">
+          <div class="service-card__header">
+            <div class="service-card__icon-wrap">
+              <i class="fas fa-plus-square" aria-hidden="true"></i>
+            </div>
+            <span class="service-card__badge service-card__badge--live">
+              <span class="status-dot" aria-hidden="true"></span> Live
+            </span>
+          </div>
+          <h3 class="service-card__title">Property Listing</h3>
+          <p class="service-card__desc">
+            Property owners can list, manage, and update their PG
+            listings with photos, pricing, and availability  directly,
+            with zero brokerage.
+          </p>
+          <ul class="service-card__list" aria-label="Property Listing features">
+            <li>Add &amp; manage rental listings</li>
+            <li>Upload images, amenities &amp; pricing</li>
+            <li>Edit or remove listings anytime</li>
+          </ul>
+          <a routerLink="/listproperty" class="service-card__cta">
+            List Your Property <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <!-- Tenant–Owner Connection -->
+        <div class="service-card service-card--live">
+          <div class="service-card__header">
+            <div class="service-card__icon-wrap">
+              <i class="fas fa-comments" aria-hidden="true"></i>
+            </div>
+            <span class="service-card__badge service-card__badge--live">
+              <span class="status-dot" aria-hidden="true"></span> Live
+            </span>
+          </div>
+          <h3 class="service-card__title">Direct Connection</h3>
+          <p class="service-card__desc">
+            Connect directly with property owners  no middlemen, no
+            broker fees. Inquire, schedule visits, and communicate
+            in real time.
+          </p>
+          <ul class="service-card__list" aria-label="Direct Connection features">
+            <li>Direct inquiry &amp; messaging</li>
+            <li>Visit scheduling requests</li>
+            <li>Zero brokerage model</li>
+          </ul>
+          <a routerLink="/contact" class="service-card__cta">
+            Get in Touch <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <!-- User Dashboard -->
+        <div class="service-card service-card--live">
+          <div class="service-card__header">
+            <div class="service-card__icon-wrap">
+              <i class="fas fa-user-circle" aria-hidden="true"></i>
+            </div>
+            <span class="service-card__badge service-card__badge--live">
+              <span class="status-dot" aria-hidden="true"></span> Live
+            </span>
+          </div>
+          <h3 class="service-card__title">User Dashboard</h3>
+          <p class="service-card__desc">
+            Your personal command centre  save favourite listings,
+            track inquiries, and manage your profile all in one place.
+          </p>
+          <ul class="service-card__list" aria-label="User Dashboard features">
+            <li>Save favourite listings</li>
+            <li>Track inquiries &amp; booking requests</li>
+            <li>Manage personal details</li>
+          </ul>
+          <a routerLink="/profile" class="service-card__cta">
+            View Profile <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       ACCORDION  Detailed + Admin + Upcoming
+  ═══════════════════════════════════════════════════ -->
+  <section class="services-accordion-section" aria-labelledby="services-detail-title">
+    <div class="services-wrapper">
+      <div class="section-header">
+        <h2 class="section-title" id="services-detail-title">Service Details</h2>
+        <p class="section-subtitle">Expand each service to learn more</p>
+      </div>
+
+      <div class="services-accordion" role="list">
+
+        <!-- Detailed Property Info -->
+        <div class="acc-item" role="listitem">
+          <button class="acc-header"
+                  aria-expanded="false"
+                  (click)="togglePanel($event)"
+                  aria-controls="acc-body-3">
+            <div class="acc-header__left">
+              <div class="acc-header__icon-wrap" aria-hidden="true">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <div class="acc-header__meta">
+                <span class="acc-header__label">03</span>
+                <span class="acc-header__title">Detailed Property Information</span>
+              </div>
+            </div>
+            <div class="acc-header__right">
+              <span class="acc-badge acc-badge--live">Live</span>
+              <i class="fas fa-plus acc-toggle-icon" aria-hidden="true"></i>
+            </div>
+          </button>
+          <div class="acc-body" id="acc-body-3" role="region">
+            <div class="acc-body__inner">
+              <p class="acc-body__lead">
+                Every listing on Nookly provides rich, accurate property data
+                so you can make informed decisions before visiting.
+              </p>
+              <ul class="acc-list">
+                <li>
+                  <i class="fas fa-check acc-list__icon" aria-hidden="true"></i>
+                  Full property details  photos, rent, facilities &amp; availability
+                </li>
+                <li>
+                  <i class="fas fa-check acc-list__icon" aria-hidden="true"></i>
+                  Map &amp; location integration for easy navigation
+                </li>
+                <li>
+                  <i class="fas fa-check acc-list__icon" aria-hidden="true"></i>
+                  Verified amenity checklists per listing
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Services -->
+        <div class="acc-item" role="listitem">
+          <button class="acc-header"
+                  aria-expanded="false"
+                  (click)="togglePanel($event)"
+                  aria-controls="acc-body-admin">
+            <div class="acc-header__left">
+              <div class="acc-header__icon-wrap" aria-hidden="true">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="acc-header__meta">
+                <span class="acc-header__label">05</span>
+                <span class="acc-header__title">Admin &amp; Moderation</span>
+              </div>
+            </div>
+            <div class="acc-header__right">
+              <span class="acc-badge acc-badge--live">Live</span>
+              <i class="fas fa-plus acc-toggle-icon" aria-hidden="true"></i>
+            </div>
+          </button>
+          <div class="acc-body" id="acc-body-admin" role="region">
+            <div class="acc-body__inner">
+              <p class="acc-body__lead">
+                A dedicated admin layer ensures every listing meets Nookly's
+                quality and trust standards before it goes public.
+              </p>
+              <ul class="acc-list">
+                <li>
+                  <i class="fas fa-check acc-list__icon" aria-hidden="true"></i>
+                  Monitor and approve all incoming listings
+                </li>
+                <li>
+                  <i class="fas fa-check acc-list__icon" aria-hidden="true"></i>
+                  Handle user reports &amp; content moderation
+                </li>
+                <li>
+                  <i class="fas fa-check acc-list__icon" aria-hidden="true"></i>
+                  Platform analytics dashboard for growth insights
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming -->
+        <div class="acc-item acc-item--soon" role="listitem">
+          <button class="acc-header"
+                  aria-expanded="false"
+                  (click)="togglePanel($event)"
+                  aria-controls="acc-body-upcoming">
+            <div class="acc-header__left">
+              <div class="acc-header__icon-wrap acc-header__icon-wrap--soon" aria-hidden="true">
+                <i class="fas fa-rocket"></i>
+              </div>
+              <div class="acc-header__meta">
+                <span class="acc-header__label">06</span>
+                <span class="acc-header__title">Upcoming Features</span>
+              </div>
+            </div>
+            <div class="acc-header__right">
+              <span class="acc-badge acc-badge--soon">Coming Soon</span>
+              <i class="fas fa-plus acc-toggle-icon" aria-hidden="true"></i>
+            </div>
+          </button>
+          <div class="acc-body" id="acc-body-upcoming" role="region">
+            <div class="acc-body__inner">
+              <p class="acc-body__lead">
+                We're actively building the next generation of Nookly features.
+                Here's what's on the roadmap:
+              </p>
+              <div class="upcoming-grid">
+                <div class="upcoming-item">
+                  <i class="fas fa-credit-card upcoming-item__icon" aria-hidden="true"></i>
+                  <div>
+                    <h4>Online Payments</h4>
+                    <p>Secure rent payment &amp; booking integration</p>
+                  </div>
+                </div>
+                <div class="upcoming-item">
+                  <i class="fas fa-user-check upcoming-item__icon" aria-hidden="true"></i>
+                  <div>
+                    <h4>Background Checks</h4>
+                    <p>Verified tenant &amp; owner identity system</p>
+                  </div>
+                </div>
+                <div class="upcoming-item">
+                  <i class="fas fa-bell upcoming-item__icon" aria-hidden="true"></i>
+                  <div>
+                    <h4>Push Notifications</h4>
+                    <p>Real-time alerts for new matching PGs</p>
+                  </div>
+                </div>
+                <div class="upcoming-item">
+                  <i class="fas fa-brain upcoming-item__icon" aria-hidden="true"></i>
+                  <div>
+                    <h4>AI Recommendations</h4>
+                    <p>Smart property suggestions based on preferences</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /services-accordion -->
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       CTA STRIP
+  ═══════════════════════════════════════════════════ -->
+  <section class="services-cta" aria-labelledby="services-cta-title">
+    <div class="services-wrapper services-cta__inner">
+      <div class="services-cta__text">
+        <h2 class="services-cta__title" id="services-cta-title">
+          Ready to find your perfect PG?
+        </h2>
+        <p class="services-cta__subtitle">
+          Start exploring verified listings in Pune  zero brokerage, full transparency.
+        </p>
+      </div>
+      <div class="services-cta__actions">
+        <a routerLink="/listings/pgs" class="btn btn--primary">
+          Browse PGs <i class="fas fa-arrow-right btn__arrow" aria-hidden="true"></i>
+        </a>
+        <a routerLink="/contact" class="btn btn--ghost">
+          Talk to Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /services-page -->
+
+<app-footer></app-footer>

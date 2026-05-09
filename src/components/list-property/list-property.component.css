@@ -1,0 +1,514 @@
+/* src/app/components/list-property/list-property.component.css */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  /* ── New color palette (Nookly luxury) ── */
+  --primary:        #4A90E2;     
+  --primary-dark:   #3a73b5;
+  --primary-light:  #6eaaf0;
+  --bg-soft:        #ffffff;    
+  --neutral:        #c5c5c5; 
+  --dark-accent:    #2C3E50;
+  --pure-white:     #FFFFFF;
+
+  /* ── Derived / supporting shades ── */
+  --border-light:   #E2E9F0;
+  --hover-bg:       rgba(74, 144, 226, 0.04);
+  --shadow-sm:      0 8px 20px rgba(44, 62, 80, 0.08);
+  --shadow-md:      0 12px 30px rgba(44, 62, 80, 0.12);
+
+  /* Typography */
+  --font-display:   'Cormorant Garamond', Georgia, serif;
+  --font-body:      'DM Sans', sans-serif;
+  --radius:         8px;
+  --ease:           cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  display: block;
+  background: var(--pure-white);
+  color: var(--dark-accent);
+}
+
+/* ── Headline (elegant & modern) ── */
+.headline {
+  background: var(--dark-accent);
+  padding: 3.5rem 2rem 3rem;
+  text-align: center;
+  position: relative;
+}
+
+.headline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+.headline h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 300;
+  color: var(--bg-soft);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.headline p {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--neutral);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Form Container ── */
+.form-container {
+  max-width: 900px;
+  margin: 3rem auto 5rem;
+  padding: 0 1.5rem;
+}
+
+/* ── Accordion ── */
+mat-accordion {
+  display: block;
+}
+
+mat-expansion-panel {
+  border: 1px solid var(--border-light) !important;
+  border-radius: 10px !important;
+  margin-bottom: 1rem !important;
+  box-shadow: none !important;
+  background: var(--pure-white) !important;
+}
+
+mat-expansion-panel-header {
+  background: var(--bg-soft) !important;
+  padding: 0 1.5rem !important;
+  height: 60px !important;
+  border-radius: 10px !important;
+  transition: background 0.3s var(--ease) !important;
+}
+
+mat-expansion-panel-header:hover {
+  background: #cbdde9 !important;
+}
+
+.panel-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  font-family: var(--font-display) !important;
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+  color: var(--dark-accent) !important;
+  letter-spacing: 0.04em !important;
+}
+
+.panel-icon {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--primary) !important;
+}
+
+.panel-desc {
+  font-family: var(--font-body) !important;
+  font-size: 0.78rem !important;
+  font-weight: 300 !important;
+}
+
+/* ── Form Group ── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem 0.5rem 0.75rem;
+}
+
+.row {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.full-width  { width: 100%; }
+.half-width  { flex: 1; min-width: 200px; }
+
+/* ── Mat Form Field (luxury touches) ── */
+.mat-mdc-text-field-wrapper {
+  background: var(--bg-soft) !important;
+  border-radius: var(--radius) !important;
+}
+
+.mdc-notched-outline__leading,
+.mdc-notched-outline__notch,
+.mdc-notched-outline__trailing {
+  border-color: var(--border-light) !important;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--primary) !important;
+  border-width: 1.5px !important;
+}
+
+.mat-mdc-input-element,
+textarea.mat-mdc-input-element {
+  font-family: var(--font-body) !important;
+  font-weight: 300 !important;
+  color: var(--dark-accent) !important;
+  font-size: 0.92rem !important;
+}
+
+.mdc-floating-label {
+  font-family: var(--font-body) !important;
+}
+
+.mat-mdc-form-field-hint {
+  font-family: var(--font-body) !important;
+  font-size: 0.72rem !important;
+}
+
+.mat-mdc-select-value-text {
+  font-family: var(--font-body) !important;
+  font-size: 0.92rem !important;
+  color: var(--dark-accent) !important;
+}
+
+/* ── Checkboxes (refined) ── */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.mat-mdc-checkbox label {
+  font-family: var(--font-body) !important;
+  font-size: 0.88rem !important;
+  color: #3e5a6f !important;
+  cursor: pointer;
+}
+
+.mat-mdc-checkbox .mdc-checkbox__background {
+  border-color: var(--border-light) !important;
+  border-radius: 3px !important;
+}
+
+.mat-mdc-checkbox .mdc-checkbox--selected .mdc-checkbox__background {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.section-checkbox {
+  font-family: var(--font-body);
+  font-size: 0.9rem !important;
+}
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0.25rem 0 0.25rem;
+}
+
+.conditional-section {
+  padding: 1.25rem;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ═════════════════════════════════════════════════════════════ */
+/* ── UPLOAD BOXES (TEXT MADE SMALLER) ── */
+/* ═════════════════════════════════════════════════════════════ */
+.upload-box {
+  background: var(--bg-soft);
+  border: 1px dashed var(--neutral);
+  border-radius: var(--radius);
+  padding: 1rem;            /* reduced padding for tighter look */
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.upload-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;      /* was 1rem → smaller */
+  font-weight: 400;
+  color: var(--dark-accent);
+  margin: 0;
+}
+
+.upload-icon {
+  font-size: 16px !important;   /* reduced from 18px */
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--primary);
+}
+
+/* hint text inside upload boxes (e.g., “Main image shown on your listing card”) */
+.upload-hint-text {
+  font-family: var(--font-body);
+  font-size: 1rem;       /* extra small */
+  font-weight: 300;
+  color: black;
+  margin-left: 0.25rem;
+}
+
+.upload-btn {
+  font-family: var(--font-body) !important;
+  font-size: 0.68rem !important;   /* was 0.75rem */
+  font-weight: 500 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--primary) !important;
+  border-color: var(--primary-light) !important;
+  align-self: flex-start !important;
+  padding: 0.4rem 0.9rem !important;
+  min-height: 32px !important;
+}
+
+.upload-btn:hover {
+  background: rgba(74, 144, 226, 0.05) !important;
+  border-color: var(--primary) !important;
+}
+
+/* cover image preview text and remove button text (if any) */
+.remove-cover-btn {
+  font-size: 0.7rem !important;
+  font-family: var(--font-body) !important;
+}
+
+/* gallery image file name text (inside mat-form-field) */
+.gallery-item .mat-mdc-input-element {
+  font-size: 0.8rem !important;
+}
+
+/* ── Sharing Card (smooth animation) ── */
+.sharing-card {
+  background: var(--pure-white);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
+  animation: fadeIn 0.35s var(--ease) both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.sharing-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--primary-light);
+}
+
+.sharing-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.sharing-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--primary);
+  letter-spacing: 0.04em;
+}
+
+/* ── Amenity Chips ── */
+.amenities-section { margin-top: 0.5rem; }
+
+.amenities-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dark-accent);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.amenity-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--dark-accent);
+  background: #eef3fc;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  user-select: none;
+}
+
+.chip:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+.chip.chip-selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--pure-white);
+}
+
+/* ── Add Option Button ── */
+.add-option-btn {
+  width: 100% !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  color: var(--primary) !important;
+  border: 1px dashed var(--primary-light) !important;
+  border-radius: var(--radius) !important;
+  padding: 0.85rem !important;
+  transition: all 0.3s var(--ease) !important;
+}
+
+.add-option-btn:hover {
+  background: rgba(74, 144, 226, 0.06) !important;
+  border-color: var(--primary) !important;
+}
+
+/* ── Form Actions ── */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+  flex-wrap: wrap;
+}
+
+.form-actions button[color="primary"] {
+  background: var(--primary) !important;
+  color: var(--pure-white) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  border-radius: 0 !important;
+  padding: 0 2rem !important;
+  height: 46px !important;
+  box-shadow: 0 4px 18px rgba(74, 144, 226, 0.3) !important;
+  transition: all 0.3s var(--ease) !important;
+}
+
+.form-actions button[color="primary"]:hover:not(:disabled) {
+  background: var(--primary-dark) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 28px rgba(74, 144, 226, 0.4) !important;
+}
+
+.form-actions button[color="primary"]:disabled {
+  background: var(--neutral) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+
+.form-actions button[color="warn"],
+.form-actions a[mat-stroked-button] {
+  font-family: var(--font-body) !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--neutral) !important;
+  border-color: var(--border-light) !important;
+  border-radius: 0 !important;
+  height: 46px !important;
+  text-decoration: none !important;
+}
+
+.form-actions button[color="warn"]:hover,
+.form-actions a[mat-stroked-button]:hover {
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  background: transparent !important;
+}
+
+/* ── Success Section (after submission) ── */
+.success-section {
+  display: flex;
+  justify-content: center;
+  padding: 5rem 2rem;
+}
+
+.success-card {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--pure-white);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: var(--shadow-md);
+  animation: fadeIn 0.5s var(--ease) both;
+}
+
+.success-icon {
+  font-size: 3rem !important;
+  width: 3rem !important;
+  height: 3rem !important;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.success-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--dark-accent);
+  margin-bottom: 0.5rem;
+}
+
+.success-card p {
+  font-size: 0.88rem;
+  color: var(--neutral);
+}
+
+/* ── Responsive (mobile first elegance) ── */
+@media (max-width: 640px) {
+  .form-container   { padding: 0 0.75rem; margin: 1.5rem auto 3rem; }
+  .row              { flex-direction: column; }
+  .half-width       { min-width: 100%; }
+  .checkbox-grid    { grid-template-columns: 1fr 1fr; }
+  .form-actions     { flex-direction: column; }
+  .form-actions > * { width: 100% !important; justify-content: center !important; }
+  .headline         { padding: 2rem 1.25rem; }
+}

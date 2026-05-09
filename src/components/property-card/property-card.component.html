@@ -1,0 +1,37 @@
+<div class="property-card">
+  <div class="property-image">
+    <img [src]="property.image" [alt]="property.title">
+    <div class="property-badges">
+      @if (property.verified) {
+        <span class="badge verified">Verified</span>
+      }
+      <span class="badge premium">Premium</span>
+    </div>
+    <button class="favorite-btn" (click)="toggleFavorite()">
+      <mat-icon>{{ property.isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+    </button>
+  </div>
+  <div class="property-content">
+    <h3>{{ property.title }}</h3>
+    <p class="location">
+      <mat-icon>location_on</mat-icon>
+      {{ property.location }}
+    </p>
+    <div class="amenities">
+      @for (amenity of property.amenities; track amenity) {
+        <span class="amenity-chip">{{ amenity }}</span>
+      }
+    </div>
+    <div class="property-footer">
+      <div class="price-rating">
+        <p class="price">₹{{ property.price }}/month</p>
+        <div class="rating">
+          <mat-icon>star</mat-icon>
+          <span>{{ property.rating }}</span>
+          <span class="reviews">({{ property.reviews }} reviews)</span>
+        </div>
+      </div>
+      <button class="btn btn-outline">View Details</button>
+    </div>
+  </div>
+</div>

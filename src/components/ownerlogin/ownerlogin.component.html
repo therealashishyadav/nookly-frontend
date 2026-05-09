@@ -1,0 +1,118 @@
+<!-- Hero Section -->
+<section class="hero" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('assets/images/hero-bg.jpg') center/cover no-repeat;">
+  <div class="container">
+    <div class="hero-content">
+      <h1>Find Your Perfect Nook</h1>
+      <p>Discover premium PG accommodations tailored to your lifestyle</p>
+      <a routerLink="/listings" class="btn btn-primary">Explore Listings</a>
+    </div>
+  </div>
+</section>
+
+<!-- Search Section -->
+<section class="section">
+  <div class="container">
+  </div>
+</section>
+
+<!-- Featured Properties -->
+<section class="section" style="background-color: #F5F0E6;">
+  <div class="container">
+    <h2 class="text-center mb-4">Featured Properties</h2>
+    <div class="properties-grid">
+      @for (property of featuredProperties(); track property.id) {
+        <app-property-card [property]="property"></app-property-card>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Interactive Map Section -->
+<section class="section">
+  <div class="container">
+    <h2 class="text-center mb-4">Explore Properties on Map</h2>
+    <div class="map-container">
+      <!-- Map integration would go here -->
+      <div class="map-placeholder" style="height: 400px; background-color: #E0E0E0; display: flex; align-items: center; justify-content: center;">
+        <p>Interactive Map Integration</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Recommended for You -->
+<section class="section" style="background-color: #FAFAFA;">
+  <div class="container">
+    <h2 class="text-center mb-4">Recommended for You</h2>
+    <div class="properties-grid">
+      @for (property of recommendedProperties(); track property.id) {
+        <app-property-card [property]="property"></app-property-card>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Trending PGs -->
+<section class="section" style="background-color: #F5F0E6;">
+  <div class="container">
+    <h2 class="text-center mb-4">Trending PGs</h2>
+    <div class="properties-grid">
+      @for (property of trendingProperties(); track property.id) {
+        <app-property-card [property]="property"></app-property-card>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Trust Signals -->
+<section class="section">
+  <div class="container">
+    <div class="trust-signals">
+      <div class="trust-item">
+        <mat-icon>verified_user</mat-icon>
+        <h3>Verified Listings</h3>
+        <p>Every property is personally verified by our team</p>
+      </div>
+      <div class="trust-item">
+        <mat-icon>star</mat-icon>
+        <h3>4.8/5 Rating</h3>
+        <p>From 2,500+ satisfied tenants</p>
+      </div>
+      <div class="trust-item">
+        <mat-icon>support_agent</mat-icon>
+        <h3>24/7 Support</h3>
+        <p>Our team is always available to help you</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Educational Content -->
+<section class="section" style="background-color: #FAFAFA;">
+  <div class="container">
+    <h2 class="text-center mb-4">Renting Made Simple</h2>
+    <div class="guides-grid">
+      <div class="guide-card">
+        <div class="guide-icon">
+          <mat-icon>search</mat-icon>
+        </div>
+        <h3>Find Your Match</h3>
+        <p>Use our advanced filters to find PGs that match your preferences</p>
+      </div>
+      <div class="guide-card">
+        <div class="guide-icon">
+          <mat-icon>chat</mat-icon>
+        </div>
+        <h3>Connect Directly</h3>
+        <p>Message property owners directly without any middlemen</p>
+      </div>
+      <div class="guide-card">
+        <div class="guide-icon">
+          <mat-icon>assignment</mat-icon>
+        </div>
+        <h3>Secure Booking</h3>
+        <p>Book your PG with our secure payment system</p>
+      </div>
+    </div>
+  </div>
+</section>

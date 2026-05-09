@@ -1,0 +1,505 @@
+<app-navbar></app-navbar>
+
+
+<div class="loading-wrapper" *ngIf="isLoading">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading PG details...</p>
+</div>
+
+
+<div class="error-wrapper" *ngIf="error && !isLoading">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h2>{{ error }}</h2>
+    <button mat-raised-button color="primary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon> Go Back
+    </button>
+</div>
+
+<!-- ── Main Content ───────────────────────────────────────────────────────── -->
+<div class="pg-detail-wrapper" *ngIf="pg && !isLoading">
+
+    <!-- Back Button -->
+    <div class="back-bar">
+        <button mat-button (click)="goBack()" class="back-btn">
+            <mat-icon>arrow_back_ios</mat-icon> Back to Listings
+        </button>
+    </div>
+
+    <section class="gallery-section" *ngIf="allImages.length > 0">
+
+        <!-- Main Image -->
+        <div class="main-image-wrapper">
+            <img [src]="allImages[activeImageIndex]" [alt]="pg.pgName" class="main-image" />
+
+            <!-- Nav arrows — only show if multiple images -->
+            <button class="gallery-nav prev" (click)="prevImage()" *ngIf="allImages.length > 1">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            <button class="gallery-nav next" (click)="nextImage()" *ngIf="allImages.length > 1">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
+
+            <!-- Image counter -->
+            <div class="image-counter" *ngIf="allImages.length > 1">
+                {{ activeImageIndex + 1 }} / {{ allImages.length }}
+            </div>
+
+            <!-- Badges -->
+            <div class="badges">
+                <span class="badge verified" *ngIf="pg.isVerified">✅ Nookly Verified</span>
+                <span class="badge new" *ngIf="pg.isBrandNew">🆕 Brand New</span>
+                <span class="badge partner" *ngIf="pg.isPartnerVerified">🤝 Partner</span>
+            </div>
+        </div>
+
+        <!-- Thumbnail Strip -->
+        <div class="thumbnail-strip" *ngIf="allImages.length > 1">
+            <img *ngFor="let img of allImages; let i = index" [src]="img" [alt]="'Image ' + (i + 1)" class="thumbnail"
+                [class.active]="i === activeImageIndex" (click)="setActiveImage(i)" />
+        </div>
+
+    </section>
+
+    <!-- No image fallback -->
+    <section class="no-image-section" *ngIf="allImages.length === 0">
+        <mat-icon class="no-img-icon">image_not_supported</mat-icon>
+        <p>No images uploaded yet</p>
+    </section>
+    <div class="detail-layout">
+
+        <!-- ── LEFT COLUMN — Main Details ──────────────────────────────────── -->
+        <div class="left-col">
+
+            <!-- ── SECTION 2 — Basic Info ──────────────────────────────────────── -->
+            <section class="detail-card">
+
+                <div class="pg-header">
+                    <div>
+                        <h1 class="pg-name">{{ pg.pgName }}</h1>
+                        <p class="pg-location">
+                            <mat-icon class="loc-icon">location_on</mat-icon>
+                            {{ pg.locality }}, {{ pg.city }} — {{ pg.pinCode }}
+                        </p>
+                        <p class="pg-address">{{ pg.fullAddress }}</p>
+                    </div>
+                    <div class="pg-price-badge">
+                        <span class="from-text">From</span>
+                        <span class="price">₹{{ getLowestPrice() | number }}</span>
+                        <span class="per-month">/month</span>
+                    </div>
+                </div>
+
+                <!-- Quick Tags -->
+                <div class="quick-tags">
+                    <span class="tag tag-occupancy">{{ getOccupancyLabel() }}</span>
+                    <span class="tag tag-food" *ngIf="pg.foodProvided">🍽️ Food Included</span>
+                    <span class="tag tag-wifi" *ngIf="pg.wifiAvailable">📶 WiFi</span>
+                    <span class="tag tag-ac" *ngIf="pg.airConditioned">❄️ AC</span>
+                    <span class="tag tag-immediate" *ngIf="pg.immediatePossession">⚡ Immediate</span>
+                    <span class="tag tag-available">Available: {{ pg.availableRooms }} rooms</span>
+                </div>
+
+                <!-- Nearby Landmarks -->
+                <div class="landmarks" *ngIf="pg.nearbyLandmarks">
+                    <mat-icon class="landmark-icon">place</mat-icon>
+                    <span>{{ pg.nearbyLandmarks }}</span>
+                </div>
+
+            </section>
+
+            <!-- ── SECTION 3 — Sharing Options & Pricing ──────────────────────── -->
+            <section class="detail-card">
+                <h2 class="section-title">
+                    <mat-icon>hotel</mat-icon> Sharing Options & Pricing
+                </h2>
+
+                <div class="sharing-grid">
+                    <div class="sharing-card" *ngFor="let opt of pg.sharingOptions">
+                        <div class="sharing-header">
+                            <span class="sharing-type">{{ getSharingLabel(opt.sharingType) }}</span>
+                            <span class="sharing-price">₹{{ opt.pricePerMonth | number }}<small>/mo</small></span>
+                        </div>
+                        <div class="sharing-meta">
+                            <span><mat-icon>bed</mat-icon> {{ opt.totalBeds }} beds total</span>
+                            <span class="available-beds" [class.full]="opt.availableBeds === 0">
+                                {{ opt.availableBeds > 0 ? opt.availableBeds + ' available' : 'Full' }}
+                            </span>
+                        </div>
+                        <!-- Amenities for this sharing type -->
+                        <div class="sharing-amenities" *ngIf="opt.amenities.length">
+                            <span class="amenity-chip" *ngFor="let a of opt.amenities">{{ a }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charges Info -->
+                <div class="charges-info" *ngIf="pg.additionalChargesInfo">
+                    <mat-icon>info</mat-icon>
+                    <span>{{ pg.additionalChargesInfo }}</span>
+                </div>
+
+            </section>
+
+            <!-- ── SECTION 4 — Amenities ───────────────────────────────────────── -->
+            <section class="detail-card">
+                <h2 class="section-title">
+                    <mat-icon>star</mat-icon> Amenities & Facilities
+                </h2>
+
+                <div class="amenities-grid">
+
+                    <div class="amenity-group">
+                        <h4 class="amenity-group-title">Facilities</h4>
+                        <div class="amenity-list">
+                            <div class="amenity-item" *ngIf="pg.wifiAvailable">
+                                <mat-icon class="amenity-icon">wifi</mat-icon> WiFi
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.airConditioned">
+                                <mat-icon class="amenity-icon">ac_unit</mat-icon> AC
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.powerBackupAvailable">
+                                <mat-icon class="amenity-icon">battery_charging_full</mat-icon> Power Backup
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.geyserAvailable">
+                                <mat-icon class="amenity-icon">hot_tub</mat-icon> Geyser
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.washingMachineAvailable">
+                                <mat-icon class="amenity-icon">local_laundry_service</mat-icon> Washing Machine
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.liftAvailable">
+                                <mat-icon class="amenity-icon">elevator</mat-icon> Lift
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.gymAvailable">
+                                <mat-icon class="amenity-icon">fitness_center</mat-icon> Gym
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.rooftopAccess">
+                                <mat-icon class="amenity-icon">roofing</mat-icon> Rooftop Access
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.twoWheelerParking">
+                                <mat-icon class="amenity-icon">two_wheeler</mat-icon> 2-Wheeler Parking
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.fourWheelerParking">
+                                <mat-icon class="amenity-icon">directions_car</mat-icon> 4-Wheeler Parking
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.loungeAvailable">
+                                <mat-icon class="amenity-icon">weekend</mat-icon> Lounge
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="amenity-group">
+                        <h4 class="amenity-group-title">Security</h4>
+                        <div class="amenity-list">
+                            <div class="amenity-item" *ngIf="pg.cctvSurveillance">
+                                <mat-icon class="amenity-icon">videocam</mat-icon> CCTV
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.securityGuardAvailable">
+                                <mat-icon class="amenity-icon">security</mat-icon> Security Guard
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.fireSafetyAvailable">
+                                <mat-icon class="amenity-icon">local_fire_department</mat-icon> Fire Safety
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.idVerificationRequired">
+                                <mat-icon class="amenity-icon">badge</mat-icon> ID Verification
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="amenity-group">
+                        <h4 class="amenity-group-title">Services</h4>
+                        <div class="amenity-list">
+                            <div class="amenity-item" *ngIf="pg.dailyCleaning">
+                                <mat-icon class="amenity-icon">cleaning_services</mat-icon> Daily Cleaning
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.laundryService">
+                                <mat-icon class="amenity-icon">dry_cleaning</mat-icon> Laundry Service
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.maintenanceOnCall">
+                                <mat-icon class="amenity-icon">build</mat-icon> Maintenance on Call
+                            </div>
+                            <div class="amenity-item" *ngIf="pg.waterPurifierAvailable">
+                                <mat-icon class="amenity-icon">water_drop</mat-icon> Water Purifier
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ── SECTION 5 — Food & Kitchen ─────────────────────────────────── -->
+            <section class="detail-card" *ngIf="pg.foodProvided || pg.cookingAllowed">
+                <h2 class="section-title">
+                    <mat-icon>restaurant</mat-icon> Food & Kitchen
+                </h2>
+
+                <div class="food-grid">
+                    <div class="food-item" *ngIf="pg.foodProvided">
+                        <mat-icon class="food-icon check">check_circle</mat-icon>
+                        <div>
+                            <strong>Food Provided</strong>
+                            <p *ngIf="pg.mealTypes">{{ pg.mealTypes }}</p>
+                            <p *ngIf="pg.foodOptions">{{ pg.foodOptions }}</p>
+                        </div>
+                    </div>
+                    <div class="food-item" *ngIf="pg.cookingAllowed">
+                        <mat-icon class="food-icon check">check_circle</mat-icon>
+                        <span>Cooking Allowed</span>
+                    </div>
+                    <div class="food-item" *ngIf="pg.commonKitchenAccess">
+                        <mat-icon class="food-icon check">check_circle</mat-icon>
+                        <span>Common Kitchen Access</span>
+                    </div>
+                    <div class="food-item" *ngIf="pg.fridgeAvailable">
+                        <mat-icon class="food-icon check">check_circle</mat-icon>
+                        <span>Fridge Available</span>
+                    </div>
+                    <div class="food-item" *ngIf="pg.microwaveAvailable">
+                        <mat-icon class="food-icon check">check_circle</mat-icon>
+                        <span>Microwave Available</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── SECTION 6 — Room Details ────────────────────────────────────── -->
+            <section class="detail-card">
+                <h2 class="section-title">
+                    <mat-icon>bed</mat-icon> Room Details
+                </h2>
+
+                <div class="room-grid">
+                    <div class="room-item" *ngIf="pg.roomSizeSqFt">
+                        <span class="room-label">Room Size</span>
+                        <span class="room-value">{{ pg.roomSizeSqFt }} sq ft</span>
+                    </div>
+                    <div class="room-item" *ngIf="pg.bedType">
+                        <span class="room-label">Bed Type</span>
+                        <span class="room-value">{{ pg.bedTypeLabel || pg.bedType }}</span>
+                    </div>
+                    <div class="room-item">
+                        <span class="room-label">Furnished</span>
+                        <span class="room-value">{{ pg.furnished ? 'Yes' : 'No' }}</span>
+                    </div>
+                    <div class="room-item">
+                        <span class="room-label">Attached Washroom</span>
+                        <span class="room-value">{{ pg.attachedWashroom ? 'Yes' : 'No' }}</span>
+                    </div>
+                    <div class="room-item">
+                        <span class="room-label">Balcony</span>
+                        <span class="room-value">{{ pg.balconyAvailable ? 'Yes' : 'No' }}</span>
+                    </div>
+                    <div class="room-item">
+                        <span class="room-label">Study Table</span>
+                        <span class="room-value">{{ pg.studyTableAvailable ? 'Yes' : 'No' }}</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── SECTION 7 — Rules & Policies ───────────────────────────────── -->
+            <section class="detail-card">
+                <h2 class="section-title">
+                    <mat-icon>gavel</mat-icon> Rules & Policies
+                </h2>
+
+                <div class="rules-grid">
+                    <div class="rule-item" *ngIf="pg.entryExitTimings">
+                        <mat-icon>access_time</mat-icon>
+                        <div>
+                            <span class="rule-label">Entry / Exit Timings</span>
+                            <span class="rule-value">{{ pg.entryExitTimings }}</span>
+                        </div>
+                    </div>
+                    <div class="rule-item" *ngIf="pg.minimumStayMonths">
+                        <mat-icon>calendar_month</mat-icon>
+                        <div>
+                            <span class="rule-label">Minimum Stay</span>
+                            <span class="rule-value">{{ pg.minimumStayMonths }} months</span>
+                        </div>
+                    </div>
+                    <div class="rule-item" *ngIf="pg.noticePeriodDays">
+                        <mat-icon>event_note</mat-icon>
+                        <div>
+                            <span class="rule-label">Notice Period</span>
+                            <span class="rule-value">{{ pg.noticePeriodDays }} days</span>
+                        </div>
+                    </div>
+                    <div class="rule-item" *ngIf="pg.depositAmount">
+                        <mat-icon>currency_rupee</mat-icon>
+                        <div>
+                            <span class="rule-label">Deposit</span>
+                            <span class="rule-value">₹{{ pg.depositAmount | number }}</span>
+                        </div>
+                    </div>
+                    <div class="rule-item" *ngIf="pg.agreementType">
+                        <mat-icon>description</mat-icon>
+                        <div>
+                            <span class="rule-label">Agreement</span>
+                            <span class="rule-value">{{ pg.agreementLabel || pg.agreementType }}</span>
+                        </div>
+                    </div>
+                    <div class="rule-item" *ngIf="pg.availableFromDate">
+                        <mat-icon>event_available</mat-icon>
+                        <div>
+                            <span class="rule-label">Available From</span>
+                            <span class="rule-value">{{ pg.availableFromDate }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boolean rules -->
+                <div class="bool-rules">
+                    <span class="bool-tag" [class.allowed]="pg.visitorsAllowed" [class.denied]="!pg.visitorsAllowed">
+                        <mat-icon>{{ pg.visitorsAllowed ? 'check' : 'close' }}</mat-icon> Visitors
+                    </span>
+                    <span class="bool-tag" [class.allowed]="pg.smokingAllowed" [class.denied]="!pg.smokingAllowed">
+                        <mat-icon>{{ pg.smokingAllowed ? 'check' : 'close' }}</mat-icon> Smoking
+                    </span>
+                    <span class="bool-tag" [class.allowed]="pg.petsAllowed" [class.denied]="!pg.petsAllowed">
+                        <mat-icon>{{ pg.petsAllowed ? 'check' : 'close' }}</mat-icon> Pets
+                    </span>
+                    <span class="bool-tag" [class.allowed]="pg.alcoholAllowed" [class.denied]="!pg.alcoholAllowed">
+                        <mat-icon>{{ pg.alcoholAllowed ? 'check' : 'close' }}</mat-icon> Alcohol
+                    </span>
+                    <span class="bool-tag" [class.allowed]="pg.guestsOvernightAllowed"
+                        [class.denied]="!pg.guestsOvernightAllowed">
+                        <mat-icon>{{ pg.guestsOvernightAllowed ? 'check' : 'close' }}</mat-icon> Overnight Guests
+                    </span>
+                </div>
+
+                <!-- Refund Policy -->
+                <div class="refund-box" *ngIf="pg.refundPolicy">
+                    <mat-icon>policy</mat-icon>
+                    <div>
+                        <strong>Refund Policy</strong>
+                        <p>{{ pg.refundPolicy }}</p>
+                    </div>
+                </div>
+
+                <!-- Special Offers -->
+                <div class="offer-box" *ngIf="pg.specialOffers">
+                    <mat-icon>local_offer</mat-icon>
+                    <div>
+                        <strong>Special Offers</strong>
+                        <p>{{ pg.specialOffers }}</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ── SECTION 8 — Virtual Tour & Video ──────────────────────────── -->
+            <section class="detail-card" *ngIf="pg.virtualTourLink || pg.videoLink">
+                <h2 class="section-title">
+                    <mat-icon>videocam</mat-icon> Virtual Tour & Video
+                </h2>
+
+                <div class="media-links">
+                    <a *ngIf="pg.virtualTourLink" [href]="pg.virtualTourLink" target="_blank" class="media-link-btn">
+                        <mat-icon>360</mat-icon> View Virtual Tour
+                    </a>
+                    <a *ngIf="pg.videoLink" [href]="pg.videoLink" target="_blank" class="media-link-btn">
+                        <mat-icon>play_circle</mat-icon> Watch Video
+                    </a>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- ── RIGHT COLUMN — Contact & Map ────────────────────────────────── -->
+        <div class="right-col">
+
+            <!-- ── CONTACT CARD (Sticky) ───────────────────────────────────────── -->
+            <div class="contact-card sticky-card">
+
+                <div class="owner-header">
+                    <div class="owner-avatar">
+                        <mat-icon>person</mat-icon>
+                    </div>
+                    <div>
+                        <h3 class="owner-name">{{ pg.ownerName }}</h3>
+                        <p class="owner-label">PG Owner / Manager</p>
+                        <p class="visiting-hours" *ngIf="pg.visitingHours">
+                            <mat-icon>schedule</mat-icon> {{ pg.visitingHours }}
+                        </p>
+                    </div>
+                </div>
+
+                <mat-divider></mat-divider>
+
+                <!-- Price Summary -->
+                <div class="price-summary">
+                    <div class="price-row" *ngFor="let opt of pg.sharingOptions">
+                        <span>{{ getSharingLabel(opt.sharingType) }}</span>
+                        <span class="price-val">₹{{ opt.pricePerMonth | number }}/mo</span>
+                    </div>
+                    <div class="price-row deposit" *ngIf="pg.depositAmount">
+                        <span>Deposit</span>
+                        <span class="price-val">₹{{ pg.depositAmount | number }}</span>
+                    </div>
+                </div>
+
+                <mat-divider></mat-divider>
+
+                <!-- CTA Buttons -->
+                <div class="cta-buttons">
+                    <button mat-raised-button color="primary" class="cta-call" (click)="callOwner()">
+                        <mat-icon>call</mat-icon> Call Owner
+                    </button>
+
+                    <button mat-raised-button class="cta-whatsapp" (click)="whatsappOwner()" *ngIf="pg.whatsappNumber">
+                        <mat-icon>chat</mat-icon> WhatsApp
+                    </button>
+
+                    <button mat-stroked-button class="cta-map" (click)="openMap()" *ngIf="pg.googleMapLink">
+                        <mat-icon>map</mat-icon> View on Map
+                    </button>
+                </div>
+
+                <!-- Availability Info -->
+                <div class="availability-info">
+                    <div class="avail-row">
+                        <mat-icon>meeting_room</mat-icon>
+                        <span>{{ pg.availableRooms }} of {{ pg.totalRooms }} rooms available</span>
+                    </div>
+                    <div class="avail-row" *ngIf="pg.immediatePossession">
+                        <mat-icon class="green">flash_on</mat-icon>
+                        <span class="green">Immediate possession available</span>
+                    </div>
+                    <div class="avail-row" *ngIf="pg.waitingList">
+                        <mat-icon class="orange">hourglass_empty</mat-icon>
+                        <span class="orange">Waiting list open</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ── QUICK FACTS CARD ─────────────────────────────────────────────── -->
+            <div class="quick-facts-card">
+                <h3 class="qf-title">Quick Facts</h3>
+                <div class="qf-item">
+                    <mat-icon>people</mat-icon>
+                    <span>Available for {{ pg.availabilityLabel || pg.availabilityFor }}</span>
+                </div>
+                <div class="qf-item" *ngIf="pg.lockInPeriodMonths">
+                    <mat-icon>lock</mat-icon>
+                    <span>Lock-in: {{ pg.lockInPeriodMonths }} months</span>
+                </div>
+                <div class="qf-item" *ngIf="pg.housekeepingFrequency">
+                    <mat-icon>cleaning_services</mat-icon>
+                    <span>Housekeeping: {{ pg.housekeepingLabel || pg.housekeepingFrequency }}</span>
+                </div>
+                <div class="qf-item">
+                    <mat-icon>verified</mat-icon>
+                    <span>{{ pg.isVerified ? 'Nookly Verified' : 'Not yet verified' }}</span>
+                </div>
+                <div class="qf-item" *ngIf="pg.rating">
+                    <mat-icon>star</mat-icon>
+                    <span>{{ pg.rating }} / 5 ({{ pg.totalReviews }} reviews)</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<app-footer></app-footer>

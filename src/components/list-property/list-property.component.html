@@ -1,0 +1,728 @@
+<app-navbar></app-navbar>
+
+<section class="headline" aria-label="List Your PG">
+  <h1>List Your Premium PG Accommodation</h1>
+  <p>Fill out the form below to list your property on Nookly.</p>
+  <p>Your details will be kept confidential.</p>
+</section>
+
+<!-- Success State -->
+<section class="success-section" *ngIf="submitSuccess">
+  <div class="success-card">
+    <mat-icon class="success-icon">check_circle</mat-icon>
+    <h2>Your PG has been listed successfully!</h2>
+    <p>Redirecting to your listing page...</p>
+  </div>
+</section>
+
+<section class="form-container" aria-label="PG Listing Form" *ngIf="!submitSuccess">
+  <form #pgForm="ngForm" (ngSubmit)="SubmitListing()" novalidate>
+    <mat-accordion multi>
+
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <mat-icon class="panel-icon">home</mat-icon> Basic Information
+          </mat-panel-title>
+          <mat-panel-description class="panel-desc">
+            Essential details about your PG
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-group">
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>PG Name</mat-label>
+            <input matInput
+              placeholder="e.g. Sunrise PG Hinjewadi"
+              name="pgName"
+              [(ngModel)]="pgModel.pgName"
+              required
+              aria-label="PG Name" />
+            <mat-icon matSuffix>home</mat-icon>
+            <mat-error *ngIf="pgForm.submitted && !pgModel.pgName">PG name is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Full Address</mat-label>
+            <textarea matInput
+              placeholder="Street, Area, Landmark"
+              name="fullAddress"
+              [(ngModel)]="pgModel.fullAddress"
+              required
+              rows="2"
+              aria-label="Full Address"></textarea>
+            <mat-error *ngIf="pgForm.submitted && !pgModel.fullAddress">Address is required</mat-error>
+          </mat-form-field>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>City</mat-label>
+              <input matInput
+                placeholder="e.g. Pune"
+                name="city"
+                [(ngModel)]="pgModel.city"
+                required
+                aria-label="City" />
+              <mat-error *ngIf="pgForm.submitted && !pgModel.city">City is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Locality</mat-label>
+              <input matInput
+                placeholder="e.g. Hinjewadi"
+                name="locality"
+                [(ngModel)]="pgModel.locality"
+                aria-label="Locality" />
+            </mat-form-field>
+          </div>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Pin Code</mat-label>
+              <input matInput
+                placeholder="411057"
+                name="pinCode"
+                [(ngModel)]="pgModel.pinCode"
+                maxlength="6"
+                aria-label="Pin Code" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Google Map Link</mat-label>
+              <input matInput
+                placeholder="https://maps.google.com/..."
+                name="googleMapLink"
+                [(ngModel)]="pgModel.googleMapLink"
+                aria-label="Google Map Link" />
+              <mat-icon matSuffix>map</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nearby Landmarks</mat-label>
+            <textarea matInput
+              placeholder="0.4km from Wipro, near Metro Station"
+              name="nearbyLandmarks"
+              [(ngModel)]="pgModel.nearbyLandmarks"
+              rows="2"
+              aria-label="Nearby Landmarks"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Occupancy Type</mat-label>
+            <mat-select
+              name="occupancyType"
+              [(ngModel)]="pgModel.occupancyType"
+              required
+              aria-label="Occupancy Type">
+              <mat-option *ngFor="let o of occupancyTypes" [value]="o.value">
+                {{ o.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="pgForm.submitted && !pgModel.occupancyType">Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <!-- 2. MEDIA                                                       -->
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <mat-icon class="panel-icon">perm_media</mat-icon> Media
+          </mat-panel-title>
+          <mat-panel-description class="panel-desc">Images and videos of your PG</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-group">
+
+          <!-- ── Cover Image Upload (replaces URL input) ────────────── -->
+          <div class="upload-box">
+            <h4 class="upload-title">
+              <mat-icon class="upload-icon">image</mat-icon> Cover Image
+              <span class="upload-hint-text">(Main image shown on your listing card)</span>
+            </h4>
+
+            <!-- Preview shown after owner selects an image -->
+            <div *ngIf="coverImagePreview" class="cover-preview-wrapper">
+              <img
+                [src]="coverImagePreview"
+                alt="Cover Image Preview"
+                class="cover-preview-img" />
+              <button
+                mat-stroked-button
+                type="button"
+                color="warn"
+                class="remove-cover-btn"
+                (click)="removeCoverImage()">
+                <mat-icon>delete</mat-icon> Remove
+              </button>
+            </div>
+
+            <!-- Upload button — hidden once image is selected -->
+            <input
+              #coverInput
+              type="file"
+              accept="image/*"
+              (change)="onCoverImageSelected($event)"
+              style="display:none" />
+
+            <button
+              mat-stroked-button
+              type="button"
+              class="upload-btn"
+              (click)="coverInput.click()"
+              *ngIf="!coverImagePreview">
+              <mat-icon>add_photo_alternate</mat-icon> Upload Cover Image
+            </button>
+          </div>
+
+          <!-- ── Virtual Tour Link (URL is fine here) ──────────────── -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Virtual Tour Link (Optional)</mat-label>
+            <input matInput
+              placeholder="Paste YouTube walkthrough or Google 360° link"
+              name="virtualTourLink"
+              [(ngModel)]="pgModel.virtualTourLink"
+              aria-label="Virtual Tour Link" />
+            <mat-icon matSuffix>360</mat-icon>
+            <mat-hint>e.g. YouTube video link or Google Maps 360° tour</mat-hint>
+          </mat-form-field>
+
+          <!-- ── Gallery Images ─────────────────────────────────────── -->
+          <div class="upload-box">
+            <h4 class="upload-title">
+              <mat-icon class="upload-icon">photo_library</mat-icon> Gallery Images
+            </h4>
+            <div *ngFor="let image of galleryImageFiles; let i = index" class="gallery-item">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Image {{ i + 1 }}</mat-label>
+                <input matInput readonly [value]="image.name" />
+                <button mat-icon-button type="button" (click)="removeGalleryImage(i)" matSuffix>
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <input #galleryInput type="file" multiple accept="image/*"
+              (change)="onGalleryFilesSelected($event)" style="display:none" />
+            <button mat-stroked-button type="button" (click)="galleryInput.click()" class="upload-btn">
+              <mat-icon>add_photo_alternate</mat-icon> Add Images
+            </button>
+          </div>
+
+          <!-- ── Video Upload ───────────────────────────────────────── -->
+          <div class="upload-box">
+            <h4 class="upload-title">
+              <mat-icon class="upload-icon">videocam</mat-icon> Video Upload
+            </h4>
+            <mat-form-field appearance="outline" class="full-width" *ngIf="videoFile">
+              <mat-label>Video File</mat-label>
+              <input matInput readonly [value]="videoFile.name" />
+              <button mat-icon-button type="button" (click)="removeVideo()" matSuffix>
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-form-field>
+            <input #videoInput type="file" accept="video/*"
+              (change)="onVideoFileSelected($event)" style="display:none" />
+            <button mat-stroked-button type="button" (click)="videoInput.click()" class="upload-btn">
+              <mat-icon>videocam</mat-icon> Select Video
+            </button>
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <mat-icon class="panel-icon">bed</mat-icon> Room Details
+          </mat-panel-title>
+          <mat-panel-description class="panel-desc">Information about the rooms</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-group">
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Room Size (sq ft)</mat-label>
+              <input matInput type="number"
+                placeholder="120"
+                name="roomSizeSqFt"
+                [(ngModel)]="pgModel.roomSizeSqFt"
+                aria-label="Room Size" />
+              <mat-icon matSuffix>straighten</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Bed Type</mat-label>
+              <mat-select name="bedType" [(ngModel)]="pgModel.bedType" aria-label="Bed Type">
+                <mat-option *ngFor="let b of bedTypes" [value]="b.value">{{ b.label }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="checkbox-grid">
+            <mat-checkbox [(ngModel)]="pgModel.furnished" name="furnished">Furnished</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.attachedWashroom" name="attachedWashroom">Attached Washroom</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.balconyAvailable" name="balconyAvailable">Balcony Available</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.airConditioned" name="airConditioned">Air Conditioned</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.mattressProvided" name="mattressProvided">Mattress Provided</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.studyTableAvailable" name="studyTableAvailable">Study Table</mat-checkbox>
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <!-- 4. FOOD & KITCHEN                                              -->
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <mat-icon class="panel-icon">restaurant</mat-icon> Food & Kitchen
+          </mat-panel-title>
+          <mat-panel-description class="panel-desc">Meal options and kitchen facilities</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-group">
+
+          <mat-checkbox [(ngModel)]="pgModel.foodProvided" name="foodProvided" class="section-checkbox">
+            Food Provided
+          </mat-checkbox>
+
+          <div class="conditional-section" *ngIf="pgModel.foodProvided">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Meal Types</mat-label>
+              <input matInput
+                placeholder="Breakfast, Lunch, Dinner"
+                name="mealTypes"
+                [(ngModel)]="pgModel.mealTypes" />
+              <mat-hint>Meals included in the rent</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Food Options</mat-label>
+              <input matInput
+                placeholder="Veg, Non-Veg, Jain"
+                name="foodOptions"
+                [(ngModel)]="pgModel.foodOptions" />
+            </mat-form-field>
+          </div>
+
+          <div class="checkbox-grid">
+            <mat-checkbox [(ngModel)]="pgModel.cookingAllowed" name="cookingAllowed">Cooking Allowed</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.commonKitchenAccess" name="commonKitchenAccess">Common Kitchen</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.fridgeAvailable" name="fridgeAvailable">Fridge Available</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.microwaveAvailable" name="microwaveAvailable">Microwave</mat-checkbox>
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <!-- 5. AMENITIES                                                    -->
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <mat-icon class="panel-icon">star</mat-icon> Amenities
+          </mat-panel-title>
+          <mat-panel-description class="panel-desc">Facilities available in your PG</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-group">
+
+          <p class="section-label">Facilities</p>
+          <div class="checkbox-grid">
+            <mat-checkbox [(ngModel)]="pgModel.wifiAvailable" name="wifiAvailable">WiFi</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.powerBackupAvailable" name="powerBackupAvailable">Power Backup</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.geyserAvailable" name="geyserAvailable">Geyser</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.washingMachineAvailable" name="washingMachineAvailable">Washing Machine</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.liftAvailable" name="liftAvailable">Lift</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.gymAvailable" name="gymAvailable">Gym</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.rooftopAccess" name="rooftopAccess">Rooftop Access</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.loungeAvailable" name="loungeAvailable">Lounge</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.recreationAreaAvailable" name="recreationAreaAvailable">Recreation Area</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.twoWheelerParking" name="twoWheelerParking">2-Wheeler Parking</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.fourWheelerParking" name="fourWheelerParking">4-Wheeler Parking</mat-checkbox>
+          </div>
+
+          <p class="section-label">Security</p>
+          <div class="checkbox-grid">
+            <mat-checkbox [(ngModel)]="pgModel.cctvSurveillance" name="cctvSurveillance">CCTV</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.securityGuardAvailable" name="securityGuardAvailable">Security Guard</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.fireSafetyAvailable" name="fireSafetyAvailable">Fire Safety</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.idVerificationRequired" name="idVerificationRequired">ID Verification</mat-checkbox>
+          </div>
+
+          <p class="section-label">Services</p>
+          <div class="checkbox-grid">
+            <mat-checkbox [(ngModel)]="pgModel.dailyCleaning" name="dailyCleaning">Daily Cleaning</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.laundryService" name="laundryService">Laundry Service</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.maintenanceOnCall" name="maintenanceOnCall">Maintenance on Call</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.waterPurifierAvailable" name="waterPurifierAvailable">Water Purifier</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.dispenserAvailable" name="dispenserAvailable">Water Dispenser</mat-checkbox>
+          </div>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Housekeeping Frequency</mat-label>
+            <mat-select name="housekeepingFrequency" [(ngModel)]="pgModel.housekeepingFrequency">
+              <mat-option *ngFor="let h of housekeepingOptions" [value]="h.value">{{ h.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <!-- 6. SHARING OPTIONS & PRICING                                   -->
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <mat-icon class="panel-icon">currency_rupee</mat-icon> Sharing Options & Pricing
+          </mat-panel-title>
+          <mat-panel-description class="panel-desc">Add each sharing type with its price</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-group">
+
+          <div class="sharing-card"
+            *ngFor="let opt of pgModel.sharingOptions; let i = index">
+
+            <div class="sharing-card-header">
+              <span class="sharing-card-title">
+                <mat-icon>hotel</mat-icon> Option {{ i + 1 }}
+              </span>
+              <button mat-icon-button type="button" color="warn"
+                (click)="removeSharingOption(i)"
+                *ngIf="pgModel.sharingOptions.length > 1"
+                matTooltip="Remove this option">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <div class="row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Sharing Type</mat-label>
+                <mat-select
+                  [(ngModel)]="opt.sharingType"
+                  [name]="'sharingType_' + i"
+                  required>
+                  <mat-option *ngFor="let s of sharingTypes" [value]="s.value">
+                    {{ s.label }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Price / Month (₹)</mat-label>
+                <input matInput type="number"
+                  placeholder="8500"
+                  [(ngModel)]="opt.pricePerMonth"
+                  [name]="'pricePerMonth_' + i"
+                  required />
+                <mat-icon matSuffix>currency_rupee</mat-icon>
+                <mat-error>Price is required</mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Total Beds</mat-label>
+              <input matInput type="number"
+                placeholder="4"
+                [(ngModel)]="opt.totalBeds"
+                [name]="'totalBeds_' + i"
+                required
+                min="1" />
+              <mat-icon matSuffix>bed</mat-icon>
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+            <div class="amenities-section">
+              <p class="amenities-label">Amenities for this sharing type</p>
+              <div class="amenity-chips">
+                <span class="chip"
+                  *ngFor="let amenity of commonAmenities"
+                  [class.chip-selected]="isAmenitySelected(i, amenity)"
+                  (click)="toggleAmenity(i, amenity)">
+                  {{ amenity }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          <button mat-stroked-button type="button"
+            (click)="addSharingOption()" class="add-option-btn">
+            <mat-icon>add</mat-icon> Add Another Sharing Option
+          </button>
+
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <!-- 7. RENT & CHARGES                                              -->
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <mat-icon class="panel-icon">receipt_long</mat-icon> Rent & Charges
+          </mat-panel-title>
+          <mat-panel-description class="panel-desc">General pricing and financial details</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-group">
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Deposit Amount (₹)</mat-label>
+              <input matInput type="number"
+                name="depositAmount"
+                [(ngModel)]="pgModel.depositAmount" />
+              <mat-icon matSuffix>currency_rupee</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Security Deposit (₹)</mat-label>
+              <input matInput type="number"
+                name="securityDepositAmount"
+                [(ngModel)]="pgModel.securityDepositAmount" />
+              <mat-icon matSuffix>currency_rupee</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Notice Period (days)</mat-label>
+              <input matInput type="number"
+                name="noticePeriodDays"
+                [(ngModel)]="pgModel.noticePeriodDays" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Lock-in Period (months)</mat-label>
+              <input matInput type="number"
+                name="lockInPeriodMonths"
+                [(ngModel)]="pgModel.lockInPeriodMonths" />
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Additional Charges Info</mat-label>
+            <textarea matInput
+              placeholder="Electricity charged separately at ₹5/unit"
+              name="additionalChargesInfo"
+              [(ngModel)]="pgModel.additionalChargesInfo"
+              rows="2"></textarea>
+            <mat-hint>Mention any extra charges</mat-hint>
+          </mat-form-field>
+
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <!-- 8. CONTACT INFORMATION                                         -->
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <mat-icon class="panel-icon">contact_phone</mat-icon> Contact Information
+          </mat-panel-title>
+          <mat-panel-description class="panel-desc">How potential tenants can reach you</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-group">
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Owner / Manager Name</mat-label>
+            <input matInput
+              placeholder="Your full name"
+              name="ownerName"
+              [(ngModel)]="pgModel.ownerName"
+              required
+              aria-label="Owner Name" />
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="pgForm.submitted && !pgModel.ownerName">Owner name is required</mat-error>
+          </mat-form-field>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Contact Number</mat-label>
+              <input matInput
+                placeholder="9876543210"
+                name="contactNumber"
+                [(ngModel)]="pgModel.contactNumber"
+                required
+                maxlength="10"
+                aria-label="Contact Number" />
+              <mat-icon matSuffix>call</mat-icon>
+              <mat-error *ngIf="pgForm.submitted && !pgModel.contactNumber">Contact number is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>WhatsApp Number</mat-label>
+              <input matInput
+                placeholder="9876543210"
+                name="whatsappNumber"
+                [(ngModel)]="pgModel.whatsappNumber"
+                aria-label="WhatsApp Number" />
+              <mat-icon matSuffix>chat</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput
+              placeholder="owner@email.com"
+              name="email"
+              [(ngModel)]="pgModel.email"
+              type="email"
+              aria-label="Email" />
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Visiting Hours</mat-label>
+              <input matInput
+                placeholder="10am - 7pm"
+                name="visitingHours"
+                [(ngModel)]="pgModel.visitingHours"
+                aria-label="Visiting Hours" />
+              <mat-hint>Preferred time for property visits</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Available For</mat-label>
+              <mat-select name="availabilityFor" [(ngModel)]="pgModel.availabilityFor">
+                <mat-option *ngFor="let a of availabilityOptions" [value]="a.value">
+                  {{ a.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <!-- 9. RULES & POLICIES                                            -->
+      <!-- ══════════════════════════════════════════════════════════════ -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <mat-icon class="panel-icon">gavel</mat-icon> Rules & Policies
+          </mat-panel-title>
+          <mat-panel-description class="panel-desc">House rules, agreements and availability</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-group">
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Entry / Exit Timings</mat-label>
+              <input matInput
+                placeholder="10pm strict"
+                name="entryExitTimings"
+                [(ngModel)]="pgModel.entryExitTimings" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Agreement Type</mat-label>
+              <mat-select name="agreementType" [(ngModel)]="pgModel.agreementType">
+                <mat-option *ngFor="let a of agreementOptions" [value]="a.value">{{ a.label }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Minimum Stay (months)</mat-label>
+              <input matInput type="number"
+                name="minimumStayMonths"
+                [(ngModel)]="pgModel.minimumStayMonths" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Available From</mat-label>
+              <input matInput type="date"
+                name="availableFromDate"
+                [(ngModel)]="pgModel.availableFromDate" />
+              <mat-icon matSuffix>calendar_today</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Total Rooms</mat-label>
+              <input matInput type="number"
+                name="totalRooms"
+                [(ngModel)]="pgModel.totalRooms" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Available Rooms</mat-label>
+              <input matInput type="number"
+                name="availableRooms"
+                [(ngModel)]="pgModel.availableRooms" />
+            </mat-form-field>
+          </div>
+
+          <div class="checkbox-grid">
+            <mat-checkbox [(ngModel)]="pgModel.visitorsAllowed" name="visitorsAllowed">Visitors Allowed</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.guestsOvernightAllowed" name="guestsOvernightAllowed">Overnight Guests</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.smokingAllowed" name="smokingAllowed">Smoking Allowed</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.petsAllowed" name="petsAllowed">Pets Allowed</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.alcoholAllowed" name="alcoholAllowed">Alcohol Allowed</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.immediatePossession" name="immediatePossession">Immediate Possession</mat-checkbox>
+            <mat-checkbox [(ngModel)]="pgModel.waitingList" name="waitingList">Waiting List Open</mat-checkbox>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Special Offers</mat-label>
+            <input matInput
+              placeholder="First month 10% off"
+              name="specialOffers"
+              [(ngModel)]="pgModel.specialOffers" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Refund Policy</mat-label>
+            <textarea matInput
+              name="refundPolicy"
+              [(ngModel)]="pgModel.refundPolicy"
+              rows="2"></textarea>
+          </mat-form-field>
+
+        </div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+
+    <!-- ── Form Actions ─────────────────────────────────────────────── -->
+    <div class="form-actions">
+      <button mat-stroked-button type="button" color="warn" (click)="resetForm()" aria-label="Reset Form">
+        <mat-icon>clear</mat-icon> Reset
+      </button>
+
+      <a mat-stroked-button routerLink="/ownerpage" aria-label="Go Back">
+        <mat-icon>arrow_back_ios</mat-icon> Go Back
+      </a>
+
+      <button mat-raised-button color="primary" type="submit"
+        [disabled]="isSubmitting" aria-label="Submit PG Details">
+        <mat-icon>save</mat-icon>
+        {{ isSubmitting ? 'Submitting...' : 'Submit PG Details' }}
+      </button>
+    </div>
+
+  </form>
+</section>
+
+<app-footer></app-footer>

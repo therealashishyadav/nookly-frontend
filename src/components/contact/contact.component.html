@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+<div class="contact-container">
+    <h2>Contact Us</h2>
+    <form (ngSubmit)="Submit()">
+        <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput type="text" [(ngModel)]="inquiry.fullName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" [(ngModel)]="inquiry.email" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput type="tel" [(ngModel)]="inquiry.phone" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <textarea matInput [(ngModel)]="inquiry.location" required></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Message</mat-label>
+            <textarea matInput [(ngModel)]="inquiry.message" required></textarea>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary">Send Message</button>
+        <div class="contact-info">
+            <h2>Get in Touch</h2>
+            <mat-label>If you have any questions or need assistance, feel free to reach out to us.</mat-label>
+        </div>
+        <div class="direct_contact">
+            <h3>Direct Contact</h3>
+            <p>Email: <a href="mailto:nookly@gmail.com">Nookly&#64;gmail.com</a></p>
+            <p>Phone: <a href="tel:+917063833301">+91 70638 33301</a></p>
+            <!-- <p>Address: NHS</p> -->
+        </div>
+
+
+    </form>
+</div>
+
+<app-footer></app-footer>

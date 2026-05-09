@@ -1,0 +1,131 @@
+Owner Module
+====================
+
+1. Registration & Verification
+	- Owner submits inquiry/verification request.
+	- Backend creates Owner account and provides a password (changeable later).
+	- Login via email and password (JWT authentication).
+
+2. Owner Dashboard
+	- Information about Nookly.
+	- Dashboard to manage PG listings.
+	- List of inquiries sent by the owner.
+
+3. PG Listing Details
+	- PG Name
+	- PG ID
+	- Room Availability
+	- Full Address
+	- City, Locality, Pincode
+	- Google Map Link, Nearby Landmarks
+	- Cover Image URL, Gallery Images
+	- Virtual Tour Link, Video Link
+	- Occupancy Type
+	- Room Size (sqft)
+	- Furnished Status
+	- Attached Washroom, Balcony, Air Conditioning
+	- Bed Type, Mattress Provided, Study Table
+	- Food Provided, Meal Types, Food Options
+	- Cooking Allowed, Common Kitchen Access
+	- Fridge, Microwave, WiFi, Power Backup, Geyser, Washing Machine
+	- Housekeeping Frequency
+	- CCTV Surveillance, Security Guard, Lift
+	- Two/Four Wheeler Parking, Lounge, Recreation Area
+	- Daily Cleaning, Laundry Service, Maintenance On Call, Water Purifier
+	- Entry/Exit Timings, Visitors Allowed
+	- Security Deposit Amount, ID Verification, Fire Safety
+	- Monthly Rent, Deposit Amount, Notice Period, Lock-in Period, Additional Charges
+	- Owner Name, Contact Number, WhatsApp, Email, Visiting Hours, Availability
+	- Agreement Type, Minimum Stay, Notice Period to Leave, Refund Policy, House Rules Document
+	- Special Offers, Early Bird Discounts, Referral Bonuses
+	- Immediate Possession, Available From Date, Waiting List
+
+4. PG Management
+	- Get PG by Name
+	- View raw PG representation
+	- Update PG details
+	- Soft Delete (requires password; sets status to INACTIVE)
+
+5. Owner Profile & Analytics
+	- View own PGs
+	- Analytics/Reports: Total PGs listed, Rooms available vs. occupied, monthly revenue projection
+	- Booking Requests (future): Pending inquiries from customers
+	- PG Status Filters: Active, Under Review, Inactive
+	- Editable Profile: Name, Contact, Email, Address
+	- KYC Verification: Aadhaar/PAN upload, verification status
+	- Bank Details for payments (if applicable)
+	- Two-Factor Authentication (2FA) for login
+	- Email OTP verification during registration
+	- Activity Log: Login history, PG updates/deletes with timestamps
+	- Property Type: Flat / Villa / Hostel / Co-living
+	- Gender Preference: Male/Female/Unisex
+	- Rating & Reviews (future scope)
+	- Document Upload: Rent Agreement PDF, Fire Safety Certificate
+	- Availability Calendar (future feature)
+
+6. Inquiry Management
+	- View inquiries related to PGs
+	- Respond via platform (optional messaging system)
+	- Mark inquiry as Converted / Rejected
+	- Featured Listing Option (pay for visibility boost)
+	- Lead Purchase (buy verified leads)
+
+7. Notifications & Compliance
+	- Push/email notifications for: New inquiry, PG approval, payment reminders
+	- Owner must enter password to confirm delete
+	- Soft Delete: status = INACTIVE (not removed from DB)
+	- Audit trail for compliance
+
+8. Owner Support & Help
+	- Access to help resources and FAQs
+	- Contact support via email, chat, or phone
+	- Troubleshooting guides for common issues
+
+9. Terms & Conditions & Legal
+	- Reference to platform terms of service and privacy policy
+	- Compliance with local rental laws and regulations
+	- Data protection and privacy commitments
+
+10. Owner Onboarding
+	- Step-by-step onboarding guide for new owners
+	- Documentation and video tutorials
+	- Checklist for successful account setup and PG listing
+
+11. API Integration (Advanced)
+	- Bulk upload and management of PG listings via API
+	- API documentation and access keys
+	- Webhooks for real-time updates
+
+12. Mobile App Features
+	- Mobile app support for owner dashboard and PG management
+	- Push notifications, inquiry management, and analytics on mobile
+	- Mobile-specific features (e.g., camera upload, location services)
+
+13. Role-Based Access & Staff Accounts
+	- Ability for owners to create sub-accounts for staff or managers
+	- Role-based permissions for PG management, inquiry handling, and reporting
+	- Audit trail for staff actions
+14. Change Log / Version History
+	- Track updates to owner features and documentation
+	- Version numbers and release dates
+
+15. Security Best Practices
+	- Password management tips
+	- Data protection guidelines
+	- Account recovery procedures
+
+16. Feedback & Feature Requests
+	- How owners can suggest improvements or report bugs
+	- Feedback channels (form, email, chat)
+
+17. Integration with Other Platforms
+	- Payment gateway integration
+	- Property portal syndication
+	- Other third-party services
+
+18. Glossary
+	- Definitions of key terms and concepts for new users
+
+19. Contact Information
+	- Direct contact details for urgent support or escalation
+	- Support hours and response times

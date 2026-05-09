@@ -1,0 +1,338 @@
+
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #b8860b;
+    /* Gold accent */
+    --accent-color: #d4af37;
+    /* Premium gold */
+    --light-color: #f8f9fa;
+    --dark-color: #1a1a1a;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+ul,
+a,
+.form-title
+ {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+
+}
+
+.sub-title, .sub-title{
+   font-family: "Cinzel", serif;
+    font-weight: 400;
+
+}
+
+/* Base Styles */
+.bootstrap-wrapper {
+    /* font-family: 'Playfa/ir Display', serif; */
+    background: linear-gradient(rgba(249, 247, 240, 0.479), rgba(249, 247, 240, 0.95)),
+        url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center;
+    background-size: cover;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Card Styling */
+.form-card {
+    border-radius: var(--border-radius) !important;
+    /* font-family: 'Playfair Display', serif; */
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    border: none;
+    transition: var(--transition);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background: linear-gradient(rgba(249, 247, 240, 0.479), rgba(249, 247, 240, 0.95));
+}
+
+.form-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.mat-card-header {
+    background: linear-gradient(to right, var(--primary-color), #34495e);
+    color: white !important;
+    padding: 2rem !important;
+    border-bottom: 3px solid var(--accent-color);
+    /* font-family: 'Playfair Display', serif; */
+
+}
+.sub-title{
+    /* font-family: 'Playfair Display', serif; */
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem !important;
+    color: rgb(100, 100, 100);
+}
+.form-title {
+    /* font-family: 'Playfair Display', serif; */
+    color: rgb(65, 65, 65);
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem !important;
+}
+
+.mat-card-subtitle {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 1rem !important;
+    font-weight: 300 !important;
+}
+
+/* Form Sections */
+.form-section {
+    padding: 1.5rem;
+}
+
+mat-label{
+    /* font-family: 'Playfair Display', serif !important; */
+    font-weight: 400;
+}
+
+.mat-expansion-panel {
+    margin-bottom: 1rem !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mat-expansion-panel-header {
+    padding: 1rem 1.5rem !important;
+    font-weight: 500 !important;
+}
+
+.mat-expansion-panel-header-title {
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+}
+
+.mat-expansion-panel-header-description {
+    color: #666 !important;
+    font-weight: 400 !important;
+}
+
+/* Form Fields */
+.mat-form-field {
+    margin: 0.75rem 0 !important;
+    width: 100%;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+    color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: var(--accent-color) !important;
+}
+
+.mat-input-element {
+    caret-color: var(--accent-color) !important;
+}
+
+.mat-form-field-label {
+    color: #666 !important;
+}
+
+.mat-focused .mat-form-field-label {
+    color: var(--accent-color) !important;
+}
+
+.mat-form-field-suffix .mat-icon {
+    color: var(--secondary-color) !important;
+}
+
+/* Buttons */
+.mat-raised-button {
+    border-radius: var(--border-radius) !important;
+    padding: 0.5rem 1.5rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.5px;
+    transition: var(--transition) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+}
+
+.mat-raised-button[color="primary"] {
+    background-color: var(--accent-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.mat-raised-button[color="primary"]:hover {
+    background-color: var(--secondary-color) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.mat-raised-button[color="warn"] {
+    background-color: white !important;
+    color: var(--error-color) !important;
+    border: 1px solid var(--error-color) !important;
+}
+
+.mat-raised-button[color="warn"]:hover {
+    background-color: var(--error-color) !important;
+    color: white !important;
+}
+
+/* Checkboxes */
+.mat-checkbox {
+    margin-right: 1rem !important;
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    background-color: var(--accent-color) !important;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+/* Form Layout */
+.row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.half-width {
+    width: calc(50% - 0.75rem) !important;
+}
+
+.full-width {
+    width: 100% !important;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Upload Sections */
+.gallery-upload,
+.video-upload {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: var(--border-radius);
+    border: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.gallery-upload h4,
+.video-upload h4 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.gallery-upload h4::before,
+.video-upload h4::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 1.2rem;
+    background: var(--accent-color);
+    margin-right: 0.75rem;
+}
+
+.gallery-item {
+    margin-bottom: 1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .half-width {
+        width: 100% !important;
+    }
+
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-title {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* Animations */
+.mat-expansion-panel-header,
+.mat-form-field,
+.mat-raised-button,
+.mat-checkbox {
+    transition: var(--transition) !important;
+}
+
+.mat-expansion-panel-header:hover {
+    background-color: rgba(212, 175, 55, 0.05) !important;
+}
+
+/* Utility Classes */
+.mat-hint {
+    font-size: 0.8rem !important;
+    color: #888 !important;
+}
+
+.mat-icon {
+    vertical-align: middle !important;
+}.form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px 0;
+  margin-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+.form-actions button,
+.form-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.form-actions a {
+  text-decoration: none;
+  color: #666;
+  margin-right: auto;
+}
+
+.form-actions a:hover {
+  color: #333;
+  text-decoration: underline;
+}
