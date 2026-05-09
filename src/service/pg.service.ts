@@ -43,9 +43,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PGListing } from '../entity/PGListing';
+import { environment } from '../Environments/environment';
 
-const SHOW_PG_URL = 'http://localhost:8080';
-const ADD_PG_URL = 'http://localhost:8080/api/pg-listings';
+// const SHOW_PG_URL = 'http://localhost:8080';
+// const ADD_PG_URL = 'http://localhost:8080/api/pg-listings';
+
+const apiUrl = environment.apiUrl;
+const SHOW_PG_URL = apiUrl;
+const ADD_PG_URL = `${apiUrl}/api/pg-listings`;
 
 @Injectable({
   providedIn: 'root'
@@ -69,7 +74,7 @@ export class PgService {
   // }
 
   getMyPGs(): Observable<any[]> {
-  return this.http.get<any[]>(`http://localhost:8080/api/pg-listings/owner`, {
+  return this.http.get<any[]>(`${ADD_PG_URL}/owner`, {
     headers: this.getAuthHeaders()
   });
 }

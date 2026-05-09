@@ -105,13 +105,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PgListingResponse, PgModel } from '../entity/PgModel';
+import { environment } from '../Environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PgListingService {
 
-  private baseUrl = 'http://localhost:8080/api/pg-listings';
+  // private baseUrl = 'http://localhost:8080/api/pg-listings';
+
+  private apiUrl = environment.apiUrl;
+  private baseUrl = `${this.apiUrl}/api/pg-listings`;
 
   constructor(private http: HttpClient) {}
 

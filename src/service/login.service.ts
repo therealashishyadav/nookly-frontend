@@ -4,10 +4,15 @@ import { JwtToken } from '../entity/JwtToken';
 import { LoginEntity } from '../entity/LoginEntity';
 import { Role } from '../entity/Role';
 import { Observable } from 'rxjs';
+import { environment } from '../Environments/environment';
 
-const token_url = "http://localhost:8080/api/v1/auth/signin"
-const user_url = "http://localhost:8080/api/v1/USER"
-const role_url = "http://localhost:8080/api/v1/auth/role/"
+// const token_url = "http://localhost:8080/api/v1/auth/signin"
+// const user_url = "http://localhost:8080/api/v1/USER"
+// const role_url = "http://localhost:8080/api/v1/auth/role/"
+
+const apiUrl = environment.apiUrl;
+const token_url = apiUrl + '/api/v1/auth/signin';
+const user_url = apiUrl + '/api/v1/USER';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +42,7 @@ export class LoginService {
 
   getRole(identifier: string) {
     // role endpoint only works with email, so pass whatever we have
-    return this.http.get<string>(`http://localhost:8080/api/v1/auth/role/${identifier}`);
+    return this.http.get<string>(apiUrl + `/api/v1/auth/role/${identifier}`);
   }
 
   currentUser() {

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError, forkJoin } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
+import { environment } from '../Environments/environment';
 
 // Models
 export interface Owner {
@@ -55,8 +56,14 @@ export interface DashboardStats {
   providedIn: 'root'
 })
 export class OwnerDashboardService {
-  private authApiUrl = 'http://localhost:8080/api/v1';
-  private pgApiUrl = 'http://localhost:8080/api';
+  // private authApiUrl = 'http://localhost:8080/api/v1';
+  // private pgApiUrl = 'http://localhost:8080/api';
+
+// const apiUrl = environment.apiUrl;
+
+private apiUrl = environment.apiUrl;
+private authApiUrl = `${this.apiUrl}/api/v1`;
+private pgApiUrl = `${this.apiUrl}/api`;
 
   constructor(private http: HttpClient, ) {}
 
