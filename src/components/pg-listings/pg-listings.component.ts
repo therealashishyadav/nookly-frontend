@@ -35,20 +35,20 @@ import { PgListingService } from '../../service/pg-listing.service';
   styleUrl: './pg-listings.component.css'
 })
 export class PgListingsComponent {
-  // ── Data ──────────────────────────────────────────────────────────────────
+
   listings: PgListingResponse[]         = [];
   filteredListings: PgListingResponse[] = [];
  
-  // ── UI State ──────────────────────────────────────────────────────────────
+
   isLoading     = true;
   hasError      = false;
   errorMessage  = '';
   isSidebarOpen = false;
  
-  // ── Search ────────────────────────────────────────────────────────────────
+
   searchCity = '';
  
-  // ── Filters ───────────────────────────────────────────────────────────────
+
   selectedGender   = '';
   selectedRoomType = '';
   minRent          = 0;
@@ -59,7 +59,7 @@ export class PgListingsComponent {
   preferredFor     = '';
   attachedBathroom = false;
  
-  // ── Sort ──────────────────────────────────────────────────────────────────
+
   sortBy = 'newest';
  
   sortOptions = [
@@ -77,7 +77,7 @@ export class PgListingsComponent {
     this.loadAllListings();
   }
  
-  // ── Fetch ALL PGs from backend ─────────────────────────────────────────────
+
   loadAllListings(): void {
     this.isLoading = true;
     this.hasError  = false;
@@ -98,7 +98,7 @@ export class PgListingsComponent {
     });
   }
  
-  // ── Search by city ─────────────────────────────────────────────────────────
+
   onSearch(): void {
     if (!this.searchCity.trim()) {
       this.loadAllListings();
@@ -126,7 +126,7 @@ export class PgListingsComponent {
     });
   }
  
-  // ── Apply filters + sort ───────────────────────────────────────────────────
+
   applyFiltersAndSort(): void {
     let result = [...this.listings];
  
@@ -154,7 +154,7 @@ export class PgListingsComponent {
     this.filteredListings = this.sortListings(result);
   }
  
-  // ── Sort ───────────────────────────────────────────────────────────────────
+
   sortListings(list: PgListingResponse[]): PgListingResponse[] {
     return [...list].sort((a, b) => {
       switch (this.sortBy) {
@@ -165,7 +165,7 @@ export class PgListingsComponent {
     });
   }
  
-  // ── Reset ──────────────────────────────────────────────────────────────────
+
   resetFilters(): void {
     this.selectedGender   = '';
     this.selectedRoomType = '';
@@ -185,7 +185,7 @@ export class PgListingsComponent {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
  
-  // ── Helpers ────────────────────────────────────────────────────────────────
+
   getLowestPrice(pg: PgListingResponse): number {
     if (pg.lowestPrice) return pg.lowestPrice;
     if (!pg.sharingOptions.length) return 0;

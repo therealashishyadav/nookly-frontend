@@ -127,15 +127,15 @@ export class PgListingService {
     });
   }
 
-  uploadImage(file: File): Observable<{ url: string }> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.http.post<{ url: string }>(
-      `${this.baseUrl}/upload-image`,
-      formData,
-      { headers: new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('token')}` }) }
-    );
-  }
+  // uploadImage(file: File): Observable<{ url: string }> {
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+  //   return this.http.post<{ url: string }>(
+  //     `${this.baseUrl}/upload-image`,
+  //     formData,
+  //     { headers: new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('token')}` }) }
+  //   );
+  // }
 
   // ownerId extracted from token on backend — no need to pass it
   createListing(pgModel: PgModel): Observable<PgListingResponse> {
