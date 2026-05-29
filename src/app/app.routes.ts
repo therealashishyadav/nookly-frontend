@@ -20,6 +20,7 @@ import { TenantListComponent } from '../components/tenant-list/tenant-list.compo
 import { AddTenantComponent } from '../components/add-tenant/add-tenant.component';
 import { RentSheetComponent } from '../components/rent-sheet/rent-sheet.component';
 import { OwnerGuard } from '../OwnerGuard';
+import { OwnerNavbarComponent } from '../components/owner-navbar/owner-navbar.component';
 // import { Navbar2Component } from '../components/navbar2/navbar2.component';
 
 export const routes: Routes = [
@@ -29,7 +30,6 @@ export const routes: Routes = [
     { path: 'navbar', component: NavbarComponent },
     { path: 'footer', component: FooterComponent },
     { path: 'homepage', component: HomepageComponent },
-    // { path: 'ownerpage', component: OwnerpageComponent },
     { path: 'addpg', component: AddpgComponent },
     { path: 'about', component: AboutComponent },
     { path: 'contact', component: ContactComponent },
@@ -39,14 +39,16 @@ export const routes: Routes = [
     { path: 'listings', component: PgListingsComponent },
     { path: 'pg/:id', component: PgDetailComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
-    // { path: 'tenantlist', component: TenantListComponent},
-    // { path: 'addtenant', component: AddTenantComponent},
-    // { path: 'rentsheet', component: RentSheetComponent},
-    { path: 'owner/dashboard', component: OwnerpageComponent, canActivate: [OwnerGuard] },
-    { path: 'owner/add-pg', component: ListPropertyComponent, canActivate: [OwnerGuard] },
-    { path: 'owner/add-tenant', component: AddTenantComponent, canActivate: [OwnerGuard] },
-    { path: 'owner/tenants', component: TenantListComponent, canActivate: [OwnerGuard] },
-    { path: 'owner/rent-sheet', component: RentSheetComponent, canActivate: [OwnerGuard] },
+    { path: 'tenantlist', component: TenantListComponent },
+    { path: 'addtenant', component: AddTenantComponent },
+    { path: 'rentsheet', component: RentSheetComponent },
+    { path: 'owner-navbar', component: OwnerNavbarComponent },
+    { path: 'ownerpage', component: OwnerpageComponent },
+    // { path: 'owner/dashboard', component: OwnerpageComponent},
+    // { path: 'owner/add-pg', component: ListPropertyComponent},
+    // { path: 'owner/add-tenant', component: AddTenantComponent},
+    // { path: 'owner/tenants', component: TenantListComponent},
+    // { path: 'owner/rent-sheet', component: RentSheetComponent},
 
 
     // {path: 'navbar2', component: Navbar2Component},

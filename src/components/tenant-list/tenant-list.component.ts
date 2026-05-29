@@ -8,6 +8,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TenantService } from '../../service/tenant.service';
 import { Tenant } from '../../entity/Tenant';
+import { OwnerNavbarComponent } from '../owner-navbar/owner-navbar.component';
 
 @Component({
   selector: 'app-tenant-list',
@@ -16,7 +17,7 @@ import { Tenant } from '../../entity/Tenant';
     CommonModule, RouterLink,
     MatButtonModule, MatIconModule,
     MatSnackBarModule, MatChipsModule,
-    NavbarComponent
+    OwnerNavbarComponent,
   ],
   templateUrl: './tenant-list.component.html',
   styleUrls: ['./tenant-list.component.css']

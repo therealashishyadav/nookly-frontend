@@ -28,7 +28,7 @@ export class OwnerNavbarComponent implements OnInit {
     { label: 'Rent Sheet',  icon: 'receipt_long',    route: '/owner/rent-sheet' },
   ];
 
-  constructor(private router: Router) {}
+  constructor(public router: Router) {}
 
   ngOnInit(): void {
     // Load owner name from localStorage (set during login)

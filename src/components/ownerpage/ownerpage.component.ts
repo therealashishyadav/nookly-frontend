@@ -182,11 +182,12 @@ import { FormsModule } from '@angular/forms';
 import { PgService } from '../../service/pg.service';
 import { RouterLink } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { OwnerNavbarComponent } from '../owner-navbar/owner-navbar.component';
 
 @Component({
   selector: 'app-ownerpage',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, OwnerNavbarComponent],
   templateUrl: './ownerpage.component.html',
   styleUrl: './ownerpage.component.css'
 })
@@ -198,6 +199,8 @@ export class OwnerpageComponent implements OnInit {
   averageRent: number = 0;
   editingPG: any | null = null;
   isLoading: boolean = true;
+  greeting: string = 'Hello';
+  ownerName: string = 'Owner';
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

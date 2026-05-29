@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TenantService } from '../../service/tenant.service';
 import { RentRecord } from '../../entity/Tenant';
+import { OwnerNavbarComponent } from '../owner-navbar/owner-navbar.component';
 
 @Component({
   selector: 'app-rent-sheet',
@@ -19,7 +20,7 @@ import { RentRecord } from '../../entity/Tenant';
     CommonModule, FormsModule, RouterLink,
     MatButtonModule, MatIconModule, MatSelectModule,
     MatFormFieldModule, MatSnackBarModule, MatTooltipModule,
-    NavbarComponent
+    OwnerNavbarComponent,
   ],
   templateUrl: './rent-sheet.component.html',
   styleUrls: ['./rent-sheet.component.css']

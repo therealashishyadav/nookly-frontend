@@ -11,6 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TenantService } from '../../service/tenant.service';
 import { Tenant } from '../../entity/Tenant';
+import { OwnerNavbarComponent } from "../owner-navbar/owner-navbar.component";
 
 @Component({
   selector: 'app-add-tenant',
@@ -19,8 +20,8 @@ import { Tenant } from '../../entity/Tenant';
     CommonModule, FormsModule, RouterLink,
     MatFormFieldModule, MatInputModule, MatButtonModule,
     MatSnackBarModule, MatIconModule, MatCheckboxModule,
-    NavbarComponent
-  ],
+    OwnerNavbarComponent,
+],
   templateUrl: './add-tenant.component.html',
   styleUrls: ['./add-tenant.component.css']
 })

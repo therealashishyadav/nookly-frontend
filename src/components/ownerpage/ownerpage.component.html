@@ -1,6 +1,5 @@
+<!-- <app-owner-navbar></app-owner-navbar>
 <div class="dashboard">
-
-  <!-- Header -->
   <div class="header">
     <div class="header-left">
       <h1>Owner Dashboard</h1>
@@ -10,7 +9,6 @@
     </div>
   </div>
 
-  <!-- Stats -->
   <div class="stats">
     <div class="stat-card">
       <p class="stat-label">Total PGs</p>
@@ -26,16 +24,13 @@
     </div>
   </div>
 
-  <!-- Loading -->
   <div *ngIf="isLoading" class="loading">Loading your PGs...</div>
 
-  <!-- No PGs -->
   <div *ngIf="!isLoading && pgs.length === 0" class="empty">
     <p>You have no PGs listed yet.</p>
     <button class="btn-add" routerLink="/addpglist">+ Add Your First PG</button>
   </div>
 
-  <!-- PG List -->
   <div class="pg-list" *ngIf="!isLoading && pgs.length > 0">
     <div class="pg-card" *ngFor="let pg of pgs">
       <div class="pg-card-header">
@@ -49,7 +44,6 @@
         <p><span class="label">City:</span> {{ pg.city }}</p>
         <p><span class="label">Locality:</span> {{ pg.locality }}</p>
 
-        <!-- handles both lowestPrice (8084) and monthlyRent (8082) -->
         <p><span class="label">Rent:</span>
           ₹{{ (pg.lowestPrice || pg.monthlyRent || 0) | number }}
         </p>
@@ -70,7 +64,6 @@
     </div>
   </div>
 
-  <!-- Edit Modal -->
   <div class="modal-overlay" *ngIf="editingPG">
     <div class="modal">
       <h2>Edit PG</h2>
@@ -96,6 +89,541 @@
       </div>
       <div class="modal-actions">
         <button class="btn-save" (click)="saveEdit()">Save</button>
+        <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div> -->
+
+<!-- FILE: src/app/components/owner-dashboard/owner-dashboard.component.html -->
+
+<app-owner-navbar></app-owner-navbar>
+
+<div class="dashboard">
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO WELCOME BANNER
+  ══════════════════════════════════════════════════════════ -->
+  <section class="hero-banner">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-grain"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <span class="hero-eyebrow">
+          <span class="live-dot"></span> Owner Portal
+        </span>
+        <h1 class="hero-title">
+           {{ greeting }},<br>
+          <span class="hero-name">{{ ownerName }}</span>
+        </h1>
+        <p class="hero-subtitle">
+          Manage your properties, track tenants, and collect rent - all in one place.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary" routerLink="/addpglist">
+            <span class="btn-icon">＋</span> Add New PG
+          </button>
+          <button class="btn-ghost" routerLink="/owner/tenants">
+            View Tenants →
+          </button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-img-stack">
+          <div class="hero-img hero-img-1"></div>
+          <div class="hero-img hero-img-2"></div>
+          <div class="hero-stat-float">
+            <span class="float-value">{{ totalPGs }}</span>
+            <span class="float-label">Listed PGs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="page-body">
+
+    <!-- ══════════════════════════════════════════════════════════
+         STATS ROW
+    ══════════════════════════════════════════════════════════ -->
+    <section class="stats-section">
+      <div class="stat-card" style="--delay:0.05s">
+        <div class="stat-icon-wrap azure">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 9.5L12 3l9 6.5V21H3V9.5z"/><path d="M9 21V13h6v8"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ totalPGs }}</span>
+          <span class="stat-label">Total PGs</span>
+        </div>
+        <div class="stat-trend up">↑ Active</div>
+      </div>
+
+      <div class="stat-card" style="--delay:0.10s">
+        <div class="stat-icon-wrap gold">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">₹{{ totalRent | number }}</span>
+          <span class="stat-label">Total Rent / month</span>
+        </div>
+        <div class="stat-trend up">↑ This month</div>
+      </div>
+
+      <div class="stat-card" style="--delay:0.15s">
+        <div class="stat-icon-wrap green">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 8v4l3 3"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">₹{{ averageRent | number:'1.0-0' }}</span>
+          <span class="stat-label">Average Rent</span>
+        </div>
+        <div class="stat-trend neutral">Per PG</div>
+      </div>
+
+      <div class="stat-card" style="--delay:0.20s">
+        <div class="stat-icon-wrap rose">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">-</span>
+          <span class="stat-label">Active Tenants</span>
+        </div>
+        <button class="stat-cta" routerLink="/owner/tenants">View →</button>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         QUICK ACTIONS
+    ══════════════════════════════════════════════════════════ -->
+    <section class="quick-actions-section">
+      <h2 class="section-title">Quick Actions</h2>
+      <div class="quick-grid">
+
+        <a routerLink="/addpglist" class="quick-card qc-pg">
+          <div class="qc-img"></div>
+          <div class="qc-overlay"></div>
+          <div class="qc-body">
+            <div class="qc-icon"></div>
+            <h3>Add New PG</h3>
+            <p>List a new property with photos, pricing and amenities</p>
+          </div>
+        </a>
+
+        <a routerLink="/owner/add-tenant" class="quick-card qc-tenant">
+          <div class="qc-img"></div>
+          <div class="qc-overlay"></div>
+          <div class="qc-body">
+            <div class="qc-icon"></div>
+            <h3>Add Tenant</h3>
+            <p>Register a new tenant to a room in your PG</p>
+          </div>
+        </a>
+
+        <a routerLink="/owner/rent-sheet" class="quick-card qc-rent">
+          <div class="qc-img"></div>
+          <div class="qc-overlay"></div>
+          <div class="qc-body">
+            <div class="qc-icon"></div>
+            <h3>Rent Sheet</h3>
+            <p>Track payments and send WhatsApp reminders</p>
+          </div>
+        </a>
+
+        <a routerLink="/owner/tenants" class="quick-card qc-list">
+          <div class="qc-img"></div>
+          <div class="qc-overlay"></div>
+          <div class="qc-body">
+            <div class="qc-icon"></div>
+            <h3>Tenant List</h3>
+            <p>View and manage all tenants in your PGs</p>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         PG LISTINGS
+    ══════════════════════════════════════════════════════════ -->
+    <section class="pg-section">
+      <div class="section-header">
+        <h2 class="section-title">Your PG Listings</h2>
+        <button class="btn-sm-outline" routerLink="/addpglist">+ Add PG</button>
+      </div>
+
+      <div *ngIf="isLoading" class="loading-state">
+        <div class="skeleton" *ngFor="let i of [1,2,3]"></div>
+      </div>
+
+      <div *ngIf="!isLoading && pgs.length === 0" class="empty-state">
+        <div class="empty-img"></div>
+        <h3>No PGs listed yet</h3>
+        <p>Add your first property to start receiving inquiries and managing tenants.</p>
+        <button class="btn-primary" routerLink="/addpglist">+ Add Your First PG</button>
+      </div>
+
+      <div class="pg-grid" *ngIf="!isLoading && pgs.length > 0">
+        <div class="pg-card" *ngFor="let pg of pgs">
+          <div class="pg-cover"
+               [style.background-image]="pg.coverImageUrl ? 'url(' + pg.coverImageUrl + ')' : 'var(--img-default-pg)'">
+            <div class="pg-cover-overlay"></div>
+            <span class="pg-occupancy-badge">{{ pg.occupancyLabel || pg.occupancyType }}</span>
+          </div>
+          <div class="pg-body">
+            <h3 class="pg-name">{{ pg.pgName }}</h3>
+            <p class="pg-location">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+              {{ pg.locality }}, {{ pg.city }}
+            </p>
+            <div class="pg-meta-row">
+              <div class="pg-meta-item">
+                <span class="meta-label">Rent</span>
+                <span class="meta-value">₹{{ (pg.lowestPrice || pg.monthlyRent || 0) | number }}</span>
+              </div>
+              <div class="pg-meta-item">
+                <span class="meta-label">Deposit</span>
+                <span class="meta-value">₹{{ pg.depositAmount | number }}</span>
+              </div>
+              <div class="pg-meta-item">
+                <span class="meta-label">Available</span>
+                <span class="meta-value">{{ pg.availableFromDate || 'Now' }}</span>
+              </div>
+            </div>
+            <div class="amenities">
+              <span class="badge wifi"  *ngIf="pg.wifiAvailable">WiFi</span>
+              <span class="badge food"  *ngIf="pg.foodProvided">Food</span>
+              <span class="badge ac"    *ngIf="pg.airConditioned">AC</span>
+              <span class="badge furn"  *ngIf="pg.furnished">Furnished</span>
+              <span class="badge cctv"  *ngIf="pg.cctvSurveillance">CCTV</span>
+              <span class="badge laund" *ngIf="pg.laundryService">Laundry</span>
+            </div>
+            <div class="pg-actions">
+              <button class="btn-edit" (click)="editPG(pg)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Edit
+              </button>
+              <button class="btn-delete" (click)="deletePG(pg.id)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                  <path d="M10 11v6m4-6v6"/><path d="M9 6V4h6v2"/>
+                </svg>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         WHY CRIBUP IS FREE - EDITORIAL SECTION
+    ══════════════════════════════════════════════════════════ -->
+    <section class="why-free-section">
+      <div class="why-free-inner">
+        <div class="why-free-text">
+          <span class="eyebrow-tag green-tag">🎉 Always Free for Owners</span>
+          <h2 class="why-title">CribUp is 100% Free.<br>Here's exactly how that works.</h2>
+          <p class="why-body">
+            We believe PG owners shouldn't pay ₹20,000 upfront to list a property and get zero results.
+            That's what NoBroker and 99acres do. We don't.
+          </p>
+          <div class="why-points">
+            <div class="why-point">
+              <div class="point-icon">✓</div>
+              <div>
+                <strong>Free to list</strong>
+                <p>Add unlimited PGs, photos, and details. No subscription, no hidden fees.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="point-icon">✓</div>
+              <div>
+                <strong>Free tenant tools</strong>
+                <p>Tenant tracking, rent sheets, and WhatsApp reminders - all free forever.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="point-icon">✓</div>
+              <div>
+                <strong>Pay only when it works</strong>
+                <p>We charge a small ₹499 finder's fee only after a tenant successfully moves in. Zero risk.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="why-free-visual">
+          <div class="why-img-wrap">
+            <div class="why-img"></div>
+            <div class="why-float-card">
+              <div class="wf-icon">₹0</div>
+              <div>
+                <p class="wf-title">Listing Cost</p>
+                <p class="wf-sub">Free to list forever</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         HOW WE EARN - TRANSPARENCY STRIP
+    ══════════════════════════════════════════════════════════ -->
+    <section class="earn-section">
+      <div class="earn-header">
+        <span class="eyebrow-tag gold-tag">Full Transparency</span>
+        <h2 class="earn-title">How CribUp makes money</h2>
+        <p class="earn-subtitle">We only earn when you do. No hidden charges. Ever.</p>
+      </div>
+      <div class="earn-grid">
+        <div class="earn-card">
+          <div class="earn-num">01</div>
+          <div class="earn-icon"></div>
+          <h3>Finder's Fee</h3>
+          <p>₹499 one-time per successful tenant placement. You only pay after a real tenant moves in through CribUp.</p>
+          <div class="earn-tag">Per placement</div>
+        </div>
+        <div class="earn-card">
+          <div class="earn-num">02</div>
+          <div class="earn-icon"></div>
+          <h3>Visibility Boost</h3>
+          <p>Optional ₹299/month to appear at the top of search results for your area. Never mandatory.</p>
+          <div class="earn-tag">Optional</div>
+        </div>
+        <div class="earn-card">
+          <div class="earn-num">03</div>
+          <div class="earn-icon"></div>
+          <h3>Verified Badge</h3>
+          <p>Annual ₹499 renewal for the "CribUp Verified" trust badge. Increases inquiries by 3–5×.</p>
+          <div class="earn-tag">Annual</div>
+        </div>
+        <div class="earn-card">
+          <div class="earn-num">04</div>
+          <div class="earn-icon"></div>
+          <h3>Partner Referrals</h3>
+          <p>When tenants use nearby services (laundry, tiffin, internet), partners pay us. You and tenants pay nothing.</p>
+          <div class="earn-tag">B2B only</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         NEWS & UPDATES
+    ══════════════════════════════════════════════════════════ -->
+    <section class="news-section">
+      <div class="section-header">
+        <h2 class="section-title">Platform Updates</h2>
+        <span class="update-badge">3 New</span>
+      </div>
+      <div class="news-grid">
+
+        <div class="news-card news-featured">
+          <div class="news-img news-img-1"></div>
+          <div class="news-body">
+            <span class="news-tag new">New</span>
+            <h3>WhatsApp Rent Reminders are live </h3>
+            <p>You can now send instant WhatsApp reminders to pending tenants directly from the Rent Sheet with one click. Free, instant, no API needed.</p>
+            <span class="news-date">May 2025</span>
+          </div>
+        </div>
+
+        <div class="news-card">
+          <div class="news-img news-img-2"></div>
+          <div class="news-body">
+            <span class="news-tag update">Update</span>
+            <h3>Tenant history now available</h3>
+            <p>View past months' rent records for any tenant. Full payment history at a glance.</p>
+            <span class="news-date">April 2025</span>
+          </div>
+        </div>
+
+        <div class="news-card">
+          <div class="news-img news-img-3"></div>
+          <div class="news-body">
+            <span class="news-tag coming">Coming Soon</span>
+            <h3>UPI payment integration</h3>
+            <p>Tenants will soon be able to pay rent directly through CribUp via UPI. Auto-marks as paid.</p>
+            <span class="news-date">Q3 2025</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         UPCOMING FEATURES
+    ══════════════════════════════════════════════════════════ -->
+    <section class="upcoming-section">
+      <div class="upcoming-inner">
+        <div class="upcoming-header">
+          <span class="eyebrow-tag azure-tag">Coming Soon</span>
+          <h2 class="upcoming-title">What we're building next</h2>
+        </div>
+        <div class="upcoming-grid">
+          <div class="upcoming-item" style="--i:0">
+            <div class="up-icon"></div>
+            <div>
+              <h4>Mobile App</h4>
+              <p>Native iOS & Android app for owners and tenants. Manage your PG from anywhere.</p>
+            </div>
+            <div class="up-status">Q3 2025</div>
+          </div>
+          <div class="upcoming-item" style="--i:1">
+            <div class="up-icon"></div>
+            <div>
+              <h4>UPI Rent Collection</h4>
+              <p>Tenants pay rent through the app. Auto-marked as paid in your rent sheet instantly.</p>
+            </div>
+            <div class="up-status">Q3 2025</div>
+          </div>
+          <div class="upcoming-item" style="--i:2">
+            <div class="up-icon"></div>
+            <div>
+              <h4>Revenue Analytics</h4>
+              <p>Monthly charts, occupancy rates, and income trends. Know your PG performance at a glance.</p>
+            </div>
+            <div class="up-status">Q4 2025</div>
+          </div>
+          <div class="upcoming-item" style="--i:3">
+            <div class="up-icon"></div>
+            <div>
+              <h4>Digital Rent Agreements</h4>
+              <p>Generate and sign rent agreements digitally. Legally valid, stored securely.</p>
+            </div>
+            <div class="up-status">Q4 2025</div>
+          </div>
+          <div class="upcoming-item" style="--i:4">
+            <div class="up-icon"></div>
+            <div>
+              <h4>Smart Reminders</h4>
+              <p>Automatic rent due date reminders sent to tenants on the 1st of every month.</p>
+            </div>
+            <div class="up-status">Q4 2025</div>
+          </div>
+          <div class="upcoming-item" style="--i:5">
+            <div class="up-icon"></div>
+            <div>
+              <h4>Tenant Verification</h4>
+              <p>Aadhaar-based tenant background checks before move-in. Safe PG, happy owner.</p>
+            </div>
+            <div class="up-status">2026</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         CITY EXPANSION BANNER
+    ══════════════════════════════════════════════════════════ -->
+    <section class="city-section">
+      <div class="city-bg"></div>
+      <div class="city-overlay"></div>
+      <div class="city-content">
+        <span class="eyebrow-tag light-tag">Expanding Fast</span>
+        <h2 class="city-title">CribUp is growing across India</h2>
+        <p class="city-subtitle">Starting from Pune, we're expanding to Mumbai, Bangalore, Hyderabad and beyond in 2025. List now and be among the first verified owners in your city.</p>
+        <div class="city-chips">
+          <span class="city-chip active">Pune ✓</span>
+          <span class="city-chip soon">Mumbai</span>
+          <span class="city-chip soon">Bangalore</span>
+          <span class="city-chip soon">Hyderabad</span>
+          <span class="city-chip soon">Chennai</span>
+          <span class="city-chip soon">Delhi NCR</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         TESTIMONIALS
+    ══════════════════════════════════════════════════════════ -->
+    <section class="testimonials-section">
+      <h2 class="section-title center">What PG owners say</h2>
+      <div class="testimonials-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"99acres charged me ₹22,000 and gave me 3 fake leads. CribUp gave me a real tenant in 10 days for free. I only paid ₹499 after they moved in."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">R</div>
+            <div>
+              <p class="testi-name">Ramesh Patil</p>
+              <p class="testi-location">PG Owner, Viman Nagar, Pune</p>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"The WhatsApp reminder feature alone saves me hours every month. One click and all pending tenants get a message. Absolutely love it."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">S</div>
+            <div>
+              <p class="testi-name">Sunita Desai</p>
+              <p class="testi-location">PG Owner, Koregaon Park, Pune</p>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★☆</div>
+          <p class="testi-quote">"Finally a platform that treats owners fairly. No upfront nonsense. The rent sheet is clean and simple. My accountant loves it too."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">A</div>
+            <div>
+              <p class="testi-name">Amit Kulkarni</p>
+              <p class="testi-location">PG Owner, Hinjawadi, Pune</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- end page-body -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       EDIT MODAL (unchanged from original)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" *ngIf="editingPG">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Edit PG</h2>
+        <button class="modal-close" (click)="cancelEdit()">✕</button>
+      </div>
+      <div class="form-group">
+        <label>PG Name</label>
+        <input [(ngModel)]="editingPG!.pgName" type="text" />
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <input [(ngModel)]="editingPG!.city" type="text" />
+      </div>
+      <div class="form-group">
+        <label>Locality</label>
+        <input [(ngModel)]="editingPG!.locality" type="text" />
+      </div>
+      <div class="form-group">
+        <label>Occupancy Type</label>
+        <input [(ngModel)]="editingPG!.occupancyType" type="text" />
+      </div>
+      <div class="form-group">
+        <label>Deposit Amount</label>
+        <input [(ngModel)]="editingPG!.depositAmount" type="number" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-save" (click)="saveEdit()">Save Changes</button>
         <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
       </div>
     </div>
