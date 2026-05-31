@@ -1,3 +1,6 @@
+import { MatSelectModule } from '@angular/material/select';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,12 +23,15 @@ import { OwnerNavbarComponent } from "../owner-navbar/owner-navbar.component";
     CommonModule, FormsModule, RouterLink,
     MatFormFieldModule, MatInputModule, MatButtonModule,
     MatSnackBarModule, MatIconModule, MatCheckboxModule,
-    OwnerNavbarComponent,
-],
+    OwnerNavbarComponent, MatSelectModule
+  ],
   templateUrl: './add-tenant.component.html',
   styleUrls: ['./add-tenant.component.css']
 })
 export class AddTenantComponent implements OnInit {
+
+  ownerPgs: any[] = [];
+  isLoadingPgs = false;
 
   tenant: Tenant = new Tenant();
   isEditing = false;
@@ -36,12 +42,14 @@ export class AddTenantComponent implements OnInit {
     private tenantService: TenantService,
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private http: HttpClient
+
+  ) { }
 
   ngOnInit(): void {
-    // If ?id=X in URL, load tenant for editing
-    const id = this.route.snapshot.queryParamMap.get('id');
+    this.loadOwnerPgs(); // load PGs for dropdown
+  const id = this.route.snapshot.queryParamMap.get('id');
     if (id) {
       this.isEditing = true;
       this.tenantId = +id;
@@ -53,10 +61,22 @@ export class AddTenantComponent implements OnInit {
       });
     }
   }
-
+  loadOwnerPgs(): void {
+    this.isLoadingPgs = true;
+    const token = localStorage.getItem('token') ?? '';
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    this.http.get<any>(`${environment.apiUrl}/api/pg-listings/my`, { headers }).subscribe({
+      next: (res) => {
+        // handle both paginated and plain array responses
+        this.ownerPgs = Array.isArray(res) ? res : (res.content ?? []);
+        this.isLoadingPgs = false;
+      },
+      error: () => { this.isLoadingPgs = false; }
+    });
+  }
   save(): void {
     if (!this.tenant.fullName || !this.tenant.phone ||
-        !this.tenant.roomNumber || !this.tenant.monthlyRent) {
+      !this.tenant.roomNumber || !this.tenant.monthlyRent) {
       this.snackBar.open('Please fill all required fields.', 'Close', { duration: 3000 });
       return;
     }
