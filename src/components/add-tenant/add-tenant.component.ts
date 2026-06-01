@@ -15,6 +15,7 @@ import { PgListingService } from '../../service/pg-listing.service';   //  impor
 import { Tenant } from '../../entity/Tenant';
 import { OwnerNavbarComponent } from "../owner-navbar/owner-navbar.component";
 import { PgListingResponse } from '../../entity/PgModel';              //  import PG response type
+import { PgService } from '../../service/pg.service';
 
 @Component({
   selector: 'app-add-tenant',
@@ -40,11 +41,11 @@ export class AddTenantComponent implements OnInit {
   loadingPGs = false;
 
   constructor(
-    private tenantService: TenantService,
-    private pgListingService: PgListingService,   //  inject PG service
-    private router: Router,
-    private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+private tenantService: TenantService,
+  private pgService: PgService,          // ← change to PgService
+  private router: Router,
+  private route: ActivatedRoute,
+  private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -63,21 +64,21 @@ export class AddTenantComponent implements OnInit {
       });
     }
   }
-
-  // 👇 new method
-  loadOwnerPGs(): void {
-    this.loadingPGs = true;
-    this.pgListingService.getMyListings().subscribe({
-      next: (pgs) => {
-        this.pgList = pgs;
-        this.loadingPGs = false;
-      },
-      error: () => {
-        this.loadingPGs = false;
-        this.snackBar.open('Could not load your PG list.', 'Close', { duration: 3000 });
-      }
-    });
-  }
+  
+loadOwnerPGs(): void {
+  this.loadingPGs = true;
+  this.pgService.getMyPGs().subscribe({   // ← now using pgService
+    next: (pgs) => {
+      this.pgList = pgs;
+      this.loadingPGs = false;
+    },
+    error: (err) => {
+      this.loadingPGs = false;
+      console.error('Error loading PGs:', err);
+      this.snackBar.open('Could not load your PG list.', 'Close', { duration: 3000 });
+    }
+  });
+}
 
   save(): void {
     if (!this.tenant.fullName || !this.tenant.phone ||
