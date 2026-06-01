@@ -494,6 +494,18 @@
                     <mat-icon>star</mat-icon>
                     <span>{{ pg.rating }} / 5 ({{ pg.totalReviews }} reviews)</span>
                 </div>
+
+                <div class="back-bar">
+                    <button mat-button (click)="goBack()" class="back-btn">
+                        <mat-icon>arrow_back_ios</mat-icon> Back to Listings
+                    </button>
+
+                    <!-- Share button - now shares only the link -->
+                    <button mat-stroked-button (click)="sharePg()" class="share-btn">
+                        <mat-icon>share</mat-icon> Share
+                    </button>
+                </div>
+
             </div>
 
         </div>

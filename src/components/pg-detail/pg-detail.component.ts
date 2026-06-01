@@ -1,5 +1,3 @@
-// src/app/components/pg-detail/pg-detail.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -8,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'; // ✅ import
 
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
@@ -25,6 +24,7 @@ import { PgListingResponse } from '../../entity/PgModel';
     MatChipsModule,
     MatDividerModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,          // ✅ add this
     NavbarComponent,
     FooterComponent,
   ],
@@ -43,7 +43,8 @@ export class PgDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private pgListingService: PgListingService
+    private pgListingService: PgListingService,
+    private snackBar: MatSnackBar          // ✅ inject MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -63,7 +64,7 @@ export class PgDetailComponent implements OnInit {
     }
   }
 
-  // ── Gallery ───────────────────────────────────────────────────────────────
+  // Gallery methods (unchanged)
   get allImages(): string[] {
     if (!this.pg) return [];
     const images: string[] = [];
@@ -77,16 +78,14 @@ export class PgDetailComponent implements OnInit {
   }
 
   prevImage(): void {
-    this.activeImageIndex =
-      (this.activeImageIndex - 1 + this.allImages.length) % this.allImages.length;
+    this.activeImageIndex = (this.activeImageIndex - 1 + this.allImages.length) % this.allImages.length;
   }
 
   nextImage(): void {
-    this.activeImageIndex =
-      (this.activeImageIndex + 1) % this.allImages.length;
+    this.activeImageIndex = (this.activeImageIndex + 1) % this.allImages.length;
   }
 
-  // ── Contact actions ───────────────────────────────────────────────────────
+  // Contact actions
   callOwner(): void {
     if (this.pg?.contactNumber) {
       window.location.href = `tel:${this.pg.contactNumber}`;
@@ -95,9 +94,7 @@ export class PgDetailComponent implements OnInit {
 
   whatsappOwner(): void {
     if (this.pg?.whatsappNumber) {
-      const message = encodeURIComponent(
-        `Hi, I found your PG "${this.pg.pgName}" on Nookly and I'm interested. Can you share more details?`
-      );
+      const message = encodeURIComponent(`Hi, I found your PG "${this.pg.pgName}" on Nookly and I'm interested. Can you share more details?`);
       window.open(`https://wa.me/91${this.pg.whatsappNumber}?text=${message}`, '_blank');
     }
   }
@@ -108,7 +105,7 @@ export class PgDetailComponent implements OnInit {
     }
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
+  // Helpers
   getLowestPrice(): number {
     if (!this.pg?.sharingOptions?.length) return 0;
     return Math.min(...this.pg.sharingOptions.map(o => o.pricePerMonth));
@@ -138,20 +135,38 @@ export class PgDetailComponent implements OnInit {
     this.router.navigate(['/listings']);
   }
 
-  // Amenity icon mapping
-  getAmenityIcon(amenity: string): string {
-    const map: Record<string, string> = {
-      'WiFi': 'wifi',
-      'AC': 'ac_unit',
-      'Geyser': 'hot_tub',
-      'Attached Bathroom': 'bathroom',
-      'Study Table': 'desk',
-      'Wardrobe': 'checkroom',
-      'TV': 'tv',
-      'Fridge': 'kitchen',
-      'Washing Machine': 'local_laundry_service',
-      'Power Backup': 'battery_charging_full',
-    };
-    return map[amenity] ?? 'check_circle';
+  // ✅ NEW: Share only the link (no message)
+  sharePg(): void {
+    if (!this.pg) return;
+    const currentUrl = window.location.href;
+    
+    // Use native Web Share API if available (mobile)
+    if (navigator.share) {
+      navigator.share({
+        title: this.pg.pgName,
+        url: currentUrl
+      }).catch(err => {
+        if (err.name !== 'AbortError') {
+          this.copyLinkToClipboard(currentUrl);
+        }
+      });
+    } else {
+      // Fallback: copy link to clipboard
+      this.copyLinkToClipboard(currentUrl);
+    }
+  }
+
+  private copyLinkToClipboard(url: string): void {
+    navigator.clipboard.writeText(url).then(() => {
+      this.snackBar.open('🔗 Link copied to clipboard!', 'Dismiss', {
+        duration: 2000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom'
+      });
+    }).catch(() => {
+      this.snackBar.open('❌ Failed to copy link. Please copy manually.', 'Dismiss', {
+        duration: 3000
+      });
+    });
   }
 }
