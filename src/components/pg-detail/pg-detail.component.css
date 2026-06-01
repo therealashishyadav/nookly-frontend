@@ -1,3 +1,7 @@
+/* ==========================================================================
+   PG DETAIL COMPONENT – NOOKLY MODERN STYLES
+   Minimal, luxurious, fully responsive
+   ========================================================================== */
 
 :host {
   /* ── Nookly color palette ── */
@@ -8,10 +12,10 @@
   --neutral:        #A7B3C6;
   --pure-white:     #FFFFFF;
 
-  /* ── Darker, clearer text colors (no --dark-accent used for text) ── */
-  --text-primary:   #0e1a24;      /* very dark, high contrast */
-  --text-secondary: #2a3a4a;      /* darker than before */
-  --text-muted:     #4a5a6a;      /* still readable but subdued */
+  /* ── Darker, clearer text colors ── */
+  --text-primary:   #0e1a24;
+  --text-secondary: #2a3a4a;
+  --text-muted:     #4a5a6a;
 
   /* Supporting shades */
   --border-light:   #e2e9f0;
@@ -35,9 +39,9 @@
   line-height: 1.45;
 }
 
-/* ─────────────────────────────────────────────────────────────────
+/* ------------------------------------------------------------------
    LOADING & ERROR STATES
-   ───────────────────────────────────────────────────────────────── */
+   ------------------------------------------------------------------ */
 .loading-wrapper,
 .error-wrapper {
   display: flex;
@@ -69,32 +73,38 @@
   color: #e74c3c;
 }
 
-/* back button in error state */
 .error-wrapper button {
   border-radius: 40px !important;
   font-weight: 500;
   background: var(--primary);
 }
 
-/* ─────────────────────────────────────────────────────────────────
+/* ------------------------------------------------------------------
    MAIN WRAPPER
-   ───────────────────────────────────────────────────────────────── */
+   ------------------------------------------------------------------ */
 .pg-detail-wrapper {
   max-width: 1400px;
   margin: 0 auto;
   padding: 1rem 2rem 4rem;
 }
 
-/* Back bar */
+/* ------------------------------------------------------------------
+   BACK BAR (Back button + Share button)
+   ------------------------------------------------------------------ */
 .back-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .back-btn {
   font-size: 0.85rem !important;
   font-weight: 500;
   color: var(--text-secondary) !important;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .back-btn:hover {
@@ -108,9 +118,25 @@
   height: 18px;
 }
 
-/* ─────────────────────────────────────────────────────────────────
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+  font-weight: 500;
+  border-radius: 40px !important;
+  transition: all 0.2s ease;
+}
+
+.share-btn:hover {
+  background: rgba(74, 144, 226, 0.08) !important;
+  transform: translateY(-2px);
+}
+
+/* ------------------------------------------------------------------
    GALLERY SECTION
-   ───────────────────────────────────────────────────────────────── */
+   ------------------------------------------------------------------ */
 .gallery-section {
   margin-bottom: 2rem;
 }
@@ -158,7 +184,6 @@
 .gallery-nav.prev {
   left: 20px;
 }
-
 .gallery-nav.next {
   right: 20px;
 }
@@ -229,7 +254,6 @@
   opacity: 0.9;
   transform: scale(1.02);
 }
-
 .thumbnail.active {
   opacity: 1;
   border-color: var(--primary);
@@ -243,7 +267,6 @@
   border-radius: var(--radius-card);
   margin-bottom: 2rem;
 }
-
 .no-img-icon {
   font-size: 4rem;
   width: 4rem;
@@ -251,26 +274,26 @@
   color: var(--text-muted);
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   DETAIL LAYOUT (left + right columns)
-   ───────────────────────────────────────────────────────────────── */
+/* ------------------------------------------------------------------
+   DETAIL LAYOUT (two columns)
+   ------------------------------------------------------------------ */
 .detail-layout {
   display: flex;
   gap: 2rem;
   margin-top: 1rem;
 }
-
 .left-col {
   flex: 2;
-  min-width: 0; /* prevent overflow */
+  min-width: 0;
 }
-
 .right-col {
   flex: 1;
   min-width: 280px;
 }
 
-/* ── Common card styling ── */
+/* ------------------------------------------------------------------
+   CARDS (shared style)
+   ------------------------------------------------------------------ */
 .detail-card {
   background: var(--pure-white);
   border-radius: var(--radius-card);
@@ -280,7 +303,6 @@
   border: 1px solid var(--border-light);
   transition: box-shadow 0.3s var(--ease);
 }
-
 .detail-card:hover {
   box-shadow: var(--shadow-md);
 }
@@ -297,13 +319,12 @@
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-light);
 }
-
 .section-title mat-icon {
   color: var(--primary);
   font-size: 24px;
 }
 
-/* ── PG Header (name, price, location) ── */
+/* PG header (name, price, location) */
 .pg-header {
   display: flex;
   justify-content: space-between;
@@ -312,7 +333,6 @@
   gap: 1rem;
   margin-bottom: 1.2rem;
 }
-
 .pg-name {
   font-family: var(--font-display);
   font-size: 2rem;
@@ -320,48 +340,40 @@
   color: var(--text-primary);
   margin: 0 0 0.25rem 0;
 }
-
 .pg-location {
   display: flex;
   align-items: center;
   gap: 0.3rem;
   font-size: 0.85rem;
   color: var(--text-secondary);
-  margin: 0.25rem 0;
 }
-
 .loc-icon {
   font-size: 16px;
   width: 16px;
   height: 16px;
   color: var(--primary);
 }
-
 .pg-address {
   font-size: 0.8rem;
   color: var(--text-muted);
   margin: 0.25rem 0 0;
 }
-
 .pg-price-badge {
   background: var(--bg-soft);
   padding: 0.5rem 1rem;
   border-radius: 40px;
   text-align: center;
 }
-
 .from-text {
   font-size: 0.7rem;
   color: var(--text-muted);
   display: block;
 }
-
 .price {
   font-size: 1.5rem;
   color: black;
   line-height: 1;
 }
-
 .per-month {
   font-size: 0.7rem;
   color: var(--text-muted);
@@ -374,7 +386,6 @@
   gap: 0.5rem;
   margin: 1rem 0;
 }
-
 .tag {
   background: var(--bg-soft);
   border-radius: 40px;
@@ -384,7 +395,6 @@
   color: var(--text-primary);
   border: 1px solid var(--border-light);
 }
-
 .tag-occupancy {
   background: var(--primary-light);
   color: var(--pure-white);
@@ -402,7 +412,6 @@
   padding: 0.5rem 0;
   border-top: 1px dashed var(--border-light);
 }
-
 .landmark-icon {
   font-size: 16px;
   width: 16px;
@@ -417,42 +426,35 @@
   gap: 1rem;
   margin-bottom: 1rem;
 }
-
 .sharing-card {
   background: var(--bg-soft);
   border-radius: var(--radius-element);
   padding: 1rem;
   transition: transform 0.2s;
 }
-
 .sharing-card:hover {
   transform: translateY(-3px);
 }
-
 .sharing-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 0.5rem;
 }
-
 .sharing-type {
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--text-primary);
 }
-
 .sharing-price {
   font-weight: 700;
   font-size: 1rem;
   color: var(--primary);
 }
-
 .sharing-price small {
   font-size: 0.7rem;
   font-weight: normal;
 }
-
 .sharing-meta {
   display: flex;
   justify-content: space-between;
@@ -461,25 +463,21 @@
   color: var(--text-secondary);
   margin-bottom: 0.5rem;
 }
-
 .sharing-meta mat-icon {
   font-size: 12px;
   width: 12px;
   height: 12px;
   margin-right: 2px;
 }
-
 .available-beds.full {
   color: #e74c3c;
 }
-
 .sharing-amenities {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-top: 0.5rem;
 }
-
 .amenity-chip {
   background: var(--pure-white);
   border-radius: 40px;
@@ -488,7 +486,6 @@
   color: var(--text-secondary);
   border: 1px solid var(--border-light);
 }
-
 .charges-info {
   display: flex;
   align-items: center;
@@ -501,13 +498,12 @@
   margin-top: 0.5rem;
 }
 
-/* Amenities grid (3 groups side by side on large) */
+/* Amenities grid (three groups) */
 .amenities-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.2rem;
 }
-
 .amenity-group-title {
   font-size: 0.85rem;
   font-weight: 600;
@@ -515,13 +511,11 @@
   margin: 0 0 0.8rem 0;
   letter-spacing: 0.03em;
 }
-
 .amenity-list {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
 }
-
 .amenity-item {
   display: flex;
   align-items: center;
@@ -529,7 +523,6 @@
   font-size: 0.8rem;
   color: var(--text-primary);
 }
-
 .amenity-icon {
   font-size: 18px;
   width: 18px;
@@ -543,7 +536,6 @@
   flex-wrap: wrap;
   gap: 1rem;
 }
-
 .food-item {
   display: flex;
   align-items: center;
@@ -554,19 +546,17 @@
   font-size: 0.8rem;
   color: var(--text-primary);
 }
-
 .food-icon.check {
   color: #27ae60;
   font-size: 18px;
 }
 
-/* Room details grid */
+/* Room details */
 .room-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 0.8rem;
 }
-
 .room-item {
   background: var(--bg-soft);
   padding: 0.6rem 1rem;
@@ -575,14 +565,12 @@
   justify-content: space-between;
   align-items: baseline;
 }
-
 .room-label {
   font-size: 0.7rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
-
 .room-value {
   font-size: 0.85rem;
   font-weight: 500;
@@ -596,7 +584,6 @@
   gap: 0.8rem;
   margin-bottom: 1rem;
 }
-
 .rule-item {
   display: flex;
   align-items: center;
@@ -604,24 +591,20 @@
   font-size: 0.8rem;
   color: var(--text-primary);
 }
-
 .rule-label {
   display: block;
   font-size: 0.65rem;
   color: var(--text-muted);
 }
-
 .rule-value {
   font-weight: 500;
 }
-
 .bool-rules {
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
   margin: 1rem 0;
 }
-
 .bool-tag {
   display: inline-flex;
   align-items: center;
@@ -631,23 +614,19 @@
   padding: 0.2rem 0.8rem;
   border-radius: 40px;
 }
-
 .bool-tag.allowed {
   background: #e8f5e9;
   color: #2e7d32;
 }
-
 .bool-tag.denied {
   background: #ffebee;
   color: #c62828;
 }
-
 .bool-tag mat-icon {
   font-size: 14px;
   width: 14px;
   height: 14px;
 }
-
 .refund-box,
 .offer-box {
   display: flex;
@@ -658,13 +637,11 @@
   padding: 1rem;
   margin-top: 1rem;
 }
-
 .refund-box mat-icon,
 .offer-box mat-icon {
   color: var(--primary);
   font-size: 20px;
 }
-
 .refund-box p,
 .offer-box p {
   margin: 0.25rem 0 0;
@@ -678,7 +655,6 @@
   gap: 1rem;
   flex-wrap: wrap;
 }
-
 .media-link-btn {
   display: inline-flex;
   align-items: center;
@@ -692,20 +668,18 @@
   color: var(--primary);
   transition: all 0.2s;
 }
-
 .media-link-btn:hover {
   background: var(--primary);
   color: white;
 }
 
-/* ─────────────────────────────────────────────────────────────────
+/* ------------------------------------------------------------------
    RIGHT COLUMN (sticky cards)
-   ───────────────────────────────────────────────────────────────── */
+   ------------------------------------------------------------------ */
 .sticky-card {
   position: sticky;
   top: 100px;
 }
-
 .contact-card {
   background: var(--pure-white);
   border-radius: var(--radius-card);
@@ -714,14 +688,12 @@
   border: 1px solid var(--border-light);
   margin-bottom: 1.5rem;
 }
-
 .owner-header {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
 }
-
 .owner-avatar {
   background: var(--bg-soft);
   width: 56px;
@@ -731,45 +703,38 @@
   align-items: center;
   justify-content: center;
 }
-
 .owner-avatar mat-icon {
   font-size: 32px;
   width: 32px;
   height: 32px;
   color: var(--primary);
 }
-
 .owner-name {
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
   color: var(--text-primary);
 }
-
 .owner-label,
 .visiting-hours {
   font-size: 0.7rem;
   color: var(--text-muted);
   margin: 0;
 }
-
 .visiting-hours {
   display: flex;
   align-items: center;
   gap: 0.2rem;
   margin-top: 0.2rem;
 }
-
 .visiting-hours mat-icon {
   font-size: 12px;
   width: 12px;
   height: 12px;
 }
-
 .price-summary {
   margin: 1rem 0;
 }
-
 .price-row {
   display: flex;
   justify-content: space-between;
@@ -777,26 +742,22 @@
   padding: 0.4rem 0;
   color: var(--text-primary);
 }
-
 .price-row.deposit {
   border-top: 1px dashed var(--border-light);
   margin-top: 0.3rem;
   padding-top: 0.6rem;
   font-weight: 500;
 }
-
 .price-val {
   font-weight: 600;
   color: var(--text-primary);
 }
-
 .cta-buttons {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
   margin: 1rem 0;
 }
-
 .cta-call,
 .cta-whatsapp,
 .cta-map {
@@ -805,43 +766,35 @@
   font-size: 0.75rem !important;
   padding: 0.5rem !important;
 }
-
 .cta-call {
   background: var(--primary) !important;
   color: white !important;
 }
-
 .cta-whatsapp {
   background: #25D366 !important;
   color: white !important;
 }
-
 .cta-map {
   border-color: var(--border-light) !important;
   color: var(--text-primary) !important;
 }
-
 .availability-info {
   margin-top: 1rem;
   font-size: 0.8rem;
   color: var(--text-primary);
 }
-
 .avail-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
-
 .avail-row .green {
   color: #2e7d32;
 }
-
 .avail-row .orange {
   color: #e67e22;
 }
-
 .quick-facts-card {
   background: var(--pure-white);
   border-radius: var(--radius-card);
@@ -849,14 +802,12 @@
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-sm);
 }
-
 .qf-title {
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 1rem 0;
   color: var(--text-primary);
 }
-
 .qf-item {
   display: flex;
   align-items: center;
@@ -865,7 +816,6 @@
   color: var(--text-secondary);
   margin-bottom: 0.75rem;
 }
-
 .qf-item mat-icon {
   font-size: 18px;
   width: 18px;
@@ -873,9 +823,9 @@
   color: var(--primary-light);
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   RESPONSIVE
-   ───────────────────────────────────────────────────────────────── */
+/* ------------------------------------------------------------------
+   RESPONSIVE BREAKPOINTS
+   ------------------------------------------------------------------ */
 @media (max-width: 1024px) {
   .detail-layout {
     flex-direction: column;
@@ -893,8 +843,14 @@
     font-size: 1.6rem;
   }
 }
-
 @media (max-width: 768px) {
+  .back-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .share-btn {
+    justify-content: center;
+  }
   .pg-header {
     flex-direction: column;
   }
@@ -919,7 +875,6 @@
     height: 32px;
   }
 }
-
 @media (max-width: 500px) {
   .detail-card {
     padding: 1rem;
@@ -936,32 +891,4 @@
   .cta-buttons button {
     width: 100%;
   }
-}
-
-/* Back bar with share button */
-.back-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.share-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .back-bar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .share-btn {
-        justify-content: center;
-    }
 }
