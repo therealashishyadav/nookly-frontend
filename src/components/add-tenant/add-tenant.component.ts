@@ -1,6 +1,3 @@
-import { MatSelectModule } from '@angular/material/select';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,11 +7,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';          //  import MatSelectModule
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TenantService } from '../../service/tenant.service';
+import { PgListingService } from '../../service/pg-listing.service';   //  import PG service
 import { Tenant } from '../../entity/Tenant';
 import { OwnerNavbarComponent } from "../owner-navbar/owner-navbar.component";
+import { PgListingResponse } from '../../entity/PgModel';              //  import PG response type
 
 @Component({
   selector: 'app-add-tenant',
@@ -22,34 +22,36 @@ import { OwnerNavbarComponent } from "../owner-navbar/owner-navbar.component";
   imports: [
     CommonModule, FormsModule, RouterLink,
     MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSnackBarModule, MatIconModule, MatCheckboxModule,
-    OwnerNavbarComponent, MatSelectModule
+    MatSnackBarModule, MatIconModule, MatSelectModule,   //  add MatSelectModule
+    MatCheckboxModule,
+    OwnerNavbarComponent,
   ],
   templateUrl: './add-tenant.component.html',
   styleUrls: ['./add-tenant.component.css']
 })
 export class AddTenantComponent implements OnInit {
 
-  ownerPgs: any[] = [];
-  isLoadingPgs = false;
-
   tenant: Tenant = new Tenant();
   isEditing = false;
   tenantId?: number;
   isLoading = false;
 
+  pgList: PgListingResponse[] = [];
+  loadingPGs = false;
+
   constructor(
     private tenantService: TenantService,
+    private pgListingService: PgListingService,   //  inject PG service
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
-    private http: HttpClient
-
-  ) { }
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.loadOwnerPgs(); // load PGs for dropdown
-  const id = this.route.snapshot.queryParamMap.get('id');
+    this.loadOwnerPGs();   //  fetch PGs first
+
+    // If ?id=X in URL, load tenant for editing
+    const id = this.route.snapshot.queryParamMap.get('id');
     if (id) {
       this.isEditing = true;
       this.tenantId = +id;
@@ -61,23 +63,32 @@ export class AddTenantComponent implements OnInit {
       });
     }
   }
-  loadOwnerPgs(): void {
-    this.isLoadingPgs = true;
-    const token = localStorage.getItem('token') ?? '';
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    this.http.get<any>(`${environment.apiUrl}/api/pg-listings/my`, { headers }).subscribe({
-      next: (res) => {
-        // handle both paginated and plain array responses
-        this.ownerPgs = Array.isArray(res) ? res : (res.content ?? []);
-        this.isLoadingPgs = false;
+
+  // 👇 new method
+  loadOwnerPGs(): void {
+    this.loadingPGs = true;
+    this.pgListingService.getMyListings().subscribe({
+      next: (pgs) => {
+        this.pgList = pgs;
+        this.loadingPGs = false;
       },
-      error: () => { this.isLoadingPgs = false; }
+      error: () => {
+        this.loadingPGs = false;
+        this.snackBar.open('Could not load your PG list.', 'Close', { duration: 3000 });
+      }
     });
   }
+
   save(): void {
     if (!this.tenant.fullName || !this.tenant.phone ||
-      !this.tenant.roomNumber || !this.tenant.monthlyRent) {
+        !this.tenant.roomNumber || !this.tenant.monthlyRent) {
       this.snackBar.open('Please fill all required fields.', 'Close', { duration: 3000 });
+      return;
+    }
+
+    // 👇 optional: validate that a PG is selected (if you want to make it required)
+    if (!this.tenant.pgId) {
+      this.snackBar.open('Please select a PG.', 'Close', { duration: 3000 });
       return;
     }
 

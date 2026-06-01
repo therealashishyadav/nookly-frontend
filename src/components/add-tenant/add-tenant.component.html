@@ -14,14 +14,16 @@
 
         <div class="form-grid">
 
+            <!-- PG Selection Dropdown -->
             <mat-form-field appearance="outline" class="full">
                 <mat-label>Select PG *</mat-label>
-                <mat-select [(ngModel)]="tenant.pgId" name="pgId">
-                    <mat-option *ngFor="let pg of ownerPgs" [value]="pg.id">
-                        {{ pg.pgName }} — {{ pg.locality }}, {{ pg.city }}
+                <mat-select [(ngModel)]="tenant.pgId" name="pgId" required>
+                    <mat-option *ngFor="let pg of pgList" [value]="pg.id">
+                        {{ pg.pgName }} - {{ pg.city }}, {{ pg.locality }}
                     </mat-option>
                 </mat-select>
-                <mat-icon matSuffix>home</mat-icon>
+                <mat-icon matSuffix>apartment</mat-icon>
+                <mat-error *ngIf="!tenant.pgId">Please select a PG</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full">
