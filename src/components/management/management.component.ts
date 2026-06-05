@@ -16,13 +16,14 @@ import { ManagementService } from '../../service/management.service';
 import {
   DashboardStats,
   ServiceHealth,
-  User,
-  PgListing,
-  Inquiry,
-  RevenueSummary,
+  ChartData,
   PlatformSettings,
   PageResponse
 } from '../../entity/DashboardStats';
+import { Account } from '../../entity/Account';
+import { PGListing as PgListing } from '../../entity/PGListing';
+import { Inquiry } from '../../entity/Inquiry';
+import { RevenueSummary } from '../../entity/RevenueSummary';
 import { OwnerNavbarComponent } from '../owner-navbar/owner-navbar.component';
 import { FooterComponent } from '../footer/footer.component';
 
@@ -67,7 +68,7 @@ export class ManagementComponent implements OnInit {
   loadingTpl: any = null;
 
   // Users
-  users: User[] = [];
+  users: Account[] = [];
   usersTotal = 0;
   usersPageSize = 10;
   usersPageIndex = 0;
@@ -151,14 +152,9 @@ export class ManagementComponent implements OnInit {
     this.managementService.getDashboardStats().subscribe({
       next: (data) => { this.dashboardStats = data; },
       error: () => {
-        // Graceful fallback with zeros so UI renders
-        this.dashboardStats = {
-          totalPGs: 0, totalUsers: 0, totalOwners: 0, totalTenants: 0,
-          monthlyInquiries: 0, weeklySignups: 0,
-          totalFinderFeesCollected: 0, pendingFinderFees: 0,
-          platformHealthy: false,
-          lastUpdated: new Date().toISOString(),
-        };
+        // Keep null when dashboard cannot be loaded; avoid hard-coded defaults
+        this.dashboardStats = null;
+        this.snackBar.open('Failed to load dashboard data', 'Close', { duration: 4000 });
       }
     });
   }
@@ -167,13 +163,9 @@ export class ManagementComponent implements OnInit {
     this.managementService.getServiceHealth().subscribe({
       next: (data) => { this.serviceHealth = data; },
       error: () => {
-        this.serviceHealth = [
-          { name: 'Account Service',  status: 'UNKNOWN' },
-          { name: 'Add PG Service',   status: 'UNKNOWN' },
-          { name: 'Inquiry Service',  status: 'UNKNOWN' },
-          { name: 'Tenant Service',   status: 'UNKNOWN' },
-          { name: 'API Gateway',      status: 'UNKNOWN' },
-        ];
+        // don't populate with hardcoded values; leave empty and notify
+        this.serviceHealth = [];
+        this.snackBar.open('Failed to load service health', 'Close', { duration: 4000 });
       }
     });
   }
@@ -182,14 +174,14 @@ export class ManagementComponent implements OnInit {
 
   loadUsers(): void {
     this.managementService.getUsers(this.usersPageIndex, this.usersPageSize, this.userSearch).subscribe({
-      next: (page: PageResponse<User>) => {
+      next: (page: PageResponse<Account>) => {
         this.users = page.content;
         this.usersTotal = page.totalElements;
       },
       error: () => {
         // If backend users endpoint returns plain array
         this.managementService.getAllUsersFallback().subscribe({
-          next: (list: User[]) => {
+          next: (list: Account[]) => {
             this.users = list;
             this.usersTotal = list.length;
           },
@@ -206,10 +198,10 @@ export class ManagementComponent implements OnInit {
     this.loadUsers();
   }
 
-  toggleUserStatus(user: User): void {
+  toggleUserStatus(user: Account): void {
     const action = (user.active === false)
-      ? this.managementService.activateUser(user.id)
-      : this.managementService.deactivateUser(user.id);
+      ? this.managementService.activateUser(user.id!)
+      : this.managementService.deactivateUser(user.id!);
 
     action.subscribe({
       next: () => {
@@ -224,7 +216,7 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  viewUserPGs(user: User): void {
+  viewUserPGs(user: Account): void {
     this.pgCityFilter = '';
     this.pgOccupancyFilter = '';
     this.activeTab = 2;
@@ -255,7 +247,7 @@ export class ManagementComponent implements OnInit {
   }
 
   verifyPg(pg: PgListing): void {
-    this.managementService.verifyListing(pg.id).subscribe({
+    this.managementService.verifyListing(pg.id!).subscribe({
       next: () => {
         pg.verified = true;
         this.snackBar.open('PG marked as verified ✓', 'Close', { duration: 3000 });
@@ -266,7 +258,7 @@ export class ManagementComponent implements OnInit {
 
   deletePg(pg: PgListing): void {
     if (!confirm(`Permanently delete "${pg.pgName}"? This cannot be undone.`)) return;
-    this.managementService.deleteListing(pg.id).subscribe({
+    this.managementService.deleteListing(pg.id!).subscribe({
       next: () => {
         this.snackBar.open('PG deleted.', 'Close', { duration: 3000 });
         this.loadPGs();

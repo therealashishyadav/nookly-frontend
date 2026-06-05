@@ -4,15 +4,15 @@ import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import {
   DashboardStats,
-  User,
-  PgListing,
-  Inquiry,
-  RevenueSummary,
   ChartData,
   PlatformSettings,
-  PageResponse
+  PageResponse,
+  ServiceHealth
 } from '../entity/DashboardStats';
-import { ServiceHealth } from '../entity/DashboardStats';
+import { Account } from '../entity/Account';
+import { PGListing } from '../entity/PGListing';
+import { Inquiry } from '../entity/Inquiry';
+import { RevenueSummary } from '../entity/RevenueSummary';
 
 @Injectable({ providedIn: 'root' })
 export class ManagementService {
@@ -24,10 +24,10 @@ export class ManagementService {
     return this.http.get<DashboardStats>(`${this.apiUrl}/dashboard`);
   }
 
-  getUsers(page: number, size: number, search: string): Observable<PageResponse<User>> {
+  getUsers(page: number, size: number, search: string): Observable<PageResponse<Account>> {
     let params = new HttpParams().set('page', page).set('size', size);
     if (search) params = params.set('search', search);
-    return this.http.get<PageResponse<User>>(`${this.apiUrl}/users`, { params });
+    return this.http.get<PageResponse<Account>>(`${this.apiUrl}/users`, { params });
   }
 
   activateUser(id: number): Observable<void> {
@@ -38,11 +38,11 @@ export class ManagementService {
     return this.http.put<void>(`${this.apiUrl}/users/${id}/deactivate`, {});
   }
 
-  getPGs(page: number, size: number, city: string, occupancyType: string): Observable<PageResponse<PgListing>> {
+  getPGs(page: number, size: number, city: string, occupancyType: string): Observable<PageResponse<PGListing>> {
     let params = new HttpParams().set('page', page).set('size', size);
     if (city) params = params.set('city', city);
     if (occupancyType) params = params.set('occupancyType', occupancyType);
-    return this.http.get<PageResponse<PgListing>>(`${this.apiUrl}/pgs`, { params });
+    return this.http.get<PageResponse<PGListing>>(`${this.apiUrl}/pgs`, { params });
   }
 
   verifyListing(id: number): Observable<void> {
@@ -110,7 +110,7 @@ export class ManagementService {
   /**
    * Some deployments return a plain list of users; helper for that case.
    */
-  getAllUsersFallback(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users/all`);
+  getAllUsersFallback(): Observable<Account[]> {
+    return this.http.get<Account[]>(`${this.apiUrl}/users/all`);
   }
 }

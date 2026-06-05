@@ -1,5 +1,7 @@
 export interface PGListing {
   id?: number;
+  verified?: boolean;
+  active?: boolean;
   pgName: string;
   fullAddress?: string;
   city: string;

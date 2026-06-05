@@ -1,4 +1,5 @@
 export class Inquiry {
+    id?: number;
 
     fullName: string;
     phone: string;
@@ -8,6 +9,7 @@ export class Inquiry {
     location: string;
 
     constructor() {
+         this.id = undefined;
        this.fullName = '';
        this.phone = '';
        this.email = '';

@@ -1,11 +1,14 @@
 export class Account {
 
+    id?: number;
     firstName: string;
     lastName: string;
     email: string;
     phone: string;
-    password: string;
+    password?: string;
     role: string;
+    active?: boolean;
+    createdAt?: string;
 
     constructor() {
         this.firstName = '';
@@ -14,6 +17,7 @@ export class Account {
         this.phone = '';
         this.password = '';
         this.role = 'USER';
+        this.active = true;
     }
 
 }
