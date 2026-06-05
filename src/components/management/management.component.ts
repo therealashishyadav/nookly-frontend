@@ -199,15 +199,17 @@ export class ManagementComponent implements OnInit {
   }
 
   toggleUserStatus(user: Account): void {
-    const action = (user.active === false)
-      ? this.managementService.activateUser(user.id!)
-      : this.managementService.deactivateUser(user.id!);
+    const uid = (user as any).id;
+    const isActive = (user as any).active;
+    const action = (isActive === false)
+      ? this.managementService.activateUser(uid)
+      : this.managementService.deactivateUser(uid);
 
     action.subscribe({
       next: () => {
-        user.active = !user.active;
+        (user as any).active = !(user as any).active;
         this.snackBar.open(
-          `User ${user.active ? 'activated' : 'deactivated'}`, 'Close', { duration: 3000 }
+          `User ${(user as any).active ? 'activated' : 'deactivated'}`, 'Close', { duration: 3000 }
         );
       },
       error: () => {
@@ -222,7 +224,7 @@ export class ManagementComponent implements OnInit {
     this.activeTab = 2;
     // Filter PGs by this owner — load fresh
     this.loadPGs();
-    this.snackBar.open(`Showing PGs for owner #${user.id}`, 'Close', { duration: 2000 });
+    this.snackBar.open(`Showing PGs for owner #${(user as any).id}`, 'Close', { duration: 2000 });
   }
 
   // ── PGs ────────────────────────────────────────────────────────────────────
