@@ -1,0 +1,180 @@
+/* ── Fullscreen Overlay with Blur ─────────────────────────── */
+.overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(44, 62, 80, 0.65) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important; /* Super high to beat everything */
+  animation: fadeIn 0.3s ease-out;
+  cursor: pointer;
+}
+
+/* ── Modal Card ────────────────────────────────────────────── */
+.modal {
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  padding: 44px 36px 32px !important;
+  max-width: 460px !important;
+  width: 92% !important;
+  text-align: center !important;
+  position: relative !important;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35) !important;
+  animation: slideUp 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: default;
+  z-index: 100000 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ── Close Button (Top Left) ──────────────────────────────── */
+.close-btn {
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  width: 36px !important;
+  height: 36px !important;
+  border: none !important;
+  background: #f1f5f9 !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #475569 !important;
+  transition: all 0.25s ease;
+  z-index: 100001 !important;
+}
+
+.close-btn:hover {
+  background: #e2e8f0 !important;
+  color: #1e293b !important;
+  transform: rotate(90deg);
+}
+
+.close-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* ── Content ────────────────────────────────────────────────── */
+.content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px;
+  position: relative !important;
+  z-index: 100000 !important;
+}
+
+.icon-wrapper {
+  color: #4A90E2 !important;
+  margin-bottom: 6px;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 28px !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  margin: 0 0 4px 0 !important;
+  letter-spacing: -0.01em;
+}
+
+.badge {
+  font-family: 'Jost', 'Segoe UI', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #2d6abf !important;
+  background: rgba(74, 144, 226, 0.15) !important;
+  padding: 4px 18px !important;
+  border-radius: 9999px !important;
+  display: inline-block !important;
+  margin: 4px 0 8px 0 !important;
+  border: 1px solid rgba(74, 144, 226, 0.3) !important;
+}
+
+.message {
+  font-family: 'Jost', 'Segoe UI', sans-serif !important;
+  font-size: 16px !important;
+  color: #334155 !important;
+  line-height: 1.6 !important;
+  margin: 4px 0 0 0 !important;
+}
+
+.sub-text {
+  font-family: 'Jost', 'Segoe UI', sans-serif !important;
+  font-size: 14px !important;
+  color: #94a3b8 !important;
+  margin: 2px 0 18px 0 !important;
+}
+
+/* ── Animated Dots Loader ──────────────────────────────────── */
+.loader {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.loader span {
+  width: 10px !important;
+  height: 10px !important;
+  background: #4A90E2 !important;
+  border-radius: 50% !important;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+.loader span:nth-child(1) { animation-delay: 0s; }
+.loader span:nth-child(2) { animation-delay: 0.2s; }
+.loader span:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Animations ────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.3;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .modal {
+    padding: 36px 20px 28px !important;
+  }
+  .title {
+    font-size: 24px !important;
+  }
+  .badge {
+    font-size: 14px !important;
+    padding: 3px 14px !important;
+  }
+  .message {
+    font-size: 15px !important;
+  }
+}

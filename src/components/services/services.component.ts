@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [ NavbarComponent, FooterComponent],
+  imports: [ NavbarComponent, FooterComponent, RouterLink ],
   templateUrl: './services.component.html',
   styleUrl: './services.component.css'
 })

@@ -1,0 +1,46 @@
+<!-- Fullscreen Overlay with Blur -->
+<div class="overlay" (click)="closeModal()">
+  
+  <!-- Modal Card -->
+  <div class="modal" (click)="$event.stopPropagation()">
+    
+    <!-- Close Button - Top Left -->
+    <button class="close-btn" (click)="closeModal()" aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Content -->
+    <div class="content">
+      
+      <!-- Icon -->
+      <div class="icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          <circle cx="12" cy="12" r="4"/>
+        </svg>
+      </div>
+
+      <!-- Title -->
+      <h2 class="title">Coming Soon!</h2>
+
+      <!-- Feature Name Badge -->
+      <span class="badge">{{ featureName }}</span>
+
+      <!-- Message -->
+      <p class="message">{{ message }}</p>
+
+      <!-- Sub-text -->
+      <p class="sub-text">We're working on it. Stay tuned for updates!</p>
+
+      <!-- Animated Loader -->
+      <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+</div>
