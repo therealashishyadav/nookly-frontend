@@ -222,7 +222,7 @@ export class ManagementComponent implements OnInit {
     this.pgCityFilter = '';
     this.pgOccupancyFilter = '';
     this.activeTab = 2;
-    // Filter PGs by this owner — load fresh
+    // Filter PGs by this owner load fresh
     this.loadPGs();
     this.snackBar.open(`Showing PGs for owner #${(user as any).id}`, 'Close', { duration: 2000 });
   }
@@ -254,7 +254,7 @@ export class ManagementComponent implements OnInit {
         pg.verified = true;
         this.snackBar.open('PG marked as verified ✓', 'Close', { duration: 3000 });
       },
-      error: () => this.snackBar.open('Verify failed — check backend endpoint.', 'Close', { duration: 3000 })
+      error: () => this.snackBar.open('Verify failed check backend endpoint.', 'Close', { duration: 3000 })
     });
   }
 
@@ -265,7 +265,7 @@ export class ManagementComponent implements OnInit {
         this.snackBar.open('PG deleted.', 'Close', { duration: 3000 });
         this.loadPGs();
       },
-      error: () => this.snackBar.open('Delete failed — check backend endpoint.', 'Close', { duration: 3000 })
+      error: () => this.snackBar.open('Delete failed check backend endpoint.', 'Close', { duration: 3000 })
     });
   }
 

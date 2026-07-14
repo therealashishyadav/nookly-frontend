@@ -1,4 +1,3 @@
-
 :host {
   /* Brand Palette */
   --nookly-azure: #4A90E2;
@@ -445,5 +444,20 @@ button.mat-mdc-button.mat-accent:active {
 
   .forgot-password {
     text-decoration: underline;
+  }
+
+  /* Google button container */
+  #googleButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  /* Optional: Override the default iframe size for better mobile responsiveness */
+  ::ng-deep #googleButton iframe {
+    width: 100% !important;
+    max-width: 280px !important;
+    min-height: 44px !important;
   }
 }

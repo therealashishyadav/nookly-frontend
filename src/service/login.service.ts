@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 const apiUrl = environment.apiUrl;
 const token_url = apiUrl + '/api/v1/auth/signin';
 const user_url = apiUrl + '/api/v1/USER';
+const googleLoginUrl = apiUrl + '/api/v1/auth/google';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,10 @@ export class LoginService {
   getRole(identifier: string) {
     // role endpoint only works with email, so pass whatever we have
     return this.http.get<string>(apiUrl + `/api/v1/auth/role/${identifier}`);
+  }
+
+    googleLogin(idToken: string): Observable<JwtToken> {
+    return this.http.post<JwtToken>(googleLoginUrl, { idToken });
   }
 
   currentUser() {

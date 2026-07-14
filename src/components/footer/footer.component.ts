@@ -13,7 +13,7 @@ import { ComingSoonPageComponent } from '../coming-soon-page/coming-soon-page.co
 export class FooterComponent {
   showComingSoon = false;
 
-  featureName = 'Careers';
+  featureName = 'feature';
   comingSoonMessage = 'We are working hard to bring this to you!';
 
   openComingSoon(event: Event): void {
@@ -23,4 +23,29 @@ export class FooterComponent {
   closeComingSoon(): void {
     this.showComingSoon = false;
   }
+
+  openCareers(event: Event): void {
+  event.preventDefault();
+  this.featureName = 'Careers';
+  this.showComingSoon = true;
+}
+
+openPress(event: Event): void {
+  event.preventDefault();
+  this.featureName = 'Press';
+  this.showComingSoon = true;
+}
+
+openBlog(event: Event): void {
+  event.preventDefault();
+  this.featureName = 'Blog';
+  this.showComingSoon = true;
+}
+
+openDuplexes(event: Event): void {
+  event.preventDefault();
+  this.featureName = 'Duplexes';
+  this.showComingSoon = true;
+}
+
 }

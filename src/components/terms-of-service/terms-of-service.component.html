@@ -1,0 +1,615 @@
+<div class="portal-wrapper">
+
+    <!-- ═══════ SIDEBAR ═══════ -->
+    <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon" *ngIf="!sidebarCollapsed">
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=40&h=40&q=80"
+                        alt="Crib" style="border-radius:50%;width:34px;height:34px;object-fit:cover;" />
+                </span>
+                <span class="logo-icon-mini" *ngIf="sidebarCollapsed">
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=40&h=40&q=80"
+                        alt="Crib" style="border-radius:50%;width:32px;height:32px;object-fit:cover;" />
+                </span>
+                <span class="logo-text" *ngIf="!sidebarCollapsed">Crib <em>· ToS</em></span>
+            </div>
+            <button class="collapse-btn" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+                <span *ngIf="!sidebarCollapsed">◀</span>
+                <span *ngIf="sidebarCollapsed">▶</span>
+            </button>
+        </div>
+
+        <div class="user-badge" *ngIf="!sidebarCollapsed">
+            <div class="avatar">JD</div>
+            <div class="user-info">
+                <span class="user-name">John Doe</span>
+                <span class="user-role">Admin</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-item" *ngFor="let item of ['Dashboard','Properties','Tenants','Payments','Reports']">
+                <span class="nav-icon">📌</span>
+                <span *ngIf="!sidebarCollapsed">{{ item }}</span>
+            </button>
+            <button class="nav-item active">
+                <span class="nav-icon">📄</span>
+                <span *ngIf="!sidebarCollapsed">Terms of Service</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn">
+                <span>🚪</span>
+                <span *ngIf="!sidebarCollapsed">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ═══════ MAIN CONTENT ═══════ -->
+    <div class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <h1 class="page-title">Terms of Service</h1>
+            <div class="topbar-right">
+                <span class="live-badge">
+                    <span class="pulse"></span>
+                    LIVE
+                </span>
+                <span class="current-date">{{ currentDate }}</span>
+                <button (click)="printDocument()" class="btn-print"
+                    style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:9999px;padding:0.3rem 1rem;color:var(--nookly-white);cursor:pointer;font-family:var(--font-body);font-size:0.8rem;display:flex;align-items:center;gap:0.4rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9V3h12v6" />
+                        <path d="M6 21h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2z" />
+                        <path d="M18 9V9" />
+                        <path d="M9 15h6" />
+                    </svg>
+                    Print
+                </button>
+                <button (click)="toggleToc()" class="btn-toc"
+                    style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:9999px;padding:0.3rem 1rem;color:var(--nookly-white);cursor:pointer;font-family:var(--font-body);font-size:0.8rem;">
+                    {{ isTocOpen ? 'Close' : 'Contents' }}
+                </button>
+            </div>
+        </header>
+
+        <!-- Tab panel -->
+        <div class="tab-panel">
+
+            <!-- Table of Contents (slide animation) -->
+            <nav *ngIf="isTocOpen" @slideToc class="toc-nav"
+                style="background:var(--nookly-surface);backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:var(--space-lg) var(--space-xl);margin-bottom:var(--space-xl);border:1px solid rgba(255,255,255,0.65);box-shadow:var(--shadow-card);">
+                <h2 class="toc-title"
+                    style="font-family:var(--font-display);font-size:1.2rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);">
+                    Contents</h2>
+                <ul class="toc-list"
+                    style="list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--space-sm) var(--space-lg);padding:0;">
+                    <li *ngFor="let section of sections" style="font-size:0.9rem;line-height:1.4;">
+                        <a [href]="'#' + section.id"
+                            style="color:var(--nookly-midnight-2);text-decoration:none;transition:color var(--dur-fast);border-bottom:1px dotted transparent;"
+                            (click)="scrollToSection(section.id, $event)">
+                            {{ section.number }} {{ section.title }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- ToS Document -->
+            <div class="section-card" style="padding:0;overflow:hidden;">
+                <article class="tos-article" @fadeInStagger style="padding:var(--space-2xl) var(--space-xl);">
+
+                    <!-- Decorative Unsplash images (floating) -->
+                    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=200&q=80"
+                        alt="" class="deco-img deco-left"
+                        style="position:absolute;width:90px;height:90px;border-radius:50%;opacity:0.10;pointer-events:none;animation:float 6s ease-in-out infinite;left:-25px;top:10%;" />
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=200&q=80"
+                        alt="" class="deco-img deco-right"
+                        style="position:absolute;width:110px;height:110px;border-radius:50%;opacity:0.10;pointer-events:none;animation:float 8s ease-in-out infinite;right:-30px;bottom:15%;animation-delay:2s;" />
+
+                    <h1 class="tos-title"
+                        style="font-family:var(--font-display);font-size:2.2rem;font-weight:700;color:var(--nookly-midnight);margin-bottom:0.2rem;letter-spacing:-0.01em;">
+                        Terms of Service for Crib</h1>
+                    <p class="tos-subtitle"
+                        style="font-size:1rem;color:var(--nookly-slate);margin-bottom:var(--space-lg);border-bottom:1px solid var(--nookly-border);padding-bottom:var(--space-lg);">
+                        <span class="domain"
+                            style="background:var(--nookly-surface-2);padding:0.1rem 0.6rem;border-radius:var(--radius-sm);font-family:monospace;font-size:0.85rem;color:var(--nookly-midnight-2);">www.crib.in</span>
+                        ·
+                        <span class="domain"
+                            style="background:var(--nookly-surface-2);padding:0.1rem 0.6rem;border-radius:var(--radius-sm);font-family:monospace;font-size:0.85rem;color:var(--nookly-midnight-2);">crib.up.vercel.app</span>
+                    </p>
+
+                    <!-- Meta -->
+                    <section class="tos-meta"
+                        style="background:var(--nookly-surface-2);border-radius:var(--radius-md);padding:var(--space-lg);margin:var(--space-lg) 0;border:1px solid var(--nookly-border);">
+                        <div class="meta-grid"
+                            style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--space-md);">
+                            <div><strong
+                                    style="display:block;font-weight:600;color:var(--nookly-midnight-2);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;">Effective
+                                    Date</strong><br />10 July 2026</div>
+                            <div><strong
+                                    style="display:block;font-weight:600;color:var(--nookly-midnight-2);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;">Operated
+                                    By</strong><br />MM Group (Crib)</div>
+                            <div><strong
+                                    style="display:block;font-weight:600;color:var(--nookly-midnight-2);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;">Document
+                                    Type</strong><br />User Agreement &amp; Terms of Service</div>
+                            <div><strong
+                                    style="display:block;font-weight:600;color:var(--nookly-midnight-2);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;">Applies
+                                    To</strong><br />All Renters, Property Owners &amp; Visitors</div>
+                        </div>
+                    </section>
+
+                    <!-- Notice -->
+                    <div class="notice-box"
+                        style="background:var(--nookly-gold-light);border-left:4px solid var(--nookly-gold);padding:var(--space-lg);border-radius:var(--radius-md);margin:var(--space-lg) 0;font-size:0.95rem;">
+                        <strong>Notice of Change.</strong> Crib may revise this Agreement from time to time to reflect
+                        new features (including the Digital Rental Agreement and Payment tools described in Section 8),
+                        regulatory changes, or operational needs. The "Effective Date" above will be updated whenever
+                        changes are made. Continued use of the Platform after such changes constitutes your acceptance
+                        of the revised Terms. You are responsible for checking this page periodically.
+                    </div>
+
+                    <!-- ======= SECTIONS (full text) ======= -->
+                    <section id="section-1" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">1.</span> Scope
+                            and Acceptance</h2>
+                        <p>This Terms of Service Agreement ("Agreement", "Terms") is a legally binding contract between
+                            you ("User", "Renter", "Property Owner", or "you") and MM Group, operating the Crib platform
+                            accessible at crib.in and crib.up.vercel.app (together, "Crib", "the Platform", "we", "us").
+                        </p>
+                        <p>Crib is a digital marketplace that helps users discover, list, and communicate about shared
+                            living spaces including PGs, flats, studio apartments, duplexes, and co-living spaces —
+                            across India. By creating an account, browsing listings, or otherwise using the Platform,
+                            you agree to be bound by this Agreement in full. If you do not agree, you must not use Crib.
+                        </p>
+                        <p>This Agreement applies to every category of user described on our platform: students, working
+                            professionals, families, remote workers and freelancers seeking accommodation, as well as
+                            property owners and PG managers listing space.</p>
+                    </section>
+
+                    <section id="section-2" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">2.</span>
+                            Eligibility and Definitions</h2>
+                        <p>You must be at least 18 years of age and capable of entering into a legally binding contract
+                            under the Indian Contract Act, 1872 to register on Crib. By registering, you represent that
+                            all information you provide is accurate and current.</p>
+                        <p>Key definitions used throughout this Agreement:</p>
+                        <dl style="margin:var(--space-md) 0 var(--space-md) var(--space-lg);">
+                            <dt style="font-weight:600;display:inline;">"Property Owner"</dt>
+                            <dd style="display:inline;margin-left:0.3rem;">any individual or entity listing a PG,
+                                flat, studio, duplex, or co-living space on the Platform.</dd>
+                            <dt style="font-weight:600;display:inline;">"Renter"</dt>
+                            <dd style="display:inline;margin-left:0.3rem;">any individual using the Platform to search
+                                for or communicate about a rental property.</dd>
+                            <dt style="font-weight:600;display:inline;">"Listing"</dt>
+                            <dd style="display:inline;margin-left:0.3rem;">the images, descriptions, pricing,
+                                amenities and other details a Property Owner submits for a property.</dd>
+                            <dt style="font-weight:600;display:inline;">"Platform"</dt>
+                            <dd style="display:inline;margin-left:0.3rem;">the Crib website, associated mobile
+                                applications (when launched), and all related services.</dd>
+                        </dl>
+                    </section>
+
+                    <section id="section-3" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">3.</span> Nature
+                            of the Platform Marketplace, Not a Party to Any Tenancy</h2>
+                        <div class="core-protection"
+                            style="background:var(--nookly-surface-2);padding:var(--space-md) var(--space-lg);border-radius:var(--radius-md);border-left:4px solid var(--nookly-azure);margin:var(--space-lg) 0;">
+                            <span class="badge"
+                                style="display:inline-block;background:var(--nookly-azure);color:white;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:0.1rem 0.6rem;border-radius:var(--radius-pill);margin-right:0.5rem;vertical-align:middle;">Core
+                                Protection</span>
+                            <p>Crib is strictly a technology platform and marketplace that connects Renters directly
+                                with Property Owners. Crib is not a broker, real estate agent, landlord, tenant,
+                                sub-lessor, property manager, or guarantor of any kind, and MM Group does not own,
+                                operate, manage, or control any property listed on the Platform.</p>
+                        </div>
+                        <p>All commercial and personal arrangements including but not limited to rent amount, security
+                            deposit, notice period, food charges (where applicable), house rules, and move-in/move-out
+                            conditions are agreed upon strictly and exclusively between the Renter and the Property
+                            Owner. Crib is not a signatory, guarantor, or party to any such arrangement, whether verbal,
+                            written, or digital, and has no obligation to enforce, mediate, or adjudicate its terms.</p>
+                        <p><strong>In plain terms:</strong> Crib helps you find and contact a listing. What happens
+                            after that the deal you strike, the deposit you pay, the condition of the room is
+                            between you and the other party, not Crib.</p>
+                    </section>
+
+                    <section id="section-4" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">4.</span> User
+                            Accounts, Login &amp; Registration</h2>
+                        <p>Access to certain features of Crib (contacting Property Owners, listing a property, saving
+                            searches) requires you to register and log in. You may be offered account creation via
+                            direct registration or supported single sign-on ("SSO") providers.</p>
+                        <ul style="margin:var(--space-md) 0 var(--space-md) var(--space-lg);">
+                            <li style="margin-bottom:var(--space-sm);">You are solely responsible for maintaining the
+                                confidentiality of your login credentials, password, and any SSO session associated with
+                                your account.</li>
+                            <li style="margin-bottom:var(--space-sm);">You are solely responsible for all activity that
+                                occurs under your account, whether or not authorized by you, unless you have notified
+                                Crib in writing of unauthorized access.</li>
+                            <li style="margin-bottom:var(--space-sm);">You must notify Crib immediately at <a
+                                    href="mailto:crib.support&#64;gmail.com">crib.support&#64;gmail.com</a> if you
+                                suspect unauthorized use of your account.</li>
+                            <li style="margin-bottom:var(--space-sm);">Crib reserves the right, at its sole discretion
+                                and without prior notice, to suspend, restrict, or terminate any account it reasonably
+                                suspects is being used for fraudulent activity, impersonation, duplicate/fake listings,
+                                or any violation of this Agreement or Crib's community standards.</li>
+                            <li style="margin-bottom:var(--space-sm);">One individual or entity may not maintain
+                                multiple accounts to circumvent restrictions, suspensions, or verification checks.</li>
+                        </ul>
+                    </section>
+
+                    <section id="section-5" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">5.</span>
+                            "Verified Properties" Scope and Limitation of Verification</h2>
+                        <div class="important-box"
+                            style="background:var(--nookly-surface-2);padding:var(--space-md) var(--space-lg);border-radius:var(--radius-md);border-left:4px solid var(--nookly-azure);margin:var(--space-lg) 0;">
+                            <span class="badge"
+                                style="display:inline-block;background:var(--nookly-azure);color:white;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:0.1rem 0.6rem;border-radius:var(--radius-pill);margin-right:0.5rem;vertical-align:middle;">Important</span>
+                            <p>Crib markets certain listings as "Verified Properties." Users must understand precisely
+                                what this verification does and does not mean:</p>
+                        </div>
+                        <p><strong>What it means:</strong> Verification indicates that Crib has performed a basic
+                            administrative and listing-accuracy check for example, confirming that photographs, stated
+                            amenities, pricing, and property description submitted by the Property Owner are internally
+                            consistent and that the Owner has completed Crib's standard onboarding process.</p>
+                        <p><strong>What it does NOT mean:</strong> Verification is not a structural, legal, regulatory,
+                            or title-due-diligence guarantee. It does not confirm ownership title, building safety
+                            compliance, occupancy certificates, fire safety clearance, absence of legal disputes over
+                            the property, or the accuracy of every representation made by the Owner. It is not an
+                            inspection report and does not constitute a warranty of habitability, safety, or condition.
+                        </p>
+                        <p>Crib strongly recommends, and you agree it is your sole responsibility, to physically inspect
+                            any property, verify ownership and legal documentation independently, and satisfy yourself
+                            of the property's condition and the Owner's legitimacy before making any payment or entering
+                            into any rental arrangement.</p>
+                    </section>
+
+                    <section id="section-6" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">6.</span> User
+                            Responsibilities</h2>
+                        <p>You agree to:</p>
+                        <ul style="margin:var(--space-md) 0 var(--space-md) var(--space-lg);">
+                            <li style="margin-bottom:var(--space-sm);">Provide accurate, current, and complete
+                                information in your profile and, if you are a Property Owner, in every Listing you
+                                publish.</li>
+                            <li style="margin-bottom:var(--space-sm);">Conduct your own physical inspection of any
+                                property before finalizing an arrangement, as described in Section 5.</li>
+                            <li style="margin-bottom:var(--space-sm);">Communicate and negotiate rent, deposits, and
+                                terms of stay directly and in good faith with the other party.</li>
+                            <li style="margin-bottom:var(--space-sm);">Refrain from posting duplicate, misleading, or
+                                unauthorized listings, or impersonating another person or entity.</li>
+                            <li style="margin-bottom:var(--space-sm);">Comply with all applicable Indian laws, including
+                                local tenancy regulations, municipal rules, and society/RWA bye-laws applicable to the
+                                property.</li>
+                            <li style="margin-bottom:var(--space-sm);">Not use the Platform to harass, discriminate
+                                against, defraud, or endanger any other user.</li>
+                        </ul>
+                    </section>
+
+                    <section id="section-7" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">7.</span>
+                            Intellectual Property Rights</h2>
+                        <div class="brand-block"
+                            style="background:var(--nookly-surface-2);padding:var(--space-md) var(--space-lg);border-radius:var(--radius-md);border-left:4px solid var(--nookly-azure);margin:var(--space-lg) 0;">
+                            <span class="badge"
+                                style="display:inline-block;background:var(--nookly-gold);color:var(--nookly-black);font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:0.1rem 0.6rem;border-radius:var(--radius-pill);margin-right:0.5rem;vertical-align:middle;">MM
+                                Group / Crib</span>
+                            <p>The Crib name, logo, "Where Every Nook Feels Like Home" and related taglines, the
+                                Platform's user interface, design elements, proprietary property descriptions, curated
+                                imagery, and underlying software are the exclusive intellectual property of MM Group
+                                and/or its licensors.</p>
+                        </div>
+                        <p>You are strictly prohibited from:</p>
+                        <ul style="margin:var(--space-md) 0 var(--space-md) var(--space-lg);">
+                            <li style="margin-bottom:var(--space-sm);">Scraping, crawling, or data-mining any part of
+                                the Platform, including Listings, images, pricing data, or user information, through
+                                automated means;</li>
+                            <li style="margin-bottom:var(--space-sm);">Copying, reproducing, republishing, or
+                                commercially exploiting the Platform's UI, layouts, proprietary descriptions, or
+                                photography without MM Group's prior written consent;</li>
+                            <li style="margin-bottom:var(--space-sm);">Reverse-engineering, decompiling, or creating
+                                derivative products based on Crib's software, design system, or database structure;</li>
+                            <li style="margin-bottom:var(--space-sm);">Using the Crib or MM Group name, logo, or
+                                branding in any manner that suggests endorsement, affiliation, or partnership without
+                                written authorization.</li>
+                        </ul>
+                        <p>Any content you submit (Listing photos, descriptions, reviews) remains your property, but by
+                            submitting it you grant Crib a worldwide, royalty-free, non-exclusive license to host,
+                            display, reproduce, and promote it in connection with operating and marketing the Platform.
+                        </p>
+                    </section>
+
+                    <section id="section-8" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">8.</span>
+                            Upcoming Features Digital Agreements &amp; Payments</h2>
+                        <div class="forward-looking"
+                            style="background:var(--nookly-surface-2);padding:var(--space-md) var(--space-lg);border-radius:var(--radius-md);border-left:4px solid var(--nookly-azure);margin:var(--space-lg) 0;">
+                            <span class="badge"
+                                style="display:inline-block;background:var(--nookly-azure);color:white;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:0.1rem 0.6rem;border-radius:var(--radius-pill);margin-right:0.5rem;vertical-align:middle;">Forward-Looking</span>
+                            <p>Crib's roadmap includes digital rental agreements, in-app rent payment integration,
+                                tenant background verification, and a rating system ("Upcoming Features"). These
+                                features are not active as of the Effective Date of this Agreement.</p>
+                        </div>
+                        <p>You acknowledge and agree that:</p>
+                        <ul style="margin:var(--space-md) 0 var(--space-md) var(--space-lg);">
+                            <li style="margin-bottom:var(--space-sm);">When launched, each Upcoming Feature will be
+                                governed by supplementary terms presented to you at the time of use, which will be
+                                incorporated into and read together with this Agreement.</li>
+                            <li style="margin-bottom:var(--space-sm);">Any payment functionality will be provided
+                                through the facilitation of third-party, RBI-regulated payment gateway providers. Crib
+                                acts only as a facilitator connecting you to such providers and does not itself hold,
+                                transmit, or guarantee funds.</li>
+                            <li style="margin-bottom:var(--space-sm);">Crib bears no liability for payment failures,
+                                delays, chargebacks, gateway downtime, fraud committed by a counterparty, or disputes
+                                arising from any transaction processed through a third-party payment gateway. Any such
+                                dispute must be raised with the relevant payment provider or bank in accordance with
+                                their own grievance redressal process.</li>
+                            <li style="margin-bottom:var(--space-sm);">Similarly, any digital rental agreement generated
+                                through the Platform is a tool for documentation convenience between the Renter and
+                                Property Owner; Crib is not a party to, and assumes no liability for the legal
+                                enforceability, drafting adequacy, or performance of, any such agreement.</li>
+                        </ul>
+                    </section>
+
+                    <section id="section-9" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">9.</span>
+                            Limitation of Liability</h2>
+                        <div class="core-protection"
+                            style="background:var(--nookly-surface-2);padding:var(--space-md) var(--space-lg);border-radius:var(--radius-md);border-left:4px solid var(--nookly-azure);margin:var(--space-lg) 0;">
+                            <span class="badge"
+                                style="display:inline-block;background:var(--nookly-azure);color:white;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:0.1rem 0.6rem;border-radius:var(--radius-pill);margin-right:0.5rem;vertical-align:middle;">Core
+                                Protection</span>
+                            <p>To the maximum extent permitted under applicable Indian law, MM Group, Crib, and their
+                                respective directors, employees, and affiliates shall have zero liability for:</p>
+                        </div>
+                        <ul style="margin:var(--space-md) 0 var(--space-md) var(--space-lg);">
+                            <li style="margin-bottom:var(--space-sm);">The physical, structural, or legal condition of
+                                any property listed on the Platform;</li>
+                            <li style="margin-bottom:var(--space-sm);">The conduct, behavior, criminal history, or
+                                misrepresentations of any Property Owner, Renter, co-tenant, or other user;</li>
+                            <li style="margin-bottom:var(--space-sm);">Any failure by a Property Owner to deliver
+                                promised amenities, services, food, or living conditions;</li>
+                            <li style="margin-bottom:var(--space-sm);">Any dispute, financial loss, injury, or damage
+                                arising from a rental arrangement, including disputes over rent, security deposits,
+                                notice periods, or damage to belongings;</li>
+                            <li style="margin-bottom:var(--space-sm);">Any indirect, incidental, special, consequential,
+                                or punitive damages arising out of or relating to your use of the Platform, even if Crib
+                                has been advised of the possibility of such damages.</li>
+                        </ul>
+                        <p>The Platform is provided on an "as is" and "as available" basis, without warranties of any
+                            kind, express or implied, including merchantability, fitness for a particular purpose, or
+                            non-infringement, except where such warranties cannot be excluded under Indian law.</p>
+                        <p>Where liability cannot be fully excluded under applicable law, Crib's aggregate liability to
+                            you for any claim arising from your use of the Platform shall not exceed the total service
+                            fees, if any, paid by you to Crib in the twelve (12) months preceding the event giving rise
+                            to the claim.</p>
+                    </section>
+
+                    <section id="section-10" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">10.</span>
+                            Indemnification</h2>
+                        <div class="core-protection"
+                            style="background:var(--nookly-surface-2);padding:var(--space-md) var(--space-lg);border-radius:var(--radius-md);border-left:4px solid var(--nookly-azure);margin:var(--space-lg) 0;">
+                            <span class="badge"
+                                style="display:inline-block;background:var(--nookly-azure);color:white;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:0.1rem 0.6rem;border-radius:var(--radius-pill);margin-right:0.5rem;vertical-align:middle;">Core
+                                Protection</span>
+                            <p>You agree to indemnify, defend, and hold harmless MM Group, Crib, and their respective
+                                officers, employees, and affiliates from and against any and all claims, demands,
+                                liabilities, damages, losses, costs, and expenses (including reasonable legal fees)
+                                arising out of or in any way connected with:</p>
+                        </div>
+                        <ul style="margin:var(--space-md) 0 var(--space-md) var(--space-lg);">
+                            <li style="margin-bottom:var(--space-sm);">Your use or misuse of the Platform;</li>
+                            <li style="margin-bottom:var(--space-sm);">Your physical stay at, or any transaction
+                                relating to, a property discovered through Crib;</li>
+                            <li style="margin-bottom:var(--space-sm);">Any breach of this Agreement or violation of
+                                applicable law by you;</li>
+                            <li style="margin-bottom:var(--space-sm);">Any Listing, content, or communication you submit
+                                through the Platform;</li>
+                            <li style="margin-bottom:var(--space-sm);">Any dispute between you and another user,
+                                including a Property Owner, Renter, or co-tenant.</li>
+                        </ul>
+                    </section>
+
+                    <section id="section-11" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">11.</span>
+                            Suspension and Termination</h2>
+                        <p>Crib may suspend or terminate your account and access to the Platform immediately, without
+                            prior notice and without any refund of prepaid or subscription fees where applicable, if:
+                        </p>
+                        <ul style="margin:var(--space-md) 0 var(--space-md) var(--space-lg);">
+                            <li style="margin-bottom:var(--space-sm);">You breach any provision of this Agreement;</li>
+                            <li style="margin-bottom:var(--space-sm);">A Property Owner or Renter reports an incident,
+                                safety concern, fraud, or misconduct involving your account;</li>
+                            <li style="margin-bottom:var(--space-sm);">Crib reasonably believes your conduct poses a
+                                risk to other users, the integrity of the Platform, or Crib's reputation;</li>
+                            <li style="margin-bottom:var(--space-sm);">Required to do so by law or a competent
+                                governmental or judicial authority.</li>
+                        </ul>
+                        <p>You may also close your account at any time by contacting Crib at <a
+                                href="mailto:crib.support&#64;gmail.com">crib.support&#64;gmail.com</a>. Sections 3,
+                            6–10, and 12–14 of this Agreement survive termination of your account.</p>
+                    </section>
+
+                    <section id="section-12" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">12.</span>
+                            Dispute Resolution and Mandatory Arbitration</h2>
+                        <div class="no-class-action"
+                            style="background:var(--nookly-surface-2);padding:var(--space-md) var(--space-lg);border-radius:var(--radius-md);border-left:4px solid var(--nookly-azure);margin:var(--space-lg) 0;">
+                            <span class="badge"
+                                style="display:inline-block;background:var(--nookly-azure);color:white;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:0.1rem 0.6rem;border-radius:var(--radius-pill);margin-right:0.5rem;vertical-align:middle;">No
+                                Class Action</span>
+                            <p>Any dispute, controversy, or claim arising out of or relating to this Agreement, the
+                                Platform, or your use of it including its formation, validity, interpretation, or
+                                termination shall first be addressed through good-faith negotiation by notifying Crib
+                                in writing at <a
+                                    href="mailto:crib.support&#64;gmail.com">crib.support&#64;gmail.com</a>. If
+                                unresolved within thirty (30) days of such notice, the dispute shall be referred to and
+                                finally resolved by binding arbitration under the Arbitration and Conciliation Act, 1996
+                                (as amended).</p>
+                        </div>
+                        <ul style="margin:var(--space-md) 0 var(--space-md) var(--space-lg);">
+                            <li style="margin-bottom:var(--space-sm);">The arbitration shall be conducted by a sole
+                                arbitrator appointed by MM Group, and the seat and venue of arbitration shall be the
+                                location of Crib's Corporate Office, currently [Corporate Office city/address MM Group
+                                to confirm].</li>
+                            <li style="margin-bottom:var(--space-sm);">The arbitration proceedings and award shall be
+                                governed by Indian law, and the proceedings shall be conducted in the English language.
+                            </li>
+                            <li style="margin-bottom:var(--space-sm);">The arbitral award shall be final and binding on
+                                both parties, subject only to such limited grounds of challenge as are available under
+                                the Arbitration and Conciliation Act, 1996.</li>
+                        </ul>
+                        <p><strong>Class Action Waiver:</strong> To the fullest extent permitted by law, you agree that
+                            any dispute shall be resolved solely on an individual basis, and you waive any right to
+                            participate in a class action, class arbitration, or any other representative or
+                            consolidated proceeding against Crib or MM Group. No arbitrator or court shall have
+                            authority to consolidate claims of multiple users into a single proceeding.</p>
+                    </section>
+
+                    <section id="section-13" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">13.</span>
+                            Governing Law and Jurisdiction</h2>
+                        <p>Subject to the arbitration clause in Section 12, this Agreement shall be governed by and
+                            construed in accordance with the laws of India, including the Information Technology Act,
+                            2000 and rules made thereunder, and the Consumer Protection Act, 2019 to the extent
+                            applicable and not overridden by mandatory arbitration.</p>
+                        <p>Subject to Section 12, the courts situated at the location of Crib's Corporate Office, [City,
+                            Maharashtra to be confirmed], shall have exclusive jurisdiction over any matter not
+                            required to be arbitrated (for example, applications for interim relief in aid of
+                            arbitration).</p>
+                    </section>
+
+                    <section id="section-14" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">14.</span>
+                            Privacy and Data Protection</h2>
+                        <p>Crib collects and processes personal data (including contact details, preferences, and
+                            communication records) in accordance with its Privacy Policy and applicable Indian data
+                            protection law, including the Digital Personal Data Protection Act, 2023, as and when its
+                            provisions come into force. By using the Platform, you consent to such processing as
+                            described in the Privacy Policy.</p>
+                    </section>
+
+                    <section id="section-15" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">15.</span>
+                            General Provisions</h2>
+                        <h3
+                            style="font-weight:600;font-size:1.05rem;margin-top:var(--space-lg);color:var(--nookly-midnight-2);">
+                            Severability</h3>
+                        <p>If any provision of this Agreement is held invalid or unenforceable by an arbitrator or court
+                            of competent jurisdiction, the remaining provisions shall continue in full force and effect.
+                        </p>
+                        <h3
+                            style="font-weight:600;font-size:1.05rem;margin-top:var(--space-lg);color:var(--nookly-midnight-2);">
+                            Entire Agreement</h3>
+                        <p>This Agreement, together with Crib's Privacy Policy and any supplementary terms for Upcoming
+                            Features, constitutes the entire agreement between you and Crib regarding use of the
+                            Platform.</p>
+                        <h3
+                            style="font-weight:600;font-size:1.05rem;margin-top:var(--space-lg);color:var(--nookly-midnight-2);">
+                            Force Majeure</h3>
+                        <p>Crib shall not be liable for any failure or delay in performance due to causes beyond its
+                            reasonable control, including but not limited to internet or telecommunications failures,
+                            government action, or natural disasters.</p>
+                        <h3
+                            style="font-weight:600;font-size:1.05rem;margin-top:var(--space-lg);color:var(--nookly-midnight-2);">
+                            No Waiver</h3>
+                        <p>Crib's failure to enforce any right or provision of this Agreement shall not constitute a
+                            waiver of such right or provision.</p>
+                        <h3
+                            style="font-weight:600;font-size:1.05rem;margin-top:var(--space-lg);color:var(--nookly-midnight-2);">
+                            Assignment</h3>
+                        <p>You may not assign or transfer your rights under this Agreement. Crib may assign this
+                            Agreement in connection with a merger, acquisition, or sale of assets, including to another
+                            entity within or succeeding MM Group.</p>
+                    </section>
+
+                    <section id="section-16" class="tos-section"
+                        style="margin:var(--space-2xl) 0;padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);">
+                        <h2
+                            style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--nookly-midnight);margin-bottom:var(--space-md);display:flex;align-items:baseline;gap:0.2rem;">
+                            <span class="section-number"
+                                style="color:var(--nookly-azure);font-weight:700;margin-right:0.2rem;">16.</span>
+                            Contact Information</h2>
+                        <p>For any questions regarding this Agreement, to report a concern, or to request account
+                            closure, please contact us:</p>
+                        <p><strong>Email:</strong> <a
+                                href="mailto:crib.support&#64;gmail.com">crib.support&#64;gmail.com</a><br />
+                            <strong>Phone:</strong> +91 7063833301<br />
+                            <strong>Corporate Office:</strong> [Full registered address to be inserted by MM Group]
+                        </p>
+                    </section>
+
+                    <footer class="tos-footer"
+                        style="margin-top:var(--space-2xl);padding-top:var(--space-lg);border-top:1px solid var(--nookly-border);font-size:0.9rem;color:var(--nookly-slate);text-align:center;">
+                        <p>© 2026 Crib, a venture of MM Group. All rights reserved. This document is a legal agreement —
+                            please read it carefully before using the Platform.</p>
+                    </footer>
+
+                </article>
+            </div>
+        </div>
+    </div>
+</div>

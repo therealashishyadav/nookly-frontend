@@ -21,7 +21,7 @@
         <ul class="footer-links">
           <li><a routerLink="/listings" class="footer-link">PGs</a></li>
           <li><a routerLink="/listings/flats" class="footer-link">Flats</a></li>
-          <li><a routerLink="/listings/duplexes" class="footer-link">Duplexes</a></li>
+          <li><a class="footer-link" (click)="openDuplexes($event)">Duplexes</a></li>
           <!-- <li><a routerLink="/list-your-property" class="footer-link">Become a Host</a></li> -->
         </ul>
       </div>
@@ -31,10 +31,10 @@
         <h3 class="footer-heading">Company</h3>
         <ul class="footer-links">
           <li><a routerLink="/about" class="footer-link">Our Story</a></li>
-          <li><a class="footer-link" (click)="openComingSoon($event)">Careers</a></li>
-          <li><a routerLink="/press" class="footer-link">Press</a></li>
-          <li><a routerLink="/blog" class="footer-link">Blog</a></li>
-          <li><a routerLink="/trust-safety" class="footer-link">Trust & Safety</a></li>
+          <li><a class="footer-link" (click)="openCareers($event)">Careers</a></li>
+          <li><a class="footer-link" (click)="openPress($event)">Press</a></li>
+          <li><a class="footer-link" (click)="openBlog($event)">Blog</a></li>
+          <li><a routerLink="/termsandservices" class="footer-link">Trust & Safety</a></li>
         </ul>
       </div>
 
