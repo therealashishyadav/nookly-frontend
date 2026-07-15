@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /owner/
+Disallow: /management/
+Disallow: /login
+
+Sitemap: https://cribup.vercel.app/sitemap.xml
