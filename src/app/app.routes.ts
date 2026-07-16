@@ -26,6 +26,7 @@ import { ManagementComponent } from '../components/management/management.compone
 import { PolicyComponentComponent } from '../components/policy-component/policy-component.component';
 import { ComingSoonPageComponent } from '../components/coming-soon-page/coming-soon-page.component';
 import { TermsOfServiceComponent } from '../components/terms-of-service/terms-of-service.component';
+import { AddUserComponent } from '../components/add-user/add-user.component';
 // import { Navbar2Component } from '../components/navbar2/navbar2.component';
 
 export const routes: Routes = [
@@ -64,8 +65,9 @@ export const routes: Routes = [
     { path: 'terms-of-service', component: PolicyComponentComponent },
     { path: 'cookie-policy', component: PolicyComponentComponent },
     { path: 'management', component: ManagementComponent },
-    { path: 'comingsoonpage', component: ComingSoonPageComponent},
-        { path: 'termsandservices', component: TermsOfServiceComponent},
+    { path: 'comingsoonpage', component: ComingSoonPageComponent },
+    { path: 'termsandservices', component: TermsOfServiceComponent },
+    { path: 'management/add-user', component: AddUserComponent }
 
 
 ];

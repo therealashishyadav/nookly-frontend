@@ -1,14 +1,13 @@
-<!-- src/app/components/management/management.component.html -->
 <div class="portal-wrapper">
 
   <!-- ── Sidebar ────────────────────────────────────────────────────────────── -->
   <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
     <div class="sidebar-header">
       <div class="logo" *ngIf="!sidebarCollapsed">
-        <span class="logo-icon">🏠</span>
+        <span class="logo-icon"></span>
         <span class="logo-text">CribUp <em>Admin</em></span>
       </div>
-      <span class="logo-icon-mini" *ngIf="sidebarCollapsed">🏠</span>
+      <span class="logo-icon-mini" *ngIf="sidebarCollapsed"></span>
       <button class="collapse-btn" (click)="sidebarCollapsed = !sidebarCollapsed">
         <mat-icon>{{ sidebarCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
       </button>

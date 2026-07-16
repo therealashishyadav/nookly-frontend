@@ -36,7 +36,7 @@ import { FooterComponent } from '../footer/footer.component';
     MatTableModule, MatPaginatorModule,
     MatFormFieldModule, MatInputModule, MatSelectModule,
     MatButtonModule, MatIconModule, MatSnackBarModule, MatTooltipModule,
-    OwnerNavbarComponent, FooterComponent,
+     FooterComponent,
   ],
   templateUrl: './management.component.html',
   styleUrls: ['./management.component.css'],
