@@ -46,24 +46,24 @@ export class AccountComponent {
     const lastName = this.user.lastName;
     const email = this.user.email;
     const phone = this.user.phone;
-    const password = this.user.password;
+    const password = this.user.password ?? '';
 
     if (firstName === '' || lastName === '' || email === '' || phone === '' || password === '') {
       this.snackBar.open('Please fill all the fields', 'Close', {
         duration: 3000
       });
       return;
-    } else if (!this.user.email.includes('@')) {
+    } else if (!email.includes('@')) {
       this.snackBar.open('Please enter a valid email address', 'Close', {
         duration: 3000
       });
       return;
-    } else if (this.user.password.length < 6) {
+    } else if (password.length < 6) {
       this.snackBar.open('Password must be at least 6 characters long', 'Close', {
         duration: 3000
       });
       return;
-    } else if (this.user.phone.length < 10) {
+    } else if (phone.length < 10) {
       this.snackBar.open('Phone number must be at least 10 digits long', 'Close', {
         duration: 3000
       });

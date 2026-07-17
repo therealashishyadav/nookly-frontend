@@ -1,0 +1,183 @@
+<div class="profile-container">
+  <!-- Loading & Error states... (same as before) -->
+
+  <div *ngIf="!loading && !error && user" class="profile-content">
+
+    <!-- Profile Header (same for all) -->
+    <div class="profile-header">
+      <div class="avatar-wrapper">
+<div class="avatar">{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</div>
+        <button class="avatar-edit" (click)="uploadPhoto()">
+          <mat-icon>photo_camera</mat-icon>
+        </button>
+      </div>
+      <div class="header-info">
+        <h1>{{ user.firstName }} {{ user.lastName }}</h1>
+        <p class="user-role">{{ user.role | titlecase }}</p>
+        <p class="user-email">{{ user.email }}</p>
+        <p class="user-phone">{{ user.phone }}</p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+
+      <!-- ── Tab 1: Profile Info (Everyone) ── -->
+      <mat-tab label="Profile Info">
+        <!-- Profile form (same as before) -->
+      </mat-tab>
+
+      <!-- ── Tab 2: My Inquiries (Everyone) ── -->
+      <mat-tab label="My Inquiries">
+        <!-- Inquiries list (same as before) -->
+      </mat-tab>
+
+      <!-- ── Tab 3: Owner Dashboard (OWNER ONLY) ── -->
+      <mat-tab *ngIf="isOwner" label="My PGs">
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div class="owner-dashboard">
+              <!-- Stats Cards -->
+              <div class="stats-grid">
+                <div class="stat-card teal">
+                  <div class="stat-icon"><mat-icon>apartment</mat-icon></div>
+                  <div class="stat-body">
+                    <div class="stat-value">{{ ownerStats.totalPGs }}</div>
+                    <div class="stat-label">Total PGs</div>
+                  </div>
+                </div>
+                <div class="stat-card emerald">
+                  <div class="stat-icon"><mat-icon>people</mat-icon></div>
+                  <div class="stat-body">
+                    <div class="stat-value">{{ ownerStats.totalTenants }}</div>
+                    <div class="stat-label">Total Tenants</div>
+                  </div>
+                </div>
+                <div class="stat-card amber">
+                  <div class="stat-icon"><mat-icon>question_answer</mat-icon></div>
+                  <div class="stat-body">
+                    <div class="stat-value">{{ ownerStats.totalInquiries }}</div>
+                    <div class="stat-label">Inquiries Received</div>
+                  </div>
+                </div>
+                <div class="stat-card rose">
+                  <div class="stat-icon"><mat-icon>currency_rupee</mat-icon></div>
+                  <div class="stat-body">
+                    <div class="stat-value">₹{{ ownerStats.monthlyRevenue | number }}</div>
+                    <div class="stat-label">Monthly Revenue</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- My PG Listings -->
+              <div class="section-card">
+                <div class="section-header">
+                  <h3><mat-icon>apartment</mat-icon> My PG Listings</h3>
+                  <button mat-raised-button color="primary" [routerLink]="['/list-property']">
+                    <mat-icon>add</mat-icon> Add New PG
+                  </button>
+                </div>
+
+                <div *ngIf="ownerPGs.length === 0" class="empty-state">
+                  <mat-icon>apartment</mat-icon>
+                  <p>You haven't listed any PGs yet.</p>
+                  <button mat-raised-button color="primary" [routerLink]="['/list-property']">
+                    List Your First PG
+                  </button>
+                </div>
+
+                <div class="pg-list" *ngIf="ownerPGs.length > 0">
+                  <div class="pg-card" *ngFor="let pg of ownerPGs">
+                    <div class="pg-image">
+                      <img [src]="pg.coverImageUrl || 'assets/default-pg.jpg'" [alt]="pg.pgName">
+                      <span class="pg-status" [class.active]="pg.active" [class.inactive]="!pg.active">
+                        {{ pg.active ? 'Active' : 'Inactive' }}
+                      </span>
+                    </div>
+                    <div class="pg-info">
+                      <h4>{{ pg.pgName }}</h4>
+                      <p class="pg-location">{{ pg.locality }}, {{ pg.city }}</p>
+                      <p class="pg-price">₹{{ pg.lowestPrice | number }}/mo</p>
+                      <div class="pg-actions">
+                        <button mat-button color="primary" (click)="editPG(pg)">
+                          <mat-icon>edit</mat-icon> Edit
+                        </button>
+                        <button mat-button color="warn" (click)="deletePG(pg)">
+                          <mat-icon>delete</mat-icon> Delete
+                        </button>
+                        <button mat-button color="accent" [routerLink]="['/pg', pg.id]">
+                          <mat-icon>visibility</mat-icon> View
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+
+      <!-- ── Tab 4: Inquiries Received (OWNER ONLY) ── -->
+      <mat-tab *ngIf="isOwner" label="Inquiries Received">
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div class="filter-bar">
+              <mat-form-field appearance="outline" class="filter-field">
+                <mat-label>Status</mat-label>
+                <mat-select [(ngModel)]="receivedInquiryFilter" (selectionChange)="filterReceivedInquiries()">
+                  <mat-option value="all">All</mat-option>
+                  <mat-option value="pending">Pending</mat-option>
+                  <mat-option value="responded">Responded</mat-option>
+                  <mat-option value="resolved">Resolved</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="filter-field">
+                <mat-label>Search</mat-label>
+                <input matInput [(ngModel)]="receivedInquirySearch" (input)="filterReceivedInquiries()" placeholder="Search by name...">
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="filteredReceivedInquiries.length === 0" class="empty-state">
+              <mat-icon>inbox</mat-icon>
+              <p>No inquiries received yet.</p>
+            </div>
+
+            <div class="inquiry-list">
+              <div class="inquiry-item" *ngFor="let inq of filteredReceivedInquiries">
+                <div class="inquiry-header">
+                  <span class="inquiry-pg">{{ inq.pgName || 'PG Inquiry' }}</span>
+                  <span class="inquiry-status" [class.pending]="inq.status === 'pending'"
+                    [class.responded]="inq.status === 'responded'"
+                    [class.resolved]="inq.status === 'resolved'">
+                    {{ inq.status || 'Pending' }}
+                  </span>
+                </div>
+                <div class="inquiry-body">
+                  <p class="inquiry-message">{{ inq.message }}</p>
+                  <p class="inquiry-meta">
+                    <span><mat-icon>person</mat-icon> {{ inq.fullName || 'User' }}</span>
+                    <span><mat-icon>phone</mat-icon> {{ inq.phone || 'N/A' }}</span>
+                    <span><mat-icon>email</mat-icon> {{ inq.email || 'N/A' }}</span>
+                    <span><mat-icon>calendar_today</mat-icon> {{ inq.createdAt | date:'medium' }}</span>
+                  </p>
+                </div>
+                <div class="inquiry-actions">
+                  <button mat-button color="primary" (click)="respondToInquiry(inq)">Respond</button>
+                  <button mat-button color="warn" (click)="deleteReceivedInquiry(inq)">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+
+      <!-- ── Tab 5: Account Settings (Everyone) ── -->
+      <mat-tab label="Account Settings">
+        <!-- Settings (same as before) -->
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </div>
+</div>

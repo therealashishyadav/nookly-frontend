@@ -1,13 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-management-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, MatSnackBarModule],
+  imports: [CommonModule, RouterModule, MatIconModule, MatSnackBarModule, RouterLink],
   templateUrl: './management-navbar.component.html',
   styleUrls: ['./management-navbar.component.css'],
 })

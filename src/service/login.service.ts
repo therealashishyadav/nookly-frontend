@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { JwtToken } from '../entity/JwtToken';
 import { LoginEntity } from '../entity/LoginEntity';
 import { Role } from '../entity/Role';
-import { Observable } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
+import { Account } from '../entity/Account';
 
 // const token_url = "http://localhost:8080/api/v1/auth/signin"
 // const user_url = "http://localhost:8080/api/v1/USER"
@@ -37,8 +38,7 @@ export class LoginService {
       headers: {
         Authorization: `Bearer ${token}`
       }
-    })
-
+    });
   }
 
   getRole(identifier: string) {
@@ -46,12 +46,29 @@ export class LoginService {
     return this.http.get<string>(apiUrl + `/api/v1/auth/role/${identifier}`);
   }
 
-    googleLogin(idToken: string): Observable<JwtToken> {
+  googleLogin(idToken: string): Observable<JwtToken> {
     return this.http.post<JwtToken>(googleLoginUrl, { idToken });
   }
 
-  currentUser() {
+  currentUser(): Observable<Account> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return throwError(() => new Error('Authentication token is missing.'));
+    }
 
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const account = new Account();
+      account.firstName = payload.firstName || '';
+      account.lastName = payload.lastName || '';
+      account.email = payload.sub || '';
+      account.phone = payload.phone || '';
+      account.role = payload.role || 'USER';
+      account.active = payload.active ?? true;
+      return of(account);
+    } catch (error) {
+      return throwError(() => new Error('Unable to parse authentication token.'));
+    }
   }
 
   constructor(private http: HttpClient) { }
