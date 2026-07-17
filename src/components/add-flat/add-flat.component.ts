@@ -13,6 +13,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { OwnerNavbarComponent } from '../owner-navbar/owner-navbar.component';
 import { FooterComponent } from '../footer/footer.component';
 import { FlatListingService } from '../../service/flat-listing.service';
+import { FileValidationService } from '../../service/file-validation.service';
 import { FlatModel } from '../../entity/FlatModel';
 import { MetaService } from '../../service/meta.service';
 
@@ -56,7 +57,8 @@ export class AddFlatComponent {
     private flatService: FlatListingService,
     private snackBar: MatSnackBar,
     private router: Router,
-    private metaService: MetaService
+    private metaService: MetaService,
+    private fileValidator: FileValidationService
   ) {}
 
   ngOnInit(): void {
@@ -66,12 +68,18 @@ export class AddFlatComponent {
   onCoverImageSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      this.coverImageFile = input.files[0];
+      const file = input.files[0];
+      const result = this.fileValidator.validateFile(file, 'image');
+      if (!result.ok) {
+        this.snackBar.open(result.message || 'Invalid image file', 'Close', { duration: 4000 });
+        return;
+      }
+      this.coverImageFile = result.file || file;
       const reader = new FileReader();
       reader.onload = (e) => {
         this.coverImagePreview = e.target?.result as string;
       };
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(this.coverImageFile);
     }
   }
 
@@ -84,7 +92,14 @@ export class AddFlatComponent {
   onGalleryFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files) {
-      Array.from(input.files).forEach(file => this.galleryImageFiles.push(file));
+      Array.from(input.files).forEach(file => {
+        const res = this.fileValidator.validateFile(file, 'image');
+        if (res.ok && res.file) {
+          this.galleryImageFiles.push(res.file);
+        } else {
+          this.snackBar.open(res.message || 'Invalid gallery image', 'Close', { duration: 4000 });
+        }
+      });
     }
   }
 
@@ -94,7 +109,14 @@ export class AddFlatComponent {
 
   onVideoFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files?.length) this.videoFile = input.files[0];
+    if (input.files?.length) {
+      const res = this.fileValidator.validateFile(input.files[0], 'video');
+      if (!res.ok) {
+        this.snackBar.open(res.message || 'Invalid video file', 'Close', { duration: 4000 });
+        return;
+      }
+      this.videoFile = res.file || input.files[0];
+    }
   }
 
   removeVideo(): void {

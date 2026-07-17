@@ -13,6 +13,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { PgdetailsService } from '../../service/pgdetails.service';
+import { FileValidationService } from '../../service/file-validation.service';
 import { response } from 'express';
 import { error } from 'console';
 import { MatCardModule } from '@angular/material/card';
@@ -95,7 +96,14 @@ onSubmit(): void {
   onGalleryFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.galleryImageFiles = [...this.galleryImageFiles, ...Array.from(input.files)];
+      Array.from(input.files).forEach(file => {
+        const res = this.fileValidator.validateFile(file, 'image');
+        if (res.ok && res.file) {
+          this.galleryImageFiles.push(res.file);
+        } else {
+          console.warn('Invalid gallery image skipped:', res.message);
+        }
+      });
       // Clear the input to allow selecting the same files again if needed
       input.value = '';
     }
@@ -104,7 +112,9 @@ onSubmit(): void {
   onVideoFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.videoFile = input.files[0];
+      const res = this.fileValidator.validateFile(input.files[0], 'video');
+      if (res.ok && res.file) this.videoFile = res.file;
+      else console.warn('Invalid video file selected');
       input.value = '';
     }
   }
@@ -117,7 +127,7 @@ onSubmit(): void {
     this.videoFile = null;
   }
 
-  constructor(private pgDetailService: PgdetailsService, private http: HttpClient, private route: Router, private metaService: MetaService) {
+  constructor(private pgDetailService: PgdetailsService, private http: HttpClient, private route: Router, private metaService: MetaService, private fileValidator: FileValidationService) {
 
   }
 
@@ -127,6 +137,3 @@ onSubmit(): void {
   }
 
 }
-
-
-
