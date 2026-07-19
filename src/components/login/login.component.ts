@@ -1,5 +1,4 @@
-
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit, AfterViewInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { LoginService } from '../../service/login.service';
@@ -13,6 +12,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
+// ✅ Declare the Google namespace for TypeScript
+declare const google: any;
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -24,7 +26,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, AfterViewInit { // <-- Added OnInit, AfterViewInit
 
   user: LoginEntity = new LoginEntity();
   jwtToken: JwtToken = new JwtToken();
@@ -39,6 +41,109 @@ export class LoginComponent {
     private snackBar: MatSnackBar
   ) {}
 
+  // ✅ 1. Load Google script when component initializes
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadGoogleScript().then(() => {
+        console.log('✅ Google script loaded.');
+      });
+    }
+  }
+
+  // ✅ 2. Render the Google button after the DOM is ready
+  ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.initializeGoogleButton();
+      }, 300);
+    }
+  }
+
+  // ✅ 3. Load Google Identity Services script
+  loadGoogleScript(): Promise<void> {
+    return new Promise((resolve) => {
+      if (document.getElementById('google-script')) {
+        resolve();
+        return;
+      }
+      const script = document.createElement('script');
+      script.id = 'google-script';
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        console.log('✅ Google script loaded successfully.');
+        resolve();
+      };
+      script.onerror = () => {
+        console.error('❌ Failed to load Google script.');
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  // ✅ 4. Initialize and render the Google Sign-In button
+  initializeGoogleButton(): void {
+    const container = document.getElementById('googleButton');
+    if (!container) {
+      console.error('❌ Container #googleButton not found.');
+      return;
+    }
+
+    if (typeof google === 'undefined' || !google.accounts) {
+      console.error('❌ Google library not loaded. Retrying...');
+      setTimeout(() => this.initializeGoogleButton(), 500);
+      return;
+    }
+
+    // ⚠️ REPLACE WITH YOUR ACTUAL GOOGLE CLIENT ID
+    const GOOGLE_CLIENT_ID = '287517103772-o212...YOUR_FULL_ID...apps.googleusercontent.com';
+
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: this.handleGoogleCredential.bind(this),
+      auto_prompt: false
+    });
+
+    google.accounts.id.renderButton(
+      container,
+      {
+        theme: 'outline',
+        size: 'large',
+        type: 'standard',
+        shape: 'rectangular',
+        text: 'signin_with',
+        logo_alignment: 'left'
+      }
+    );
+
+    console.log('✅ Google button rendered successfully!');
+  }
+
+  // ✅ 5. Handle Google credential response
+  handleGoogleCredential(response: any): void {
+    const idToken = response.credential;
+    console.log('✅ Google ID token received');
+
+    this.loginService.googleLogin(idToken).subscribe({
+      next: (jwtResponse) => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('token', jwtResponse.token);
+          localStorage.setItem('refreshToken', jwtResponse.refreshToken);
+        }
+
+        // Decode email from token and fetch role
+        const emailFromToken = this.getEmailFromToken(jwtResponse.token);
+        this.fetchUserRole(emailFromToken);
+      },
+      error: (err) => {
+        console.error('Google login failed:', err);
+        this.snackBar.open('Google login failed. Please try again.', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  // ✅ 6. Your existing login() method (unchanged)
   login(): void {
     const input = this.user.email.trim();
     const password = this.user.password.trim();
@@ -61,12 +166,10 @@ export class LoginComponent {
     this.loginService.getToken(this.user).subscribe({
       next: (response) => {
         this.token = response.token;
-        // ✅ Only access localStorage in browser
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('token', this.token);
         }
 
-        // Decode JWT to get email — works whether user logged in with email or phone
         const emailFromToken = this.getEmailFromToken(this.token);
 
         this.loginService.loginUser(this.token).subscribe({
@@ -80,16 +183,17 @@ export class LoginComponent {
     });
   }
 
-  // Decode JWT locally — extract email (sub claim)
+  // ✅ 7. Helper: Decode JWT to get email
   private getEmailFromToken(token: string): string {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.sub; // sub = email set in Account API JwtServiceImpl
+      return payload.sub;
     } catch {
       return '';
     }
   }
 
+  // ✅ 8. Helper: Fetch user role and navigate
   private fetchUserRole(email: string): void {
     this.loginService.getRole(email).subscribe({
       next: (role) => {

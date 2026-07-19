@@ -4,14 +4,12 @@
     <div class="nav-inner">
       <a class="nav-logo" routerLink="/homepage" aria-label="Crib – Go to homepage">
         <span class="nav-logo__mark" aria-hidden="true">
-          <svg class="nav-logo__icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true">
-            <path class="logo-glyph" d="M6 28V10L18 4L30 10V28" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-            <path class="logo-glyph logo-glyph--door" d="M14 28V20H22V28" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-            <circle class="logo-glyph logo-glyph--dot" cx="18" cy="14" r="2.5" stroke-width="0" />
-          </svg>
+          <img
+            class="nav-logo__image"
+            src="https://res.cloudinary.com/dmb3nvt45/image/upload/v1784451564/yz6vznpaknlwvvosevpu.jpg"
+            alt=""
+            loading="eager"
+          />
         </span>
         <span class="nav-logo__wordmark">
           <span class="nav-logo__word">Crib</span>
@@ -19,7 +17,7 @@
         </span>
       </a>
 
-      <ul class="nav-links" [class.active]="isMenuOpen" role="list">
+      <ul class="nav-links" [class.active]="isMenuOpen" id="nav-links" role="list">
         <li class="nav-links__item">
           <a class="nav-links__anchor" routerLink="/homepage" routerLinkActive="is-active" (click)="closeMenu()">
             Home
@@ -41,7 +39,6 @@
           </a>
         </li>
 
-        <!-- If logged in show Profile + Logout, else show Login/Register -->
         <li class="nav-links__item" *ngIf="isLoggedIn">
           <a class="nav-links__anchor" routerLink="/profile" routerLinkActive="is-active" (click)="closeMenu()">
             Profile
@@ -53,7 +50,6 @@
           </a>
         </li>
 
-        <!-- Not logged in -->
         <li class="nav-links__item" *ngIf="!isLoggedIn">
           <a class="nav-links__anchor" routerLink="/login" routerLinkActive="is-active" (click)="closeMenu()">
             Login
@@ -77,9 +73,12 @@
         </a>
         <button class="nav-hamburger" [class.is-open]="isMenuOpen" (click)="toggleMenu()"
           [attr.aria-expanded]="isMenuOpen" aria-controls="nav-links" aria-label="Toggle menu">
-          <span class="nav-hamburger__bar"></span>
-          <span class="nav-hamburger__bar"></span>
-          <span class="nav-hamburger__bar"></span>
+          <span class="nav-hamburger__label">Menu</span>
+          <span class="nav-hamburger__bars">
+            <span class="nav-hamburger__bar"></span>
+            <span class="nav-hamburger__bar"></span>
+            <span class="nav-hamburger__bar"></span>
+          </span>
         </button>
       </div>
 

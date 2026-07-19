@@ -373,6 +373,46 @@ button.mat-mdc-button.mat-accent:active {
   text-decoration: underline;
 }
 
+/* ── NEW: LOGIN DIVIDER (or continue with) ── */
+.login-divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0 20px 0;
+  color: var(--nookly-slate);
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--nookly-mist);
+}
+
+.login-divider span {
+  padding: 0 16px;
+  white-space: nowrap;
+}
+
+/* ── NEW: GOOGLE BUTTON CONTAINER ── */
+#googleButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+  width: 100%;
+}
+
+/* Makes the Google button fully responsive and matches your design */
+::ng-deep #googleButton iframe {
+  width: 100% !important;
+  max-width: 280px !important;
+  min-height: 44px !important;
+  border-radius: var(--radius-pill) !important;
+}
+
 /* ── RESPONSIVE BREAKPOINTS ── */
 @media (max-width: 640px) {
   :host {
@@ -405,6 +445,11 @@ button.mat-mdc-button.mat-accent:active {
   :host::after {
     display: none;
     /* performance on mobile */
+  }
+
+  /* Mobile Google button adjustments */
+  ::ng-deep #googleButton iframe {
+    max-width: 100% !important;
   }
 }
 
@@ -446,7 +491,6 @@ button.mat-mdc-button.mat-accent:active {
     text-decoration: underline;
   }
 
-  /* Google button container */
   #googleButton {
     display: flex;
     justify-content: center;
@@ -454,7 +498,6 @@ button.mat-mdc-button.mat-accent:active {
     width: 100%;
   }
 
-  /* Optional: Override the default iframe size for better mobile responsiveness */
   ::ng-deep #googleButton iframe {
     width: 100% !important;
     max-width: 280px !important;

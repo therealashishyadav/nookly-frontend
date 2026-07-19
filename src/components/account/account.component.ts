@@ -6,9 +6,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Meta, Title } from '@angular/platform-browser';
 import { first } from 'rxjs';
 
 
@@ -22,23 +25,68 @@ import { first } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
-    FormsModule,
+    MatIconModule,
+    MatCheckboxModule,
     RouterLink
   ],
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'
 })
-export class AccountComponent {
+export class AccountComponent implements OnInit {
 
   user: Account = new Account();
   confirmPassword: string = '';
+  acceptedTerms: boolean = false;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   constructor(
     private accountSerivce: AccountService,
     private route: Router,
     private http: HttpClient,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private meta: Meta,
+    private title: Title
   ) { }
+
+  ngOnInit(): void {
+    this.setSeoMetaTags();
+  }
+
+  private setSeoMetaTags(): void {
+    const pageTitle = 'Create Your Crib Account | Sign Up';
+    const pageDescription = 'Create a free Crib account to discover verified PGs, flats and co-living spaces across India, or list your property for renters to find.';
+
+    this.title.setTitle(pageTitle);
+    this.meta.updateTag({ name: 'description', content: pageDescription });
+    this.meta.updateTag({ name: 'robots', content: 'index, follow' });
+    this.meta.updateTag({ property: 'og:title', content: pageTitle });
+    this.meta.updateTag({ property: 'og:description', content: pageDescription });
+    this.meta.updateTag({ property: 'og:type', content: 'website' });
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
+    this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
+    this.meta.updateTag({ name: 'twitter:description', content: pageDescription });
+  }
+
+  toggleShowPassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleShowConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  signInWithGoogle(): void {
+    this.snackBar.open('Google sign up is coming soon', 'Close', { duration: 3000 });
+  }
+
+  signInWithFacebook(): void {
+    this.snackBar.open('Facebook sign up is coming soon', 'Close', { duration: 3000 });
+  }
+
+  signInWithTwitter(): void {
+    this.snackBar.open('Twitter sign up is coming soon', 'Close', { duration: 3000 });
+  }
 
   Register(): void {
 
@@ -105,6 +153,11 @@ export class AccountComponent {
       return;
     } else if (this.user.password !== this.confirmPassword) {
       this.snackBar.open('Password Does Not Match', 'Close', {
+        duration: 3000
+      });
+      return;
+    } else if (!this.acceptedTerms) {
+      this.snackBar.open('Please accept the Terms and Conditions to continue', 'Close', {
         duration: 3000
       });
       return;

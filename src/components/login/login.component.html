@@ -2,13 +2,11 @@
   <form action="" (ngSubmit)="login()" class="auth-form">
     <h2 class="auth-title">Welcome Back!</h2>
 
-
     <mat-form-field appearance="outline" class="full-width-field">
       <mat-label>Email or Phone Number</mat-label>
       <input matInput type="text" name="email" [(ngModel)]="user.email" required>
       <mat-icon matSuffix>email</mat-icon>
     </mat-form-field>
-
 
     <mat-form-field appearance="outline" class="full-width-field">
       <mat-label>Password</mat-label>
@@ -31,5 +29,11 @@
     </div>
   </form>
 
-  <div id="googleButton" style="display: flex; justify-content: center; margin-top: 20px;"></div>
+  <!-- Divider: "or continue with" -->
+  <div class="login-divider">
+    <span>or continue with</span>
+  </div>
+
+  <!-- Google Sign-In Button Container -->
+  <div id="googleButton"></div>
 </div>

@@ -28,6 +28,7 @@ import { ComingSoonPageComponent } from '../components/coming-soon-page/coming-s
 import { TermsOfServiceComponent } from '../components/terms-of-service/terms-of-service.component';
 import { AddUserComponent } from '../components/add-user/add-user.component';
 import { ProfileComponent } from '../components/profile/profile.component';
+import { ManagementGuard } from '../ManagementGuard';
 // import { Navbar2Component } from '../components/navbar2/navbar2.component';
 
 export const routes: Routes = [
@@ -43,14 +44,14 @@ export const routes: Routes = [
     { path: 'service', component: ServicesComponent },
     { path: 'owner', component: OwnerloginComponent },
     { path: 'listings', component: PgListingsComponent },
-{ 
-    path: 'pg/:id', 
-    component: PgDetailComponent,
-    data: { ssr: false } 
-  },
+    {
+        path: 'pg/:id',
+        component: PgDetailComponent,
+        data: { ssr: false }
+    },
     { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'owner-navbar', component: OwnerNavbarComponent },
-    { path: 'ownerpage', component: OwnerpageComponent },
+    { path: 'ownerpage', component: OwnerpageComponent, canActivate: [OwnerGuard], data: { roles: ['OWNER'] }, runGuardsAndResolvers: 'always' },
     { path: 'addpglist', component: ListPropertyComponent },
     { path: 'owner/add-tenant', component: AddTenantComponent },
     { path: 'owner/tenants', component: TenantListComponent },
@@ -69,7 +70,7 @@ export const routes: Routes = [
     { path: 'privacy-policy', component: PolicyComponentComponent },
     { path: 'terms-of-service', component: PolicyComponentComponent },
     { path: 'cookie-policy', component: PolicyComponentComponent },
-    { path: 'management', component: ManagementComponent },
+    { path: 'management', component: ManagementComponent , canActivate: [ManagementGuard], data: { roles: ['MANAGEMENT'] }, runGuardsAndResolvers: 'always' },
     { path: 'comingsoonpage', component: ComingSoonPageComponent },
     { path: 'termsandservices', component: TermsOfServiceComponent },
     { path: 'management/add-user', component: AddUserComponent }
